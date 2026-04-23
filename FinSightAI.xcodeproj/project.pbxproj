@@ -1,0 +1,637 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0633E56D98C7464395E1574C /* CapabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B408732D339CA2D5BE7F8DD /* CapabilityService.swift */; };
+		1337A04BB6E2EFFBD658583C /* AIInsightService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D541801B85063DF31D2D4347 /* AIInsightService.swift */; };
+		148090CABE09B5452AECFF73 /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF57EBC46B97C0CEDD1F3D1 /* TransactionRepository.swift */; };
+		1661508F3799BEE2D0DAE8F0 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3394EAC466A9CF141EDE3796 /* SampleData.swift */; };
+		2587252C1CF088AF709314CA /* SwiftDataTransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 805925825E8FFF34CAEE6C24 /* SwiftDataTransactionRepository.swift */; };
+		284D5D851738E728D1546ABC /* SummaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF9445A6851674B3F55FA3B0 /* SummaryService.swift */; };
+		2E9FF5DC34BF872EC555DD1D /* FinSightAITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F7F5FC7DBD22CACC59164A4 /* FinSightAITests.swift */; };
+		3A842FC95957CB189EE6A9A7 /* SimulationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A816402B7E34EA903EE6C6D /* SimulationModels.swift */; };
+		469C7CB414DEA02B00063EF3 /* SimulationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 944B0574F71F89400501A013 /* SimulationService.swift */; };
+		50B9F013CEE3826702E950A7 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70875595BEEC07CAE46E9A5F /* DashboardView.swift */; };
+		64BF1929F155F2F90D4B1D6D /* InsightModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044C5D5263217ECEF780D70 /* InsightModels.swift */; };
+		72543EAB4EA29E0121158627 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A37DEF675D8BE171C74CDD /* AppContext.swift */; };
+		75A96198B8EE35D9D18DFDA8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B996940D78D55494DF83B37A /* Foundation.framework */; };
+		7B25EDA5B538E0437B292CC2 /* FinSightAIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C2403B7EF529A1F3787C51 /* FinSightAIApp.swift */; };
+		7D2F3A8538629321E4F56AED /* TransactionDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AAF2EC7620D467C345879C /* TransactionDraft.swift */; };
+		8B4EB11BE12C19BF2228B5F7 /* SpendingCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55AD00D016AC4A58F7CC5333 /* SpendingCategory.swift */; };
+		8F709FFA3D75D40DA1CCA308 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 709AB38236C17397F12797E2 /* AppTheme.swift */; };
+		94A461BAA0A356C1FFA7C468 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B996940D78D55494DF83B37A /* Foundation.framework */; };
+		9A233B214D916D7E084F5FAE /* TransactionRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2136B4BE097997F536FA4E5 /* TransactionRecord.swift */; };
+		A433046E02552D2B8996F437 /* MonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B24C45F8A434B033B40E5E72 /* MonthlySummary.swift */; };
+		AEF95674312FD9C5524184C2 /* TransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871BB656032B2B26D326121A /* TransactionsView.swift */; };
+		B66EABE4BDF188740F49AB2B /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945CFA1C8B8E29D9CFC2CA15 /* RootTabView.swift */; };
+		C6CC7ACACE687B2F8BE9B6E8 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B72D5B8FED8A01970A1866D /* InsightsView.swift */; };
+		C704CE30A58A5EF78DD7867B /* TransactionEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3AEF8CB95A8998E97DBB95D2 /* TransactionEditorView.swift */; };
+		CE369C8D124F8B3408AC647D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 20B3BE888314012C5AB9BA21 /* Assets.xcassets */; };
+		CEF383326BCE215732B4F003 /* DefaultSummaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B62333EAAC81559050E26E58 /* DefaultSummaryService.swift */; };
+		CF6E46DE633417C1652E48FE /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 823EA5EFBF980F438E0686BE /* Formatters.swift */; };
+		FAF827F338CA5A013E501A0C /* SimulatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FAD5BAF939EAF1F9B122628 /* SimulatorView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4FD9222C580D7D025B1D31EB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 06DABDB3640FF7D4FA91A05C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 39AE7D337C9FD7F954567B09;
+			remoteInfo = FinSightAI;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		20B3BE888314012C5AB9BA21 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		29AAF2EC7620D467C345879C /* TransactionDraft.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionDraft.swift; sourceTree = "<group>"; };
+		3394EAC466A9CF141EDE3796 /* SampleData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		3A816402B7E34EA903EE6C6D /* SimulationModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SimulationModels.swift; sourceTree = "<group>"; };
+		3AEF8CB95A8998E97DBB95D2 /* TransactionEditorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionEditorView.swift; sourceTree = "<group>"; };
+		3B408732D339CA2D5BE7F8DD /* CapabilityService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapabilityService.swift; sourceTree = "<group>"; };
+		3FAD5BAF939EAF1F9B122628 /* SimulatorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SimulatorView.swift; sourceTree = "<group>"; };
+		55AD00D016AC4A58F7CC5333 /* SpendingCategory.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpendingCategory.swift; sourceTree = "<group>"; };
+		5AF57EBC46B97C0CEDD1F3D1 /* TransactionRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionRepository.swift; sourceTree = "<group>"; };
+		6F7F5FC7DBD22CACC59164A4 /* FinSightAITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightAITests.swift; sourceTree = "<group>"; };
+		70875595BEEC07CAE46E9A5F /* DashboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		709AB38236C17397F12797E2 /* AppTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		805925825E8FFF34CAEE6C24 /* SwiftDataTransactionRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SwiftDataTransactionRepository.swift; sourceTree = "<group>"; };
+		823EA5EFBF980F438E0686BE /* Formatters.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
+		871BB656032B2B26D326121A /* TransactionsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionsView.swift; sourceTree = "<group>"; };
+		8B72D5B8FED8A01970A1866D /* InsightsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
+		944B0574F71F89400501A013 /* SimulationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SimulationService.swift; sourceTree = "<group>"; };
+		945CFA1C8B8E29D9CFC2CA15 /* RootTabView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		9D95F0BE2DF1A660EFE12522 /* FinSightAITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = FinSightAITests.xctest; path = FinSightAITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2136B4BE097997F536FA4E5 /* TransactionRecord.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionRecord.swift; sourceTree = "<group>"; };
+		A7C2403B7EF529A1F3787C51 /* FinSightAIApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightAIApp.swift; sourceTree = "<group>"; };
+		B24C45F8A434B033B40E5E72 /* MonthlySummary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MonthlySummary.swift; sourceTree = "<group>"; };
+		B62333EAAC81559050E26E58 /* DefaultSummaryService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DefaultSummaryService.swift; sourceTree = "<group>"; };
+		B996940D78D55494DF83B37A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		C044C5D5263217ECEF780D70 /* InsightModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InsightModels.swift; sourceTree = "<group>"; };
+		D050000B56D632D0AD341315 /* FinSightAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = FinSightAI.app; path = FinSightAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		D0A37DEF675D8BE171C74CDD /* AppContext.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
+		D541801B85063DF31D2D4347 /* AIInsightService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AIInsightService.swift; sourceTree = "<group>"; };
+		FF9445A6851674B3F55FA3B0 /* SummaryService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SummaryService.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2CACEE2A5849C4486051F0BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75A96198B8EE35D9D18DFDA8 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		450F747CCB0854C573965728 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				94A461BAA0A356C1FFA7C468 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0F269960D8256BB676A37FB9 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				D0A37DEF675D8BE171C74CDD /* AppContext.swift */,
+				A7C2403B7EF529A1F3787C51 /* FinSightAIApp.swift */,
+				945CFA1C8B8E29D9CFC2CA15 /* RootTabView.swift */,
+			);
+			name = App;
+			path = App;
+			sourceTree = "<group>";
+		};
+		0FF90F65206FCA5E7B4C2BD2 /* FinSightAITests */ = {
+			isa = PBXGroup;
+			children = (
+				6F7F5FC7DBD22CACC59164A4 /* FinSightAITests.swift */,
+			);
+			name = FinSightAITests;
+			path = FinSightAITests;
+			sourceTree = "<group>";
+		};
+		3BA0B1F4A58147EA1691F975 = {
+			isa = PBXGroup;
+			children = (
+				F4F83DD854322F7E9BCE7E39 /* Products */,
+				3EDC8E293343052D2B333BBC /* Frameworks */,
+				A0B91A575C7F6F4D65FCAB83 /* FinSightAI */,
+				0FF90F65206FCA5E7B4C2BD2 /* FinSightAITests */,
+			);
+			sourceTree = "<group>";
+		};
+		3EDC8E293343052D2B333BBC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A2A14BE8E7AE6E6FF3099260 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		47DAC3BAD8E07F27CC153578 /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				3AEF8CB95A8998E97DBB95D2 /* TransactionEditorView.swift */,
+				871BB656032B2B26D326121A /* TransactionsView.swift */,
+			);
+			name = Transactions;
+			path = Transactions;
+			sourceTree = "<group>";
+		};
+		4FA8D6A9720AAC467406DE87 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D541801B85063DF31D2D4347 /* AIInsightService.swift */,
+				3B408732D339CA2D5BE7F8DD /* CapabilityService.swift */,
+				B62333EAAC81559050E26E58 /* DefaultSummaryService.swift */,
+				944B0574F71F89400501A013 /* SimulationService.swift */,
+				FF9445A6851674B3F55FA3B0 /* SummaryService.swift */,
+				805925825E8FFF34CAEE6C24 /* SwiftDataTransactionRepository.swift */,
+				5AF57EBC46B97C0CEDD1F3D1 /* TransactionRepository.swift */,
+			);
+			name = Services;
+			path = Services;
+			sourceTree = "<group>";
+		};
+		56F9FDF9BB01EFDC0D642809 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C044C5D5263217ECEF780D70 /* InsightModels.swift */,
+				B24C45F8A434B033B40E5E72 /* MonthlySummary.swift */,
+				3A816402B7E34EA903EE6C6D /* SimulationModels.swift */,
+				55AD00D016AC4A58F7CC5333 /* SpendingCategory.swift */,
+				29AAF2EC7620D467C345879C /* TransactionDraft.swift */,
+				A2136B4BE097997F536FA4E5 /* TransactionRecord.swift */,
+			);
+			name = Models;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		57943B0ACE3DE60DC2BC5602 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				823EA5EFBF980F438E0686BE /* Formatters.swift */,
+				3394EAC466A9CF141EDE3796 /* SampleData.swift */,
+			);
+			name = Utils;
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		5AF1316AE627FDAD81FC9050 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				F985938C08031E50452D91BF /* Dashboard */,
+				61E9178A9DF210A669BE1FB6 /* Insights */,
+				892108172A0EFF1C16485862 /* Simulator */,
+				47DAC3BAD8E07F27CC153578 /* Transactions */,
+			);
+			name = Features;
+			path = Features;
+			sourceTree = "<group>";
+		};
+		61E9178A9DF210A669BE1FB6 /* Insights */ = {
+			isa = PBXGroup;
+			children = (
+				8B72D5B8FED8A01970A1866D /* InsightsView.swift */,
+			);
+			name = Insights;
+			path = Insights;
+			sourceTree = "<group>";
+		};
+		892108172A0EFF1C16485862 /* Simulator */ = {
+			isa = PBXGroup;
+			children = (
+				3FAD5BAF939EAF1F9B122628 /* SimulatorView.swift */,
+			);
+			name = Simulator;
+			path = Simulator;
+			sourceTree = "<group>";
+		};
+		A0B91A575C7F6F4D65FCAB83 /* FinSightAI */ = {
+			isa = PBXGroup;
+			children = (
+				0F269960D8256BB676A37FB9 /* App */,
+				E54EA193F68949362056A25E /* Design */,
+				5AF1316AE627FDAD81FC9050 /* Features */,
+				56F9FDF9BB01EFDC0D642809 /* Models */,
+				4FA8D6A9720AAC467406DE87 /* Services */,
+				57943B0ACE3DE60DC2BC5602 /* Utils */,
+				20B3BE888314012C5AB9BA21 /* Assets.xcassets */,
+			);
+			name = FinSightAI;
+			path = FinSightAI;
+			sourceTree = "<group>";
+		};
+		A2A14BE8E7AE6E6FF3099260 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				B996940D78D55494DF83B37A /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		E54EA193F68949362056A25E /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				709AB38236C17397F12797E2 /* AppTheme.swift */,
+			);
+			name = Design;
+			path = Design;
+			sourceTree = "<group>";
+		};
+		F4F83DD854322F7E9BCE7E39 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D050000B56D632D0AD341315 /* FinSightAI.app */,
+				9D95F0BE2DF1A660EFE12522 /* FinSightAITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F985938C08031E50452D91BF /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				70875595BEEC07CAE46E9A5F /* DashboardView.swift */,
+			);
+			name = Dashboard;
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		39AE7D337C9FD7F954567B09 /* FinSightAI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CAED5EE342AB5E3125ECED09 /* Build configuration list for PBXNativeTarget "FinSightAI" */;
+			buildPhases = (
+				2DE53DF08F3548AC2D5CF157 /* Sources */,
+				450F747CCB0854C573965728 /* Frameworks */,
+				4890E8A59E54EAB2746964D8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FinSightAI;
+			productName = FinSightAI;
+			productReference = D050000B56D632D0AD341315 /* FinSightAI.app */;
+			productType = "com.apple.product-type.application";
+		};
+		8534F55192FB0985DED900EA /* FinSightAITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A90C33A2CF865B18AD7B6E24 /* Build configuration list for PBXNativeTarget "FinSightAITests" */;
+			buildPhases = (
+				8F1012FCA537A53F77821FF7 /* Sources */,
+				2CACEE2A5849C4486051F0BA /* Frameworks */,
+				B78AC2B32AED6F4D2A935D10 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				07FCB0DFFE74259C0B3C31C3 /* PBXTargetDependency */,
+			);
+			name = FinSightAITests;
+			productName = FinSightAITests;
+			productReference = 9D95F0BE2DF1A660EFE12522 /* FinSightAITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		06DABDB3640FF7D4FA91A05C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
+			};
+			buildConfigurationList = 20DE78E85EBB6FB5E2B56B0B /* Build configuration list for PBXProject "FinSightAI" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3BA0B1F4A58147EA1691F975;
+			minimizedProjectReferenceProxies = 0;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = F4F83DD854322F7E9BCE7E39 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				39AE7D337C9FD7F954567B09 /* FinSightAI */,
+				8534F55192FB0985DED900EA /* FinSightAITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4890E8A59E54EAB2746964D8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CE369C8D124F8B3408AC647D /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B78AC2B32AED6F4D2A935D10 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2DE53DF08F3548AC2D5CF157 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				72543EAB4EA29E0121158627 /* AppContext.swift in Sources */,
+				7B25EDA5B538E0437B292CC2 /* FinSightAIApp.swift in Sources */,
+				B66EABE4BDF188740F49AB2B /* RootTabView.swift in Sources */,
+				8F709FFA3D75D40DA1CCA308 /* AppTheme.swift in Sources */,
+				50B9F013CEE3826702E950A7 /* DashboardView.swift in Sources */,
+				C6CC7ACACE687B2F8BE9B6E8 /* InsightsView.swift in Sources */,
+				FAF827F338CA5A013E501A0C /* SimulatorView.swift in Sources */,
+				C704CE30A58A5EF78DD7867B /* TransactionEditorView.swift in Sources */,
+				AEF95674312FD9C5524184C2 /* TransactionsView.swift in Sources */,
+				64BF1929F155F2F90D4B1D6D /* InsightModels.swift in Sources */,
+				A433046E02552D2B8996F437 /* MonthlySummary.swift in Sources */,
+				3A842FC95957CB189EE6A9A7 /* SimulationModels.swift in Sources */,
+				8B4EB11BE12C19BF2228B5F7 /* SpendingCategory.swift in Sources */,
+				7D2F3A8538629321E4F56AED /* TransactionDraft.swift in Sources */,
+				9A233B214D916D7E084F5FAE /* TransactionRecord.swift in Sources */,
+				1337A04BB6E2EFFBD658583C /* AIInsightService.swift in Sources */,
+				0633E56D98C7464395E1574C /* CapabilityService.swift in Sources */,
+				CEF383326BCE215732B4F003 /* DefaultSummaryService.swift in Sources */,
+				469C7CB414DEA02B00063EF3 /* SimulationService.swift in Sources */,
+				284D5D851738E728D1546ABC /* SummaryService.swift in Sources */,
+				2587252C1CF088AF709314CA /* SwiftDataTransactionRepository.swift in Sources */,
+				148090CABE09B5452AECFF73 /* TransactionRepository.swift in Sources */,
+				CF6E46DE633417C1652E48FE /* Formatters.swift in Sources */,
+				1661508F3799BEE2D0DAE8F0 /* SampleData.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8F1012FCA537A53F77821FF7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2E9FF5DC34BF872EC555DD1D /* FinSightAITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		07FCB0DFFE74259C0B3C31C3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = FinSightAI;
+			target = 39AE7D337C9FD7F954567B09 /* FinSightAI */;
+			targetProxy = 4FD9222C580D7D025B1D31EB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		407CCA5EC85F69B41F46FE05 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		426C04DAE672D3B498625AA3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"FinSightAI/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "FinSight AI";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.finsightai.app;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		48CED6A48CA72317D1C7285F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"FinSightAI/Preview Content\"";
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "FinSight AI";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.finsightai.app;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		B2B15A3BE3CF11937FF1A89C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		C734AD746D7C9A0F4076D55C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.finsightai.tests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FinSightAI.app/FinSightAI";
+			};
+			name = Debug;
+		};
+		CD5683BA9B03FAB468D83056 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.finsightai.tests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FinSightAI.app/FinSightAI";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		20DE78E85EBB6FB5E2B56B0B /* Build configuration list for PBXProject "FinSightAI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B2B15A3BE3CF11937FF1A89C /* Debug */,
+				407CCA5EC85F69B41F46FE05 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A90C33A2CF865B18AD7B6E24 /* Build configuration list for PBXNativeTarget "FinSightAITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CD5683BA9B03FAB468D83056 /* Release */,
+				C734AD746D7C9A0F4076D55C /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CAED5EE342AB5E3125ECED09 /* Build configuration list for PBXNativeTarget "FinSightAI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				48CED6A48CA72317D1C7285F /* Release */,
+				426C04DAE672D3B498625AA3 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 06DABDB3640FF7D4FA91A05C /* Project object */;
+}
