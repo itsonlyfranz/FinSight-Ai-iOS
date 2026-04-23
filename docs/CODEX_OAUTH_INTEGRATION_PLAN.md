@@ -1,28 +1,48 @@
-# FinSight AI — Codex OAuth Integration Plan
-
-**Status:** Planning  
-**Last updated:** 2026-04-23  
-**Repository:** [itsonlyfranz/FinSight-Ai-iOS](https://github.com/itsonlyfranz/FinSight-Ai-iOS)
-
-## Implementation checklist
-
-- [ ] Derive exact OAuth `client_id`, `redirect_uri`, and model name from OpenClaw source before writing auth code
-- [ ] Add `finsightai://` URL scheme (manual `Info.plist` or project generator changes)
-- [ ] Create `TokenVaultService.swift` — Keychain wrapper for OAuth token CRUD
-- [ ] Create `CodexOAuthService.swift` — PKCE flow, `ASWebAuthenticationSession`, token exchange, refresh actor
-- [ ] Create `CodexOAuthProvider.swift` and `OpenAIAPIKeyProvider.swift` conforming to `AIInsightService`
-- [ ] Create `AIProviderRouter.swift` — `@Observable`, conforms to `AIInsightService`, re-resolves on auth events
-- [ ] Update `FinSightAIApp.swift` to use `AIProviderRouter`; add `resetInsightState()` to `AppContext`
-- [ ] Create `SettingsView` + `AIProviderSettingsView`; add Settings tab to `RootTabView`
-- [ ] Create `AuthChoiceView` for first-launch provider selection
-- [ ] Concurrent refresh actor, revocation handling, subscription tier error, `authErrorMessage` in `AppContext`
-- [ ] Tests: `CodexOAuthServiceTests`, `TokenVaultServiceTests`, `AIProviderResolutionTests`
-
+---
+name: Codex OAuth Integration
+overview: Integrate OpenAI Codex subscription OAuth into FinSight AI as a dual-path (OAuth + API key) provider alongside the existing Apple Intelligence path, with immediate runtime provider swapping when the user connects or disconnects their ChatGPT account.
+todos:
+  - id: pre-openclaw
+    content: Derive exact OAuth client_id, redirect_uri, and model name from OpenClaw source before writing auth code
+    status: pending
+  - id: url-scheme
+    content: Add finsightai:// URL scheme — switch from GENERATE_INFOPLIST_FILE=YES to a manual Info.plist in the Xcode project
+    status: pending
+  - id: phase1-token-vault
+    content: Create TokenVaultService.swift — Keychain wrapper for OAuth token CRUD
+    status: pending
+  - id: phase1-oauth-service
+    content: Create CodexOAuthService.swift — PKCE flow, ASWebAuthenticationSession, token exchange, refresh actor
+    status: pending
+  - id: phase2-providers
+    content: Create CodexOAuthProvider.swift and OpenAIAPIKeyProvider.swift conforming to AIInsightService
+    status: pending
+  - id: phase2-router
+    content: Create AIProviderRouter.swift — @Observable, conforms to AIInsightService, re-resolves on auth events
+    status: pending
+  - id: phase2-app-wiring
+    content: Update FinSightAIApp.swift to use AIProviderRouter; add resetInsightState() to AppContext
+    status: pending
+  - id: phase3-settings-ui
+    content: Create SettingsView + AIProviderSettingsView; add Settings tab to RootTabView
+    status: pending
+  - id: phase3-onboarding
+    content: Create AuthChoiceView for first-launch provider selection
+    status: pending
+  - id: phase4-errors
+    content: Implement concurrent refresh actor, revocation handling, subscription tier error, authErrorMessage in AppContext
+    status: pending
+  - id: phase5-tests
+    content: Write CodexOAuthServiceTests, TokenVaultServiceTests, AIProviderResolutionTests
+    status: pending
+isProject: false
 ---
 
-## Key architectural insight
+# FinSight AI — Codex OAuth Integration Plan
 
-`FinSightAIApp.swift` currently hard-wires `aiInsightService` at launch. For **immediate provider swap** at runtime, introduce `AIProviderRouter` — a type that conforms to `AIInsightService` and delegates to a live-swappable implementation. `AppContext` keeps the same initializer; pass an `AIProviderRouter` instead of a concrete service.
+## Key Architectural Insight
+
+`FinSightAIApp.swift` currently hard-wires `aiInsightService` at launch. Since we need **immediate provider swap** at runtime, we introduce `AIProviderRouter` — a class that conforms to `AIInsightService` and acts as a live-swappable delegate. `AppContext`'s signature stays unchanged; we simply pass it an `AIProviderRouter` instead of a concrete service.
 
 ```mermaid
 flowchart TD
@@ -36,13 +56,13 @@ flowchart TD
     CodexOAuthService -->|"calls resolveProvider()"| AIProviderRouter
 ```
 
-## Existing files that change
+## Existing Files That Change
 
-- [`FinSightAI/App/FinSightAIApp.swift`](../FinSightAI/App/FinSightAIApp.swift) — replace static `aiService` switch with `AIProviderRouter()` instantiation
-- [`FinSightAI/App/RootTabView.swift`](../FinSightAI/App/RootTabView.swift) — add a Settings tab
-- [`FinSightAI/App/AppContext.swift`](../FinSightAI/App/AppContext.swift) — optionally add `func resetInsightState()` so auth events can clear stale results
+- [`FinSightAI/App/FinSightAIApp.swift`](FinSightAI/App/FinSightAIApp.swift) — replace static `aiService` switch with `AIProviderRouter()` instantiation
+- [`FinSightAI/App/RootTabView.swift`](FinSightAI/App/RootTabView.swift) — add a Settings tab
+- [`FinSightAI/App/AppContext.swift`](FinSightAI/App/AppContext.swift) — no protocol changes; optionally add `func resetInsightState()` so auth events can clear stale results
 
-## New files
+## New Files
 
 ```
 FinSightAI/
@@ -66,16 +86,14 @@ FinSightAITests/
   AIProviderResolutionTests.swift
 ```
 
-## Pre-work: derive OAuth constants from OpenClaw
+## Pre-work: Derive OAuth Constants from OpenClaw
 
-Before writing auth code, extract from OpenClaw’s public source the exact values for:
-
-- `client_id` (verify; do not guess)
+Before writing any auth code, extract from [OpenClaw's source](https://github.com) the exact values for:
+- `client_id` (e.g. `app_EMSc9Ew0YqZOlVnDqIlGn6S` — verify before use)
 - `redirect_uri` (registered callback scheme)
 - Required scopes
 
 Define these as constants in `CodexOAuthService.swift`:
-
 ```swift
 private enum OAuthConstants {
     static let clientID     = "<derived from OpenClaw>"
@@ -89,7 +107,6 @@ private enum OAuthConstants {
 ## Phase 1 — PKCE + Keychain (Week 1–2)
 
 **`TokenVaultService.swift`** — thin `Security` framework wrapper; exposes:
-
 ```swift
 func store(_ value: String, forKey: String) throws
 func retrieve(forKey: String) throws -> String?
@@ -97,28 +114,28 @@ func delete(forKey: String) throws
 ```
 
 **`CodexOAuthService.swift`** — owns the full PKCE flow:
-
 - `startOAuthFlow(presentationAnchor:)` → opens `ASWebAuthenticationSession` with `prefersEphemeralWebBrowserSession = false`
 - `handleCallback(url:)` → extracts code + validates state, then calls token exchange
 - `refreshTokenIfNeeded()` → checks `expires_at`, refreshes if stale, re-stores via `TokenVaultService`
 
-**URL scheme registration:** The project uses `GENERATE_INFOPLIST_FILE = YES` in `project.pbxproj`, which does not support `CFBundleURLTypes`. Add `finsightai://` by either adding `INFOPLIST_KEY_*` entries via `generate_project.rb`, or switching to a manual `Info.plist` (`GENERATE_INFOPLIST_FILE = NO`). Prefer a manual `Info.plist` for ongoing control.
+**URL scheme registration:** The project uses `GENERATE_INFOPLIST_FILE = YES` in `project.pbxproj`, which does not support `CFBundleURLTypes`. Add `finsightai://` by either:
+- Adding `INFOPLIST_KEY_*` entries via `generate_project.rb` for URL types, **or**
+- Switching to a manual `Info.plist` (set `GENERATE_INFOPLIST_FILE = NO`, add `Info.plist` to sources)
 
-## Phase 2 — Provider layer (Week 2–3)
+Recommend the manual `Info.plist` approach for easier ongoing control.
+
+## Phase 2 — Provider Layer (Week 2–3)
 
 **`CodexOAuthProvider.swift`** — conforms to `AIInsightService`:
-
-- Reads bearer token via `TokenVaultService`, with refresh via `CodexOAuthService.refreshTokenIfNeeded()` first
-- POSTs to OpenAI Responses API with an `openai-codex/*` model (exact name TBD from OpenClaw)
-- 401 → clear token, throw `.unavailable("Session expired. Please reconnect ChatGPT.")`
+- Calls `TokenVaultService` for the bearer token, triggering refresh via `CodexOAuthService.refreshTokenIfNeeded()` first
+- POSTs to OpenAI Responses API with `model: "openai-codex/gpt-4o"` (exact model name TBD from OpenClaw)
+- 401 response → clears token, throws `.unavailable("Session expired. Please reconnect ChatGPT.")`
 
 **`OpenAIAPIKeyProvider.swift`** — conforms to `AIInsightService`:
+- Reads API key from `UserDefaults` (acceptable for API keys — not a secret in the same threat model as OAuth tokens)
+- Same OpenAI Responses API call but with `Authorization: Bearer <api_key>`
 
-- Reads API key from `UserDefaults` (acceptable for API keys vs OAuth tokens in Keychain)
-- Same Responses API shape with `Authorization: Bearer <api_key>`
-
-**`AIProviderRouter.swift`** — immediate-swap mechanism:
-
+**`AIProviderRouter.swift`** — the immediate-swap mechanism:
 ```swift
 @Observable final class AIProviderRouter: AIInsightService {
     private(set) var activeProviderLabel: String = "None"
@@ -132,53 +149,61 @@ func delete(forKey: String) throws
     func generateInsights(from summary: MonthlySummary) async throws -> [InsightCard] {
         try await currentProvider.generateInsights(from: summary)
     }
-    // explainSimulation delegates similarly
+    // ... explainSimulation delegates similarly
 }
 ```
 
-Update `FinSightAIApp.swift`: replace the `switch capabilityService.aiAvailability` block with router creation, `resolveProvider`, and pass the router into `AppContext`.
+Update `FinSightAIApp.swift`: replace the `switch capabilityService.aiAvailability` block with:
+```swift
+let router = AIProviderRouter()
+router.resolveProvider(capabilityService: capabilityService)
+// pass router as aiInsightService in AppContext init
+```
 
 ## Phase 3 — Auth UI (Week 3–4)
 
-**`SettingsView.swift`** — new tab in `RootTabView`; embed `AIProviderSettingsView`.
+**`SettingsView.swift`** — new tab in `RootTabView`; contains `AIProviderSettingsView` as a section.
 
-**`AIProviderSettingsView.swift`:**
+**`AIProviderSettingsView.swift`**:
+- Shows active provider chip (e.g. "ChatGPT Pro · Connected")
+- "Connect with ChatGPT" button → calls `CodexOAuthService.startOAuthFlow()` → on success calls `router.resolveProvider()` → `appContext.resetInsightState()`
+- "Use API Key" row → secure text field, save button
+- "Sign out" (when connected) → clears Keychain, calls `router.resolveProvider()`
 
-- Active provider indicator (e.g. “ChatGPT · Connected”)
-- “Connect with ChatGPT” → `CodexOAuthService.startOAuthFlow()` → on success `router.resolveProvider()` → `appContext.resetInsightState()`
-- “Use API Key” — secure field + save
-- “Sign out” — clear Keychain, `router.resolveProvider()`
+**`AuthChoiceView.swift`** — shown as a `.sheet` on first launch (gated by a `hasChosenProvider` flag in `UserDefaults`). Three options + skip.
 
-**`AuthChoiceView.swift`** — first-launch sheet gated by `UserDefaults` (`hasChosenProvider`); options for ChatGPT OAuth, API key, Apple Intelligence (if eligible), skip.
+Add Settings tab to `RootTabView`:
+```swift
+SettingsView()
+    .tabItem { Label("Settings", systemImage: "gearshape") }
+```
 
-## Phase 4 — Error handling (Week 4)
+## Phase 4 — Error Handling (Week 4)
 
-- Concurrent token refresh: Swift `actor` in `CodexOAuthService` to serialize refresh
-- Revoked refresh token: clear Keychain, `router.resolveProvider()`, user-facing alert (`authErrorMessage` on `AppContext`)
-- Insufficient subscription: map API 403 to a dedicated `AIInsightError` case
+- Concurrent token refresh: use a Swift `actor` in `CodexOAuthService` to serialize refresh requests (prevents double-refresh race)
+- Revoked refresh token: clear all Keychain entries, call `router.resolveProvider()`, show a `.alert` via `AppContext` (add `authErrorMessage: String?` published property)
+- Insufficient subscription tier: detect from API 403 response body, surface as a specific `AIInsightError` case
 
 ## Phase 5 — Tests (Week 4–5)
 
-- `CodexOAuthServiceTests` — verifier length, challenge = BASE64URL(SHA256(verifier)), state validation
+- `CodexOAuthServiceTests` — verifier length, challenge = BASE64URL(SHA256(verifier)), state CSRF check
 - `TokenVaultServiceTests` — round-trip store/retrieve, expiry comparison
-- `AIProviderResolutionTests` — mock capability + token + API key combinations
+- `AIProviderResolutionTests` — mock all three capability states, assert correct provider type selected
+- Extend existing `FinSightAITests.swift` pattern (already uses `@MainActor` test style)
 
 ## Dependencies
 
-All Apple SDK — no new Swift packages:
+All Apple SDK — no new packages required:
+- `AuthenticationServices` — `ASWebAuthenticationSession`
+- `CryptoKit` — SHA-256 for PKCE
+- `Security` — Keychain
+- `URLSession` — token exchange + API calls
 
-| Framework | Use |
-|-----------|-----|
-| `AuthenticationServices` | `ASWebAuthenticationSession` |
-| `CryptoKit` | SHA-256 for PKCE |
-| `Security` | Keychain |
-| `URLSession` | Token exchange + API calls |
+## Acceptance Criteria
 
-## Acceptance criteria
-
-- ChatGPT subscriber can sign in via OAuth and receive insights without an API key
-- Token stored in Keychain and refreshed automatically before use
-- Expired/revoked tokens prompt re-auth without crash or silent failure
-- API key path remains a fallback; Apple Intelligence path unchanged
-- No OAuth credentials in `UserDefaults`, logs, or crash reports
-- Unit tests cover auth helpers and provider resolution
+- ChatGPT subscriber can sign in via OAuth and get insights without an API key
+- Token stored in Keychain, refreshed transparently before each API call
+- Switching providers mid-session updates the active provider immediately (no restart)
+- Apple Intelligence, API key, and "unavailable" paths all remain functional
+- No credentials in UserDefaults, logs, or crash reports
+- All auth and resolution logic has unit test coverage
