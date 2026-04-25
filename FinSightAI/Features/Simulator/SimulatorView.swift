@@ -17,115 +17,153 @@ struct SimulatorView: View {
 
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
                     heroCard(input: input, projection: projection)
                     controlsCard
                     projectionCard(projection: projection)
                     explanationCard(input: input)
                 }
-                .padding(20)
+                .padding(AppTheme.Spacing.lg)
             }
             .background(AppTheme.backgroundGradient.ignoresSafeArea())
             .navigationTitle("What If")
         }
-        .task(id: taskID(for: input)) {
+        .task(id: AIFingerprint.simulation(input: input, projection: projection)) {
             await appContext.loadSimulationExplanation(input: input)
         }
     }
 
     private func heroCard(input: SimulationInput, projection: SimulationProjection) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
             Text("Scenario Builder")
                 .font(.headline)
-                .foregroundStyle(.white.opacity(0.9))
+                .foregroundStyle(AppTheme.surface.opacity(0.85))
             Text(CurrencyFormatter.pesoString(from: projection.monthlySavings))
-                .font(.system(size: 38, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
+                .font(AppTheme.Typography.heroValue)
+                .foregroundStyle(AppTheme.primary)
+                .monospacedDigit()
+                .contentTransition(.numericText())
+                .animation(.spring(duration: 0.3), value: projection.monthlySavings)
             Text("Projected monthly savings if you set aside \(CurrencyFormatter.pesoString(from: input.dailySavings)) a day and trim \(Int(input.reductionPercent))% of current spending.")
-                .foregroundStyle(.white.opacity(0.9))
+                .foregroundStyle(AppTheme.surface.opacity(0.88))
         }
-        .padding(24)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            LinearGradient(
-                colors: [AppTheme.secondary, AppTheme.primary],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ),
-            in: RoundedRectangle(cornerRadius: 30, style: .continuous)
-        )
+        .finSightCard(surface: AppTheme.surfaceElevated)
     }
 
     private var controlsCard: some View {
         VStack(alignment: .leading, spacing: 18) {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
                 Text("Daily savings")
                     .font(.headline)
                 Text(CurrencyFormatter.pesoString(from: dailySavings))
                     .font(.title3.weight(.semibold))
+                    .monospacedDigit()
+                    .contentTransition(.numericText())
+                    .animation(.spring(duration: 0.3), value: dailySavings)
                 Slider(value: $dailySavings, in: 0...500, step: 10)
             }
 
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
                 Text("Spending reduction")
                     .font(.headline)
                 Text("\(Int(reductionPercent))%")
                     .font(.title3.weight(.semibold))
+                    .monospacedDigit()
+                    .contentTransition(.numericText())
+                    .animation(.spring(duration: 0.3), value: reductionPercent)
                 Slider(value: $reductionPercent, in: 0...50, step: 1)
             }
 
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
                 Text("Savings goal")
                     .font(.headline)
                 Text(CurrencyFormatter.pesoString(from: savingsGoal))
                     .font(.title3.weight(.semibold))
+                    .monospacedDigit()
+                    .contentTransition(.numericText())
+                    .animation(.spring(duration: 0.3), value: savingsGoal)
                 Slider(value: $savingsGoal, in: 5_000...200_000, step: 1_000)
             }
         }
-        .padding(22)
-        .background(AppTheme.card, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .finSightCard()
     }
 
     private func projectionCard(projection: SimulationProjection) -> some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
             Text("Projected savings")
                 .font(.headline)
 
             projectionRow(label: "3 months", value: projection.projectedSavingsThreeMonths)
+            Divider().overlay(AppTheme.divider)
             projectionRow(label: "6 months", value: projection.projectedSavingsSixMonths)
+            Divider().overlay(AppTheme.divider)
             projectionRow(label: "12 months", value: projection.projectedSavingsTwelveMonths)
 
             if let months = projection.monthsToGoal {
+                Divider().overlay(AppTheme.divider)
                 HStack {
                     Text("Time to goal")
                     Spacer()
                     Text("\(months) months")
                         .fontWeight(.semibold)
+                        .monospacedDigit()
+                        .contentTransition(.numericText())
+                        .animation(.spring(duration: 0.3), value: months)
                 }
             }
         }
-        .padding(22)
-        .background(AppTheme.card, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .finSightCard()
     }
 
     private func explanationCard(input: SimulationInput) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Label("AI Explanation", systemImage: "sparkles")
-                .font(.headline)
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
+            HStack {
+                Label("AI Explanation", systemImage: "sparkles")
+                    .font(.headline)
+                Spacer()
+                FinSightStreamingRefreshControl(
+                    isRefreshing: appContext.isSimulationRefreshInFlight || simulatorExplanationIsRefreshing,
+                    action: {
+                    Task {
+                        await appContext.loadSimulationExplanation(input: input, forceRefresh: true)
+                    }
+                },
+                    progressText: "Streaming...",
+                    buttonStyleKind: .bordered
+                )
+            }
 
             switch appContext.simulatorExplanationState {
             case .idle, .loading:
-                ProgressView("Preparing scenario explanation...")
-            case .loaded(let explanation):
-                Text(explanation)
-                    .foregroundStyle(AppTheme.mutedInk)
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
+                    FinSightTypingIndicator()
+                    Text("Preparing scenario explanation...")
+                        .foregroundStyle(AppTheme.mutedInk)
+                }
+            case .available(let content):
+                if content.isRefreshing {
+                    FinSightStatusLine(text: "Streaming latest explanation...")
+                }
+                FinSightMarkdownView(markdown: content.value, style: .simulatorExplanation)
+                FinSightStatusLine(text: RelativeTimestampFormatter.updatedString(for: content.lastUpdated))
+                if let statusMessage = content.statusMessage {
+                    Text(statusMessage)
+                        .font(AppTheme.Typography.caption)
+                        .foregroundStyle(AppTheme.mutedInk)
+                }
             case .unavailable(let message), .failure(let message):
                 Text(message)
                     .foregroundStyle(AppTheme.mutedInk)
             }
         }
-        .padding(22)
-        .background(AppTheme.card, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .finSightCard()
+    }
+
+    private var simulatorExplanationIsRefreshing: Bool {
+        if case .available(let content) = appContext.simulatorExplanationState {
+            return content.isRefreshing
+        }
+        return false
     }
 
     private func projectionRow(label: String, value: Double) -> some View {
@@ -134,10 +172,9 @@ struct SimulatorView: View {
             Spacer()
             Text(CurrencyFormatter.pesoString(from: value))
                 .fontWeight(.semibold)
+                .monospacedDigit()
+                .contentTransition(.numericText())
+                .animation(.spring(duration: 0.3), value: value)
         }
-    }
-
-    private func taskID(for input: SimulationInput) -> String {
-        "\(input.currentMonthlySpending)-\(input.dailySavings)-\(input.reductionPercent)-\(input.savingsGoal)"
     }
 }

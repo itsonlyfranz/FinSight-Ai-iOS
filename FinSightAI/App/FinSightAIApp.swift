@@ -7,7 +7,7 @@ struct FinSightAIApp: App {
     @State private var appContext: AppContext
 
     init() {
-        let schema = Schema([TransactionRecord.self])
+        let schema = Schema([TransactionRecord.self, AIResponseCacheRecord.self])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: false)
 
         do {
@@ -38,6 +38,7 @@ struct FinSightAIApp: App {
         _appContext = State(
             initialValue: AppContext(
                 repository: SwiftDataTransactionRepository(modelContext: modelContext),
+                modelContext: modelContext,
                 summaryService: DefaultSummaryService(),
                 aiInsightService: aiService,
                 simulationService: DefaultSimulationService(),

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0A1B2C3D4E5F60718293A4B5 /* FinSightMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A3B4C5D6E7F8091A2B3C4D5 /* FinSightMarkdownView.swift */; };
+		1A2B3C4D5E6F708192A3B4C5 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 4A5B6C7D8E9F0123A4B5C6D7 /* MarkdownUI */; };
 		0633E56D98C7464395E1574C /* CapabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B408732D339CA2D5BE7F8DD /* CapabilityService.swift */; };
 		1337A04BB6E2EFFBD658583C /* AIInsightService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D541801B85063DF31D2D4347 /* AIInsightService.swift */; };
 		148090CABE09B5452AECFF73 /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF57EBC46B97C0CEDD1F3D1 /* TransactionRepository.swift */; };
@@ -49,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		20B3BE888314012C5AB9BA21 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2A3B4C5D6E7F8091A2B3C4D5 /* FinSightMarkdownView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightMarkdownView.swift; sourceTree = "<group>"; };
 		29AAF2EC7620D467C345879C /* TransactionDraft.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionDraft.swift; sourceTree = "<group>"; };
 		3394EAC466A9CF141EDE3796 /* SampleData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
 		3A816402B7E34EA903EE6C6D /* SimulationModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SimulationModels.swift; sourceTree = "<group>"; };
@@ -92,6 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A2B3C4D5E6F708192A3B4C5 /* MarkdownUI in Frameworks */,
 				94A461BAA0A356C1FFA7C468 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -243,6 +247,7 @@
 			isa = PBXGroup;
 			children = (
 				709AB38236C17397F12797E2 /* AppTheme.swift */,
+				2A3B4C5D6E7F8091A2B3C4D5 /* FinSightMarkdownView.swift */,
 			);
 			name = Design;
 			path = Design;
@@ -282,6 +287,9 @@
 			dependencies = (
 			);
 			name = FinSightAI;
+			packageProductDependencies = (
+				4A5B6C7D8E9F0123A4B5C6D7 /* MarkdownUI */,
+			);
 			productName = FinSightAI;
 			productReference = D050000B56D632D0AD341315 /* FinSightAI.app */;
 			productType = "com.apple.product-type.application";
@@ -327,6 +335,9 @@
 			productRefGroup = F4F83DD854322F7E9BCE7E39 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
+			packageReferences = (
+				3A4B5C6D7E8F9012A3B4C5D6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+			);
 			targets = (
 				39AE7D337C9FD7F954567B09 /* FinSightAI */,
 				8534F55192FB0985DED900EA /* FinSightAITests */,
@@ -361,6 +372,7 @@
 				7B25EDA5B538E0437B292CC2 /* FinSightAIApp.swift in Sources */,
 				B66EABE4BDF188740F49AB2B /* RootTabView.swift in Sources */,
 				8F709FFA3D75D40DA1CCA308 /* AppTheme.swift in Sources */,
+				0A1B2C3D4E5F60718293A4B5 /* FinSightMarkdownView.swift in Sources */,
 				50B9F013CEE3826702E950A7 /* DashboardView.swift in Sources */,
 				C6CC7ACACE687B2F8BE9B6E8 /* InsightsView.swift in Sources */,
 				FAF827F338CA5A013E501A0C /* SimulatorView.swift in Sources */,
@@ -402,6 +414,17 @@
 			targetProxy = 4FD9222C580D7D025B1D31EB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		3A4B5C6D7E8F9012A3B4C5D6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCBuildConfiguration section */
 		407CCA5EC85F69B41F46FE05 /* Release */ = {
@@ -632,6 +655,14 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4A5B6C7D8E9F0123A4B5C6D7 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 3A4B5C6D7E8F9012A3B4C5D6 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 06DABDB3640FF7D4FA91A05C /* Project object */;
 }

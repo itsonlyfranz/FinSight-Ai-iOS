@@ -7,13 +7,13 @@ struct DashboardView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
                     heroCard
                     spendingChartCard
                     recentTransactionsCard
                     insightCard
                 }
-                .padding(20)
+                .padding(AppTheme.Spacing.lg)
             }
             .background(AppTheme.backgroundGradient.ignoresSafeArea())
             .navigationTitle("FinSight AI")
@@ -24,37 +24,39 @@ struct DashboardView: View {
     }
 
     private var heroCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
             Text(appContext.monthlySummary.monthLabel)
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(AppTheme.mutedInk)
 
             Text(CurrencyFormatter.pesoString(from: appContext.monthlySummary.totalSpent))
-                .font(.system(size: 40, weight: .bold, design: .rounded))
+                .font(AppTheme.Typography.heroValue)
                 .foregroundStyle(AppTheme.ink)
+                .monospacedDigit()
 
-            HStack(spacing: 12) {
+            HStack(spacing: AppTheme.Spacing.sm) {
                 metricPill(title: "Transactions", value: "\(appContext.monthlySummary.transactionCount)")
                 metricPill(title: "Average", value: CurrencyFormatter.pesoString(from: appContext.monthlySummary.averageTransactionValue))
             }
 
             Text(appContext.monthlySummary.spendingTrendDescription)
-                .font(.footnote)
+                .font(AppTheme.Typography.caption)
                 .foregroundStyle(AppTheme.mutedInk)
         }
-        .padding(22)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppTheme.card, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .finSightCard()
     }
 
     private var spendingChartCard: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
             Text("Category Breakdown")
-                .font(.headline)
+                .font(AppTheme.Typography.headline)
 
             if appContext.monthlySummary.categoryBreakdown.isEmpty {
-                ContentUnavailableView("No spend yet", systemImage: "chart.bar.xaxis")
-                    .frame(maxWidth: .infinity)
+                FinSightEmptyState(
+                    title: "No spend yet",
+                    systemImage: "chart.bar.xaxis",
+                    message: "Add transactions to see where your budget is going."
+                )
             } else {
                 Chart(appContext.monthlySummary.categoryBreakdown) { item in
                     BarMark(
@@ -64,58 +66,88 @@ struct DashboardView: View {
                     .foregroundStyle(item.category.tint.gradient)
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 }
+                .chartXAxis {
+                    AxisMarks(values: .automatic(desiredCount: 4)) { value in
+                        AxisGridLine(stroke: StrokeStyle(lineWidth: 0.8))
+                            .foregroundStyle(AppTheme.divider)
+                        AxisTick()
+                            .foregroundStyle(AppTheme.divider)
+                        AxisValueLabel {
+                            if let amount = value.as(Double.self) {
+                                Text(amount, format: .currency(code: "PHP").precision(.fractionLength(0)))
+                            }
+                        }
+                    }
+                }
+                .chartYAxis {
+                    AxisMarks(position: .leading)
+                }
+                .chartXAxisLabel("Amount", position: .bottomTrailing)
                 .frame(height: 240)
             }
         }
-        .padding(22)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppTheme.card, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .finSightCard()
     }
 
     private var recentTransactionsCard: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
             Text("Recent Activity")
-                .font(.headline)
+                .font(AppTheme.Typography.headline)
 
-            ForEach(appContext.monthlySummary.recentTransactions) { transaction in
-                TransactionRow(transaction: transaction)
+            if appContext.monthlySummary.recentTransactions.isEmpty {
+                FinSightEmptyState(
+                    title: "No recent transactions",
+                    systemImage: "list.bullet.rectangle",
+                    message: "Once you log spending, the latest activity will show up here."
+                )
+            } else {
+                ForEach(appContext.monthlySummary.recentTransactions) { transaction in
+                    TransactionRow(transaction: transaction)
+                }
             }
         }
-        .padding(22)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppTheme.card, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .finSightCard()
     }
 
     private var insightCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
             HStack {
                 Label("AI Insight of the Day", systemImage: "sparkles")
-                    .font(.headline)
+                    .font(AppTheme.Typography.headline)
                 Spacer()
             }
 
             switch appContext.insightState {
             case .idle, .loading:
-                ProgressView("Preparing insight...")
-            case .available(let cards):
-                Text(cards.first(where: { $0.kind == .budgeting })?.body ?? "No insight available.")
-                    .foregroundStyle(AppTheme.ink)
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
+                    FinSightSkeletonBlock(width: 180, height: 16)
+                    FinSightSkeletonBlock(width: nil, height: 18)
+                    FinSightSkeletonBlock(width: nil, height: 18)
+                }
+            case .available(let content):
+                if let card = content.value.first(where: { $0.kind == .budgeting }) {
+                    FinSightMarkdownView(markdown: card.markdown, style: .dashboardPreview)
+                        .font(AppTheme.Typography.body)
+                    if content.isRefreshing {
+                        FinSightStatusLine(text: "Streaming latest insight...")
+                    }
+                    FinSightStatusLine(text: RelativeTimestampFormatter.updatedString(for: content.lastUpdated))
+                    if let statusMessage = content.statusMessage {
+                        Text(statusMessage)
+                            .font(AppTheme.Typography.caption)
+                            .foregroundStyle(AppTheme.mutedInk)
+                    }
+                } else {
+                    Text("No insight available.")
+                        .foregroundStyle(AppTheme.ink)
+                        .font(AppTheme.Typography.body)
+                }
             case .unavailable(let message), .failure(let message):
                 Label(message, systemImage: "exclamationmark.triangle")
                     .foregroundStyle(AppTheme.mutedInk)
             }
         }
-        .padding(22)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            LinearGradient(
-                colors: [AppTheme.primary.opacity(0.95), AppTheme.secondary.opacity(0.82)],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            ),
-            in: RoundedRectangle(cornerRadius: 28, style: .continuous)
-        )
-        .foregroundStyle(Color.white)
+        .finSightCard(surface: AppTheme.cardTintBudget)
     }
 
     private func metricPill(title: String, value: String) -> some View {
@@ -126,10 +158,11 @@ struct DashboardView: View {
             Text(value)
                 .font(.headline)
                 .foregroundStyle(AppTheme.ink)
+                .monospacedDigit()
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 14)
-        .background(Color.white.opacity(0.75), in: Capsule())
+        .background(AppTheme.surfaceAccent, in: Capsule())
     }
 }
 
@@ -137,11 +170,11 @@ private struct TransactionRow: View {
     let transaction: TransactionRecord
 
     var body: some View {
-        HStack(spacing: 14) {
+        HStack(spacing: AppTheme.Spacing.sm) {
             Image(systemName: transaction.category.symbolName)
                 .foregroundStyle(.white)
                 .frame(width: 38, height: 38)
-                .background(transaction.category.tint, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .background(transaction.category.tint, in: RoundedRectangle(cornerRadius: AppTheme.CornerRadius.icon, style: .continuous))
 
             VStack(alignment: .leading, spacing: 3) {
                 Text(transaction.category.title)
@@ -156,6 +189,7 @@ private struct TransactionRow: View {
             VStack(alignment: .trailing, spacing: 3) {
                 Text(CurrencyFormatter.pesoString(from: transaction.amount))
                     .font(.subheadline.weight(.semibold))
+                    .monospacedDigit()
                 Text(transaction.date, style: .date)
                     .font(.caption)
                     .foregroundStyle(AppTheme.mutedInk)

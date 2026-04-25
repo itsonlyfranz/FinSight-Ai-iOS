@@ -1,8 +1,16 @@
 import Foundation
 
 protocol AIInsightService {
-    func generateInsights(from summary: MonthlySummary) async throws -> [InsightCard]
-    func explainSimulation(input: SimulationInput, projection: SimulationProjection) async throws -> String
+    var providerIdentifier: String { get }
+    func generateInsights(
+        from summary: MonthlySummary,
+        onUpdate: (@Sendable ([GeneratedInsightCard]) async -> Void)?
+    ) async throws -> GeneratedInsightPayload
+    func explainSimulation(
+        input: SimulationInput,
+        projection: SimulationProjection,
+        onUpdate: (@Sendable (String) async -> Void)?
+    ) async throws -> GeneratedSimulationExplanation
 }
 
 enum AIInsightError: LocalizedError {
@@ -19,12 +27,20 @@ enum AIInsightError: LocalizedError {
 
 struct UnsupportedAIInsightService: AIInsightService {
     let reason: String
+    let providerIdentifier = "unsupported"
 
-    func generateInsights(from summary: MonthlySummary) async throws -> [InsightCard] {
+    func generateInsights(
+        from summary: MonthlySummary,
+        onUpdate: (@Sendable ([GeneratedInsightCard]) async -> Void)? = nil
+    ) async throws -> GeneratedInsightPayload {
         throw AIInsightError.unavailable(reason)
     }
 
-    func explainSimulation(input: SimulationInput, projection: SimulationProjection) async throws -> String {
+    func explainSimulation(
+        input: SimulationInput,
+        projection: SimulationProjection,
+        onUpdate: (@Sendable (String) async -> Void)? = nil
+    ) async throws -> GeneratedSimulationExplanation {
         throw AIInsightError.unavailable(reason)
     }
 }
@@ -34,27 +50,51 @@ import FoundationModels
 
 @available(iOS 26.0, *)
 struct AppleFoundationModelsInsightService: AIInsightService {
-    func generateInsights(from summary: MonthlySummary) async throws -> [InsightCard] {
-        var cards: [InsightCard] = []
+    let providerIdentifier = "apple-foundation-models"
+
+    func generateInsights(
+        from summary: MonthlySummary,
+        onUpdate: (@Sendable ([GeneratedInsightCard]) async -> Void)? = nil
+    ) async throws -> GeneratedInsightPayload {
+        var cards: [GeneratedInsightCard] = []
 
         for kind in InsightKind.allCases {
             let prompt = PromptFactory.insightPrompt(for: kind, summary: summary)
             let session = LanguageModelSession(instructions: PromptFactory.instructions(for: kind))
-            let response = try await session.respond(to: prompt)
-            let text = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
+            var streamedMarkdown = ""
+
+            for try await snapshot in session.streamResponse(to: prompt) {
+                streamedMarkdown = snapshot.content
+                let partialCards = cards + [GeneratedInsightCard(kind: kind, markdown: streamedMarkdown)]
+                await onUpdate?(partialCards)
+            }
+
+            let text = streamedMarkdown.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !text.isEmpty else { throw AIInsightError.emptyResponse }
-            cards.append(InsightCard(kind: kind, body: text))
+            cards.append(GeneratedInsightCard(kind: kind, markdown: text))
+            await onUpdate?(cards)
         }
 
-        return cards
+        return GeneratedInsightPayload(cards: cards, providerIdentifier: providerIdentifier)
     }
 
-    func explainSimulation(input: SimulationInput, projection: SimulationProjection) async throws -> String {
+    func explainSimulation(
+        input: SimulationInput,
+        projection: SimulationProjection,
+        onUpdate: (@Sendable (String) async -> Void)? = nil
+    ) async throws -> GeneratedSimulationExplanation {
         let session = LanguageModelSession(instructions: PromptFactory.simulationInstructions)
-        let response = try await session.respond(to: PromptFactory.simulationPrompt(input: input, projection: projection))
-        let text = response.content.trimmingCharacters(in: .whitespacesAndNewlines)
+        let prompt = PromptFactory.simulationPrompt(input: input, projection: projection)
+        var streamedMarkdown = ""
+
+        for try await snapshot in session.streamResponse(to: prompt) {
+            streamedMarkdown = snapshot.content
+            await onUpdate?(streamedMarkdown)
+        }
+
+        let text = streamedMarkdown.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { throw AIInsightError.emptyResponse }
-        return text
+        return GeneratedSimulationExplanation(markdown: text, providerIdentifier: providerIdentifier)
     }
 }
 #endif
@@ -67,18 +107,45 @@ enum PromptFactory {
             You are a financial budgeting assistant.
             Analyze processed monthly spending patterns, highlight overspending categories or anomalies, and give concise, practical suggestions.
             Keep the tone clear, specific, and educational. Do not provide regulated financial advice.
+            Return valid markdown with exactly these sections:
+            ## Key Takeaway
+
+            ## Why It Matters
+
+            ## Next Step
+            Put a blank line after each heading.
+            Use one short paragraph under the first two headings.
+            Use 1-2 markdown bullet points under Next Step when the action is concrete.
             """
         case .risk:
             """
             You are a financial risk analyst.
             Review monthly spending summaries for risk signals such as rising expenses, weak savings behavior, or concentration in volatile categories.
             Be direct but constructive. Do not provide regulated financial advice.
+            Return valid markdown with exactly these sections:
+            ## Key Takeaway
+
+            ## Why It Matters
+
+            ## Next Step
+            Put a blank line after each heading.
+            Use one short paragraph under the first two headings.
+            Use 1-2 markdown bullet points under Next Step when the action is concrete.
             """
         case .growth:
             """
             You are a financial growth coach.
             Suggest realistic improvements that help the user save more or redirect spending more effectively.
             Keep the response actionable, concise, and grounded in the supplied summary.
+            Return valid markdown with exactly these sections:
+            ## Key Takeaway
+
+            ## Why It Matters
+
+            ## Next Step
+            Put a blank line after each heading.
+            Use one short paragraph under the first two headings.
+            Use 1-2 markdown bullet points under Next Step when the action is concrete.
             """
         }
     }
@@ -88,6 +155,15 @@ enum PromptFactory {
         You explain savings simulations in plain language.
         Use the supplied numeric projection as the source of truth and do not change the numbers.
         Keep the response concise, practical, and educational.
+        Return valid markdown with exactly these sections:
+        ## Scenario Summary
+
+        ## Tradeoff
+
+        ## Recommended Next Step
+        Put a blank line after each heading.
+        Use one short paragraph under Scenario Summary and Tradeoff.
+        Use 1-2 markdown bullet points under Recommended Next Step when the action is concrete.
         """
     }
 

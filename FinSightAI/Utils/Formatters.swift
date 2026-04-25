@@ -63,3 +63,27 @@ enum MonthFormatter {
         sectionFormatter.string(from: date)
     }
 }
+
+enum DayFormatter {
+    private static let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
+
+    static func dayKey(for date: Date) -> String {
+        formatter.string(from: date)
+    }
+}
+
+enum RelativeTimestampFormatter {
+    private static let formatter: RelativeDateTimeFormatter = {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        return formatter
+    }()
+
+    static func updatedString(for date: Date) -> String {
+        "Updated \(formatter.localizedString(for: date, relativeTo: .now))"
+    }
+}

@@ -6,25 +6,50 @@ struct InsightsView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
                     summaryHeader
 
                     switch appContext.insightState {
                     case .idle, .loading:
-                        ProgressView("Analyzing spending summary...")
-                            .frame(maxWidth: .infinity, minHeight: 180)
-                    case .available(let cards):
-                        ForEach(cards) { card in
+                        VStack(spacing: AppTheme.Spacing.md) {
+                            FinSightInsightSkeleton()
+                            FinSightInsightSkeleton()
+                            FinSightInsightSkeleton()
+                        }
+                    case .available(let content):
+                        VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
+                            HStack {
+                                FinSightStatusLine(text: RelativeTimestampFormatter.updatedString(for: content.lastUpdated))
+                                Spacer()
+                                FinSightStreamingRefreshControl(
+                                    isRefreshing: content.isRefreshing || appContext.isInsightRefreshInFlight,
+                                    action: {
+                                    Task {
+                                        await appContext.loadInsights(forceRefresh: true)
+                                    }
+                                },
+                                    buttonStyleKind: .prominent
+                                )
+                            }
+                            if let statusMessage = content.statusMessage {
+                                Text(statusMessage)
+                                    .font(AppTheme.Typography.caption)
+                                    .foregroundStyle(AppTheme.mutedInk)
+                            }
+                        }
+
+                        ForEach(content.value) { card in
                             InsightPanel(card: card)
                         }
                     case .unavailable(let message), .failure(let message):
                         unsupportedPanel(message: message)
                     }
                 }
-                .padding(20)
+                .padding(AppTheme.Spacing.lg)
             }
             .background(AppTheme.backgroundGradient.ignoresSafeArea())
             .navigationTitle("AI Insights")
+            .toolbarTitleDisplayMode(.inline)
         }
         .task(id: appContext.monthlySummary.monthLabel) {
             await appContext.loadInsights()
@@ -32,30 +57,37 @@ struct InsightsView: View {
     }
 
     private var summaryHeader: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
             Text("This month")
-                .font(.headline)
-            Text("\(CurrencyFormatter.pesoString(from: appContext.monthlySummary.totalSpent)) across \(appContext.monthlySummary.transactionCount) entries")
+                .font(AppTheme.Typography.headline)
+            Text(CurrencyFormatter.pesoString(from: appContext.monthlySummary.totalSpent))
+                .font(AppTheme.Typography.heroValue)
+                .foregroundStyle(AppTheme.ink)
+                .monospacedDigit()
+            Text("Across \(appContext.monthlySummary.transactionCount) entries")
                 .font(.title3.weight(.semibold))
             Text("Insights are generated from processed monthly summaries rather than raw logs.")
-                .font(.footnote)
+                .font(AppTheme.Typography.caption)
                 .foregroundStyle(AppTheme.mutedInk)
         }
-        .padding(22)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppTheme.card, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .finSightCard()
     }
 
     private func unsupportedPanel(message: String) -> some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
             Label("AI unavailable", systemImage: "exclamationmark.triangle.fill")
-                .font(.headline)
+                .font(AppTheme.Typography.headline)
             Text(message)
                 .foregroundStyle(AppTheme.mutedInk)
+            Button("Retry") {
+                Task {
+                    await appContext.loadInsights(forceRefresh: true)
+                }
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(AppTheme.primary)
         }
-        .padding(22)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppTheme.card, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .finSightCard()
     }
 }
 
@@ -63,16 +95,28 @@ private struct InsightPanel: View {
     let card: InsightCard
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
             Label(card.kind.title, systemImage: card.kind.systemImage)
-                .font(.headline)
+                .font(AppTheme.Typography.headline)
                 .foregroundStyle(AppTheme.ink)
 
-            Text(card.body)
-                .foregroundStyle(AppTheme.mutedInk)
+            FinSightMarkdownView(markdown: card.markdown, style: .aiInsight)
+
+            if card.markdown.isEmpty {
+                FinSightTypingIndicator()
+            }
         }
-        .padding(22)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(AppTheme.card, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .finSightCard(surface: panelTint)
+    }
+
+    private var panelTint: Color {
+        switch card.kind {
+        case .budgeting:
+            AppTheme.cardTintBudget
+        case .risk:
+            AppTheme.cardTintRisk
+        case .growth:
+            AppTheme.cardTintGrowth
+        }
     }
 }
