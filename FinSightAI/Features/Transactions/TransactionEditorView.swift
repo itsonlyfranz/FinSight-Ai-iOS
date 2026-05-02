@@ -28,6 +28,8 @@ struct TransactionEditorView: View {
                 }
 
                 Section("Details") {
+                    TextField("Merchant", text: Bindable(appContext).activeDraft.merchantName)
+                        .textInputAutocapitalization(.words)
                     DatePicker("Date", selection: Bindable(appContext).activeDraft.date, displayedComponents: .date)
                     TextField("Note", text: Bindable(appContext).activeDraft.note, axis: .vertical)
                         .lineLimit(2...4)

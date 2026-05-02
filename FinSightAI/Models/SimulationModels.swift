@@ -5,6 +5,7 @@ struct SimulationInput: Equatable {
     var dailySavings: Double
     var reductionPercent: Double
     var savingsGoal: Double
+    var disabledRecurringMonthlySpend: Double = 0
 }
 
 struct SimulationProjection: Equatable {

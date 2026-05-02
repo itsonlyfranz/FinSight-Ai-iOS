@@ -5,6 +5,7 @@ import SwiftData
 final class TransactionRecord {
     @Attribute(.unique) var id: UUID
     var amount: Double
+    var merchantNameStorage: String?
     var categoryRawValue: String
     var date: Date
     var note: String
@@ -14,6 +15,7 @@ final class TransactionRecord {
     init(
         id: UUID = UUID(),
         amount: Double,
+        merchantName: String = "",
         category: SpendingCategory,
         date: Date,
         note: String = "",
@@ -22,6 +24,7 @@ final class TransactionRecord {
     ) {
         self.id = id
         self.amount = amount
+        self.merchantNameStorage = merchantName
         self.categoryRawValue = category.rawValue
         self.date = date
         self.note = note
@@ -32,5 +35,10 @@ final class TransactionRecord {
     var category: SpendingCategory {
         get { SpendingCategory(rawValue: categoryRawValue) ?? .other }
         set { categoryRawValue = newValue.rawValue }
+    }
+
+    var merchantName: String {
+        get { merchantNameStorage ?? "" }
+        set { merchantNameStorage = newValue }
     }
 }

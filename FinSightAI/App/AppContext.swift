@@ -6,8 +6,10 @@ import SwiftData
 @Observable
 final class AppContext {
     private let repository: TransactionRepository
+    private let recurringExpenseRepository: RecurringExpenseRepository
     private let modelContext: ModelContext
     private let summaryService: SummaryService
+    private let recurringSummaryService: RecurringSummaryService
     private let aiInsightService: AIInsightService
     let simulationService: SimulationService
     let capabilityService: CapabilityService
@@ -16,31 +18,39 @@ final class AppContext {
     private var isLoadingSimulationExplanation = false
 
     var transactions: [TransactionRecord] = []
+    var recurringExpenses: [RecurringExpenseRecord] = []
     var sections: [TransactionMonthSection] = []
     var monthlySummary: MonthlySummary
+    var recurringSummary: RecurringSummary = .empty
     var insightState: InsightLoadState = .idle
     var simulatorExplanationState: LoadableTextState = .idle
     var activeDraft: TransactionDraft = .init()
+    var activeRecurringDraft: RecurringExpenseDraft = .init()
     var editingTransaction: TransactionRecord?
+    var editingRecurringExpense: RecurringExpenseRecord?
 
     var isInsightRefreshInFlight: Bool { isLoadingInsights }
     var isSimulationRefreshInFlight: Bool { isLoadingSimulationExplanation }
 
     init(
         repository: TransactionRepository,
+        recurringExpenseRepository: RecurringExpenseRepository,
         modelContext: ModelContext,
         summaryService: SummaryService,
+        recurringSummaryService: RecurringSummaryService,
         aiInsightService: AIInsightService,
         simulationService: SimulationService,
         capabilityService: CapabilityService
     ) {
         self.repository = repository
+        self.recurringExpenseRepository = recurringExpenseRepository
         self.modelContext = modelContext
         self.summaryService = summaryService
+        self.recurringSummaryService = recurringSummaryService
         self.aiInsightService = aiInsightService
         self.simulationService = simulationService
         self.capabilityService = capabilityService
-        self.monthlySummary = summaryService.makeMonthlySummary(from: [], now: .now)
+        self.monthlySummary = summaryService.makeMonthlySummary(from: [], recurringSummary: .empty, now: .now)
     }
 
     func bootstrap() throws {
@@ -50,8 +60,14 @@ final class AppContext {
 
     func reloadTransactions() throws {
         transactions = try repository.fetchAllTransactions()
+        recurringExpenses = try recurringExpenseRepository.fetchAllRecurringExpenses()
+        recurringSummary = recurringSummaryService.makeSummary(
+            recurringExpenses: recurringExpenses,
+            transactions: transactions,
+            now: .now
+        )
         sections = summaryService.monthlySections(from: transactions)
-        monthlySummary = summaryService.makeMonthlySummary(from: transactions, now: .now)
+        monthlySummary = summaryService.makeMonthlySummary(from: transactions, recurringSummary: recurringSummary, now: .now)
     }
 
     func saveDraft() throws {
@@ -77,6 +93,37 @@ final class AppContext {
 
     func delete(_ transaction: TransactionRecord) throws {
         try repository.deleteTransaction(transaction)
+        try reloadTransactions()
+    }
+
+    func saveRecurringDraft() throws {
+        if let editingRecurringExpense {
+            try recurringExpenseRepository.updateRecurringExpense(editingRecurringExpense, from: activeRecurringDraft)
+        } else {
+            try recurringExpenseRepository.addRecurringExpense(from: activeRecurringDraft)
+        }
+        editingRecurringExpense = nil
+        activeRecurringDraft = .init()
+        try reloadTransactions()
+    }
+
+    func prepareNewRecurringExpense() {
+        editingRecurringExpense = nil
+        activeRecurringDraft = .init()
+    }
+
+    func prepareRecurringExpense(from transaction: TransactionRecord) {
+        editingRecurringExpense = nil
+        activeRecurringDraft = RecurringExpenseDraft(transaction: transaction)
+    }
+
+    func prepareEdit(for recurringExpense: RecurringExpenseRecord) {
+        editingRecurringExpense = recurringExpense
+        activeRecurringDraft = RecurringExpenseDraft(record: recurringExpense)
+    }
+
+    func delete(_ recurringExpense: RecurringExpenseRecord) throws {
+        try recurringExpenseRepository.deleteRecurringExpense(recurringExpense)
         try reloadTransactions()
     }
 

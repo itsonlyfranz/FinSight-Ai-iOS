@@ -1,7 +1,11 @@
 import Foundation
 
 protocol SummaryService {
-    func makeMonthlySummary(from transactions: [TransactionRecord], now: Date) -> MonthlySummary
+    func makeMonthlySummary(
+        from transactions: [TransactionRecord],
+        recurringSummary: RecurringSummary,
+        now: Date
+    ) -> MonthlySummary
     func monthlySections(from transactions: [TransactionRecord]) -> [TransactionMonthSection]
 }
 

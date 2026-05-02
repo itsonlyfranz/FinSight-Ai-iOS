@@ -5,13 +5,16 @@ struct SimulatorView: View {
     @State private var dailySavings: Double = 100
     @State private var reductionPercent: Double = 15
     @State private var savingsGoal: Double = 50_000
+    @State private var disabledRecurringIDs: Set<UUID> = []
+    @State private var explanationInput: SimulationInput?
 
     var body: some View {
         let input = SimulationInput(
             currentMonthlySpending: appContext.monthlySummary.totalSpent,
             dailySavings: dailySavings,
             reductionPercent: reductionPercent,
-            savingsGoal: savingsGoal
+            savingsGoal: savingsGoal,
+            disabledRecurringMonthlySpend: disabledRecurringMonthlySpend
         )
         let projection = appContext.simulationService.project(input: input)
 
@@ -20,16 +23,23 @@ struct SimulatorView: View {
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
                     heroCard(input: input, projection: projection)
                     controlsCard
+                    recurringControlsCard
                     projectionCard(projection: projection)
-                    explanationCard(input: input)
+                    explanationCard(input: explanationInput ?? input)
                 }
                 .padding(AppTheme.Spacing.lg)
             }
             .background(AppTheme.backgroundGradient.ignoresSafeArea())
             .navigationTitle("What If")
         }
-        .task(id: AIFingerprint.simulation(input: input, projection: projection)) {
-            await appContext.loadSimulationExplanation(input: input)
+        .task(id: input) {
+            try? await Task.sleep(nanoseconds: 700_000_000)
+            guard !Task.isCancelled else { return }
+            explanationInput = input
+        }
+        .task(id: explanationInput) {
+            guard let explanationInput else { return }
+            await appContext.loadSimulationExplanation(input: explanationInput)
         }
     }
 
@@ -44,7 +54,7 @@ struct SimulatorView: View {
                 .monospacedDigit()
                 .contentTransition(.numericText())
                 .animation(.spring(duration: 0.3), value: projection.monthlySavings)
-            Text("Projected monthly savings if you set aside \(CurrencyFormatter.pesoString(from: input.dailySavings)) a day and trim \(Int(input.reductionPercent))% of current spending.")
+            Text("Projected monthly savings if you set aside \(CurrencyFormatter.pesoString(from: input.dailySavings)) a day, trim \(Int(input.reductionPercent))% of current spending, and pause selected recurring charges.")
                 .foregroundStyle(AppTheme.surface.opacity(0.88))
         }
         .finSightCard(surface: AppTheme.surfaceElevated)
@@ -83,6 +93,41 @@ struct SimulatorView: View {
                     .contentTransition(.numericText())
                     .animation(.spring(duration: 0.3), value: savingsGoal)
                 Slider(value: $savingsGoal, in: 5_000...200_000, step: 1_000)
+            }
+        }
+        .finSightCard()
+    }
+
+    private var recurringControlsCard: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+            HStack {
+                Label("Recurring expenses", systemImage: "repeat.circle.fill")
+                    .font(.headline)
+                Spacer()
+                Text(CurrencyFormatter.pesoString(from: disabledRecurringMonthlySpend))
+                    .font(.headline.monospacedDigit())
+                    .foregroundStyle(AppTheme.primary)
+            }
+
+            if appContext.recurringSummary.items.isEmpty {
+                FinSightEmptyState(
+                    title: "No recurring charges",
+                    systemImage: "calendar.badge.clock",
+                    message: "Set recurring expenses from Transactions to model long-term savings here."
+                )
+            } else {
+                ForEach(appContext.recurringSummary.items) { item in
+                    Toggle(isOn: recurringToggleBinding(for: item)) {
+                        VStack(alignment: .leading, spacing: 3) {
+                            Text(item.merchantName)
+                                .font(.subheadline.weight(.semibold))
+                            Text(CurrencyFormatter.pesoString(from: item.monthlyAmount) + "/mo")
+                                .font(AppTheme.Typography.caption)
+                                .foregroundStyle(AppTheme.mutedInk)
+                        }
+                    }
+                    .toggleStyle(.switch)
+                }
             }
         }
         .finSightCard()
@@ -164,6 +209,24 @@ struct SimulatorView: View {
             return content.isRefreshing
         }
         return false
+    }
+
+    private var disabledRecurringMonthlySpend: Double {
+        appContext.recurringSummary.items
+            .filter { disabledRecurringIDs.contains($0.id) }
+            .reduce(0) { $0 + $1.monthlyAmount }
+    }
+
+    private func recurringToggleBinding(for item: RecurringTransaction) -> Binding<Bool> {
+        Binding {
+            disabledRecurringIDs.contains(item.id)
+        } set: { isEnabled in
+            if isEnabled {
+                disabledRecurringIDs.insert(item.id)
+            } else {
+                disabledRecurringIDs.remove(item.id)
+            }
+        }
     }
 
     private func projectionRow(label: String, value: Double) -> some View {

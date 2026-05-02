@@ -9,6 +9,7 @@ struct DashboardView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
                     heroCard
+                    recurringSpendCard
                     spendingChartCard
                     recentTransactionsCard
                     insightCard
@@ -38,12 +39,62 @@ struct DashboardView: View {
                 metricPill(title: "Transactions", value: "\(appContext.monthlySummary.transactionCount)")
                 metricPill(title: "Average", value: CurrencyFormatter.pesoString(from: appContext.monthlySummary.averageTransactionValue))
             }
+            HStack(spacing: AppTheme.Spacing.sm) {
+                metricPill(title: "Recurring", value: CurrencyFormatter.pesoString(from: appContext.monthlySummary.recurringMonthlySpend))
+                metricPill(title: "One-off", value: CurrencyFormatter.pesoString(from: appContext.monthlySummary.oneOffSpent))
+            }
 
             Text(appContext.monthlySummary.spendingTrendDescription)
                 .font(AppTheme.Typography.caption)
                 .foregroundStyle(AppTheme.mutedInk)
         }
         .finSightCard()
+    }
+
+    private var recurringSpendCard: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+            HStack {
+                Label("Recurring Spend", systemImage: "repeat.circle.fill")
+                    .font(AppTheme.Typography.headline)
+                Spacer()
+                Text("\(appContext.monthlySummary.recurringTransactionCount)")
+                    .font(.headline.monospacedDigit())
+                    .foregroundStyle(AppTheme.primary)
+            }
+
+            if appContext.recurringSummary.items.isEmpty {
+                FinSightEmptyState(
+                    title: "No recurring charges set",
+                    systemImage: "calendar.badge.clock",
+                    message: "Add recurring expenses from Transactions to track fixed monthly spend."
+                )
+            } else {
+                Text(CurrencyFormatter.pesoString(from: appContext.monthlySummary.recurringMonthlySpend))
+                    .font(.title2.weight(.semibold))
+                    .foregroundStyle(AppTheme.ink)
+                    .monospacedDigit()
+                if let largest = appContext.recurringSummary.largestItem {
+                    HStack(spacing: AppTheme.Spacing.sm) {
+                        Image(systemName: largest.category.symbolName)
+                            .foregroundStyle(.white)
+                            .frame(width: 32, height: 32)
+                            .background(largest.category.tint, in: RoundedRectangle(cornerRadius: AppTheme.CornerRadius.icon, style: .continuous))
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(largest.merchantName)
+                                .font(.subheadline.weight(.semibold))
+                            Text("Largest recurring charge")
+                                .font(AppTheme.Typography.caption)
+                                .foregroundStyle(AppTheme.mutedInk)
+                        }
+                        Spacer()
+                        Text(CurrencyFormatter.pesoString(from: largest.monthlyAmount))
+                            .font(.subheadline.weight(.semibold))
+                            .monospacedDigit()
+                    }
+                }
+            }
+        }
+        .finSightCard(surface: AppTheme.cardTintGrowth)
     }
 
     private var spendingChartCard: some View {
@@ -177,7 +228,7 @@ private struct TransactionRow: View {
                 .background(transaction.category.tint, in: RoundedRectangle(cornerRadius: AppTheme.CornerRadius.icon, style: .continuous))
 
             VStack(alignment: .leading, spacing: 3) {
-                Text(transaction.category.title)
+                Text(transaction.merchantName.isEmpty ? transaction.category.title : transaction.merchantName)
                     .font(.subheadline.weight(.semibold))
                 Text(transaction.note.isEmpty ? "No note" : transaction.note)
                     .font(.caption)

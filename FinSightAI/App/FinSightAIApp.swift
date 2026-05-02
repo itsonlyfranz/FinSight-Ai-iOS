@@ -7,7 +7,7 @@ struct FinSightAIApp: App {
     @State private var appContext: AppContext
 
     init() {
-        let schema = Schema([TransactionRecord.self, AIResponseCacheRecord.self])
+        let schema = Schema([TransactionRecord.self, RecurringExpenseRecord.self, AIResponseCacheRecord.self])
         let configuration = ModelConfiguration(isStoredInMemoryOnly: false)
 
         do {
@@ -38,8 +38,10 @@ struct FinSightAIApp: App {
         _appContext = State(
             initialValue: AppContext(
                 repository: SwiftDataTransactionRepository(modelContext: modelContext),
+                recurringExpenseRepository: SwiftDataRecurringExpenseRepository(modelContext: modelContext),
                 modelContext: modelContext,
                 summaryService: DefaultSummaryService(),
+                recurringSummaryService: DefaultRecurringSummaryService(),
                 aiInsightService: aiService,
                 simulationService: DefaultSimulationService(),
                 capabilityService: capabilityService

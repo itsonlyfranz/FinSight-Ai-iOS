@@ -23,6 +23,7 @@ final class SwiftDataTransactionRepository: TransactionRepository {
 
         let record = TransactionRecord(
             amount: amount,
+            merchantName: draft.merchantName.trimmingCharacters(in: .whitespacesAndNewlines),
             category: draft.category,
             date: draft.date,
             note: draft.note.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -37,6 +38,7 @@ final class SwiftDataTransactionRepository: TransactionRepository {
         }
 
         record.amount = amount
+        record.merchantName = draft.merchantName.trimmingCharacters(in: .whitespacesAndNewlines)
         record.category = draft.category
         record.date = draft.date
         record.note = draft.note.trimmingCharacters(in: .whitespacesAndNewlines)

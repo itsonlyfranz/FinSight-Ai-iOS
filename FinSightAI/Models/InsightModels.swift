@@ -130,6 +130,9 @@ enum AIFingerprint {
         return [
             "month=\(MonthFormatter.sectionID(for: summary.monthStart))",
             "total=\(normalizedDecimal(summary.totalSpent))",
+            "recurring=\(normalizedDecimal(summary.recurringMonthlySpend))",
+            "recurringCount=\(summary.recurringTransactionCount)",
+            "oneOff=\(normalizedDecimal(summary.oneOffSpent))",
             "count=\(summary.transactionCount)",
             "average=\(normalizedDecimal(summary.averageTransactionValue))",
             "top=\(summary.topCategory?.rawValue ?? "none")",
@@ -145,6 +148,7 @@ enum AIFingerprint {
             "daily=\(normalizedDecimal(input.dailySavings))",
             "reduction=\(normalizedDecimal(input.reductionPercent))",
             "goal=\(normalizedDecimal(input.savingsGoal))",
+            "disabledRecurring=\(normalizedDecimal(input.disabledRecurringMonthlySpend))",
             "monthly=\(normalizedDecimal(projection.monthlySavings))",
             "three=\(normalizedDecimal(projection.projectedSavingsThreeMonths))",
             "six=\(normalizedDecimal(projection.projectedSavingsSixMonths))",

@@ -171,6 +171,10 @@ enum PromptFactory {
         """
         Month: \(summary.monthLabel)
         Total spent: \(CurrencyFormatter.pesoString(from: summary.totalSpent))
+        Recurring monthly spend: \(CurrencyFormatter.pesoString(from: summary.recurringMonthlySpend))
+        Recurring item count: \(summary.recurringTransactionCount)
+        Largest recurring merchant: \(summary.largestRecurringMerchant ?? "None")
+        One-off spending this month: \(CurrencyFormatter.pesoString(from: summary.oneOffSpent))
         Transaction count: \(summary.transactionCount)
         Average transaction: \(CurrencyFormatter.pesoString(from: summary.averageTransactionValue))
         Top category: \(summary.topCategory?.title ?? "None")
@@ -188,6 +192,7 @@ enum PromptFactory {
         Current monthly spending: \(CurrencyFormatter.pesoString(from: input.currentMonthlySpending))
         Daily savings target: \(CurrencyFormatter.pesoString(from: input.dailySavings))
         Spending reduction: \(PercentFormatter.string(from: input.reductionPercent / 100))
+        Recurring expenses paused: \(CurrencyFormatter.pesoString(from: input.disabledRecurringMonthlySpend))
         Savings goal: \(CurrencyFormatter.pesoString(from: input.savingsGoal))
         Monthly savings result: \(CurrencyFormatter.pesoString(from: projection.monthlySavings))
         3-month projection: \(CurrencyFormatter.pesoString(from: projection.projectedSavingsThreeMonths))

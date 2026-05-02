@@ -88,10 +88,50 @@ Core components:
 
 - `AppContext`: app-wide state and feature orchestration
 - `TransactionRepository`: local CRUD and seed handling
+- `RecurringExpenseRepository`: user-managed recurring expense storage
 - `SummaryService`: monthly aggregation and dashboard summary building
+- `RecurringSummaryService`: recurring expense totals and transaction classification
 - `SimulationService`: deterministic savings calculations
 - `AIInsightService`: AI abstraction for insights and simulator explanations
 - `CapabilityService`: checks whether Apple Intelligence support is available
+
+```mermaid
+flowchart TD
+    User["User"] --> Dashboard["Dashboard"]
+    User --> Transactions["Transactions"]
+    User --> Simulator["What-If Simulator"]
+    User --> Insights["Insights"]
+
+    Transactions --> TransactionEditor["Transaction Editor"]
+    Transactions --> RecurringEditor["Recurring Expense Editor"]
+    TransactionEditor --> TransactionRepository["TransactionRepository"]
+    RecurringEditor --> RecurringExpenseRepository["RecurringExpenseRepository"]
+
+    TransactionRepository --> SwiftData["SwiftData Local Store"]
+    RecurringExpenseRepository --> SwiftData
+    SwiftData --> AppContext["AppContext"]
+
+    AppContext --> SummaryService["SummaryService"]
+    AppContext --> RecurringSummaryService["RecurringSummaryService"]
+    SummaryService --> MonthlySummary["Monthly Summary"]
+    RecurringSummaryService --> RecurringSummary["Recurring Summary"]
+
+    MonthlySummary --> Dashboard
+    RecurringSummary --> Dashboard
+    RecurringSummary --> Simulator
+
+    Simulator --> SimulationService["SimulationService"]
+    SimulationService --> Projection["Savings Projection"]
+    Projection --> Simulator
+
+    MonthlySummary --> AIInsightService["AIInsightService"]
+    RecurringSummary --> AIInsightService
+    Projection --> AIInsightService
+    AIInsightService --> InsightCards["Markdown Insight Cards"]
+    InsightCards --> Dashboard
+    InsightCards --> Insights
+    InsightCards --> Simulator
+```
 
 ## Apple Intelligence
 

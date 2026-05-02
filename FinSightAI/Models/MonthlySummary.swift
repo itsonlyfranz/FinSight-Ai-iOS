@@ -11,6 +11,10 @@ struct MonthlySummary: Equatable {
     let monthStart: Date
     let monthLabel: String
     let totalSpent: Double
+    let recurringMonthlySpend: Double
+    let recurringTransactionCount: Int
+    let oneOffSpent: Double
+    let largestRecurringMerchant: String?
     let transactionCount: Int
     let categoryBreakdown: [CategorySpend]
     let recentTransactions: [TransactionRecord]

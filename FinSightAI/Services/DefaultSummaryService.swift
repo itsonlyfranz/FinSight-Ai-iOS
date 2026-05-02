@@ -7,13 +7,21 @@ struct DefaultSummaryService: SummaryService {
         self.calendar = calendar
     }
 
-    func makeMonthlySummary(from transactions: [TransactionRecord], now: Date = .now) -> MonthlySummary {
+    func makeMonthlySummary(
+        from transactions: [TransactionRecord],
+        recurringSummary: RecurringSummary = .empty,
+        now: Date = .now
+    ) -> MonthlySummary {
         let monthInterval = calendar.dateInterval(of: .month, for: now) ?? DateInterval(start: now, end: now)
         let monthlyTransactions = transactions
             .filter { monthInterval.contains($0.date) }
             .sorted(by: { $0.date > $1.date })
 
         let totalSpent = monthlyTransactions.reduce(0) { $0 + $1.amount }
+        let recurringActualSpend = monthlyTransactions
+            .filter { recurringSummary.recurringTransactionIDs.contains($0.id) }
+            .reduce(0) { $0 + $1.amount }
+        let oneOffSpent = max(0, totalSpent - recurringActualSpend)
         let grouped = Dictionary(grouping: monthlyTransactions, by: \.category)
         let categoryBreakdown = grouped
             .map { category, entries in
@@ -31,6 +39,10 @@ struct DefaultSummaryService: SummaryService {
             monthStart: monthInterval.start,
             monthLabel: MonthFormatter.label(for: monthInterval.start),
             totalSpent: totalSpent,
+            recurringMonthlySpend: recurringSummary.totalMonthlySpend,
+            recurringTransactionCount: recurringSummary.itemCount,
+            oneOffSpent: oneOffSpent,
+            largestRecurringMerchant: recurringSummary.largestItem?.merchantName,
             transactionCount: monthlyTransactions.count,
             categoryBreakdown: categoryBreakdown,
             recentTransactions: Array(monthlyTransactions.prefix(5)),

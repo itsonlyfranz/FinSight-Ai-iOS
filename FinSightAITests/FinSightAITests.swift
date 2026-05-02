@@ -14,9 +14,9 @@ final class FinSightAITests: XCTestCase {
         let calendar = Calendar(identifier: .gregorian)
         let now = Date(timeIntervalSince1970: 1_713_000_000)
         let transactions = [
-            TransactionRecord(amount: 1000, category: .groceries, date: now),
-            TransactionRecord(amount: 500, category: .transport, date: now),
-            TransactionRecord(amount: 500, category: .groceries, date: now)
+            TransactionRecord(amount: 1000, merchantName: "Landers", category: .groceries, date: now),
+            TransactionRecord(amount: 500, merchantName: "Grab", category: .transport, date: now),
+            TransactionRecord(amount: 500, merchantName: "Landers", category: .groceries, date: now)
         ]
 
         let summary = DefaultSummaryService(calendar: calendar).makeMonthlySummary(from: transactions, now: now)
@@ -27,19 +27,171 @@ final class FinSightAITests: XCTestCase {
         XCTAssertEqual(summary.categoryBreakdown.first?.amount ?? 0, 1500, accuracy: 0.001)
     }
 
+    func testRecurringSummaryUsesManualDefinitions() {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = makeDate(year: 2024, month: 4, day: 10, calendar: calendar)
+        let recurringExpenses = [
+            RecurringExpenseRecord(
+                merchantName: "Netflix",
+                amount: 720,
+                category: .entertainment,
+                expectedDay: 15
+            )
+        ]
+
+        let summary = DefaultRecurringSummaryService(calendar: calendar).makeSummary(
+            recurringExpenses: recurringExpenses,
+            transactions: [],
+            now: now
+        )
+
+        XCTAssertEqual(summary.itemCount, 1)
+        XCTAssertEqual(summary.totalMonthlySpend, 720, accuracy: 0.001)
+        XCTAssertEqual(summary.items.first?.merchantName, "Netflix")
+        XCTAssertEqual(summary.items.first?.status, .upcoming)
+    }
+
+    func testRecurringSummaryIgnoresInactiveDefinitions() {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = makeDate(year: 2024, month: 4, day: 10, calendar: calendar)
+        let recurringExpenses = [
+            RecurringExpenseRecord(
+                merchantName: "Netflix",
+                amount: 720,
+                category: .entertainment,
+                expectedDay: 15,
+                isActive: false
+            )
+        ]
+
+        let summary = DefaultRecurringSummaryService(calendar: calendar).makeSummary(
+            recurringExpenses: recurringExpenses,
+            transactions: [],
+            now: now
+        )
+
+        XCTAssertTrue(summary.items.isEmpty)
+    }
+
+    func testRecurringSummaryMatchesTransactionsForClassification() {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = makeDate(year: 2024, month: 4, day: 10, calendar: calendar)
+        let netflix = TransactionRecord(amount: 720, merchantName: "Netflix, Inc.", category: .entertainment, date: now)
+        let transactions = [
+            netflix,
+            TransactionRecord(amount: 100, merchantName: "Coffee Shop", category: .dining, date: now),
+            TransactionRecord(amount: 1_500, merchantName: "Netflix", category: .entertainment, date: now)
+        ]
+        let recurringExpenses = [
+            RecurringExpenseRecord(
+                merchantName: "NETFLIX INC",
+                amount: 720,
+                category: .entertainment,
+                expectedDay: 15
+            )
+        ]
+
+        let summary = DefaultRecurringSummaryService(calendar: calendar).makeSummary(
+            recurringExpenses: recurringExpenses,
+            transactions: transactions,
+            now: now
+        )
+
+        XCTAssertEqual(summary.recurringTransactionIDs, [netflix.id])
+    }
+
+    func testRecurringSummaryUsesScheduleOnlyStatus() {
+        let calendar = Calendar(identifier: .gregorian)
+        let recurringExpenses = [
+            RecurringExpenseRecord(merchantName: "Rent", amount: 15_000, category: .bills, expectedDay: 10)
+        ]
+        let service = DefaultRecurringSummaryService(calendar: calendar, gracePeriodDays: 3)
+
+        let upcoming = service.makeSummary(
+            recurringExpenses: recurringExpenses,
+            transactions: [],
+            now: makeDate(year: 2024, month: 4, day: 9, calendar: calendar)
+        )
+        let due = service.makeSummary(
+            recurringExpenses: recurringExpenses,
+            transactions: [],
+            now: makeDate(year: 2024, month: 4, day: 13, calendar: calendar)
+        )
+        let missed = service.makeSummary(
+            recurringExpenses: recurringExpenses,
+            transactions: [],
+            now: makeDate(year: 2024, month: 4, day: 14, calendar: calendar)
+        )
+
+        XCTAssertEqual(upcoming.items.first?.status, .upcoming)
+        XCTAssertEqual(due.items.first?.status, .due)
+        XCTAssertEqual(missed.items.first?.status, .missed)
+    }
+
+    func testSummaryServiceSeparatesRecurringFromOneOffSpend() {
+        let calendar = Calendar(identifier: .gregorian)
+        let now = makeDate(year: 2024, month: 3, day: 15, calendar: calendar)
+        let transactions = [
+            TransactionRecord(amount: 720, merchantName: "Netflix", category: .entertainment, date: makeDate(year: 2024, month: 3, day: 5, calendar: calendar)),
+            TransactionRecord(amount: 100, merchantName: "Coffee Shop", category: .dining, date: makeDate(year: 2024, month: 3, day: 6, calendar: calendar))
+        ]
+        let recurringSummary = DefaultRecurringSummaryService(calendar: calendar).makeSummary(
+            recurringExpenses: [
+                RecurringExpenseRecord(
+                    merchantName: "Netflix",
+                    amount: 720,
+                    category: .entertainment,
+                    expectedDay: 5
+                )
+            ],
+            transactions: transactions,
+            now: now
+        )
+
+        let summary = DefaultSummaryService(calendar: calendar).makeMonthlySummary(
+            from: transactions,
+            recurringSummary: recurringSummary,
+            now: now
+        )
+
+        XCTAssertEqual(summary.recurringMonthlySpend, 720, accuracy: 0.001)
+        XCTAssertEqual(summary.recurringTransactionCount, 1)
+        XCTAssertEqual(summary.oneOffSpent, 100, accuracy: 0.001)
+    }
+
+    func testRecurringDraftPrefillsFromTransaction() {
+        let calendar = Calendar(identifier: .gregorian)
+        let transaction = TransactionRecord(
+            amount: 1_250,
+            merchantName: "Spotify",
+            category: .entertainment,
+            date: makeDate(year: 2024, month: 4, day: 18, calendar: calendar),
+            note: "Family plan"
+        )
+
+        let draft = RecurringExpenseDraft(transaction: transaction, calendar: calendar)
+
+        XCTAssertEqual(draft.merchantName, "Spotify")
+        XCTAssertEqual(draft.amount, 1_250)
+        XCTAssertEqual(draft.category, .entertainment)
+        XCTAssertEqual(draft.expectedDay, 18)
+        XCTAssertEqual(draft.note, "Family plan")
+    }
+
     func testSimulationServiceCalculatesGoalTimeline() {
         let projection = DefaultSimulationService().project(
             input: SimulationInput(
                 currentMonthlySpending: 20_000,
                 dailySavings: 100,
                 reductionPercent: 20,
-                savingsGoal: 50_000
+                savingsGoal: 50_000,
+                disabledRecurringMonthlySpend: 500
             )
         )
 
-        XCTAssertEqual(projection.monthlySavings, 7_000, accuracy: 0.001)
-        XCTAssertEqual(projection.projectedSavingsSixMonths, 42_000, accuracy: 0.001)
-        XCTAssertEqual(projection.monthsToGoal, 8)
+        XCTAssertEqual(projection.monthlySavings, 7_500, accuracy: 0.001)
+        XCTAssertEqual(projection.projectedSavingsSixMonths, 45_000, accuracy: 0.001)
+        XCTAssertEqual(projection.monthsToGoal, 7)
     }
 
     func testCurrencyFormatterUsesPesoSymbol() {
@@ -47,16 +199,52 @@ final class FinSightAITests: XCTestCase {
     }
 
     @MainActor
+    func testRecurringExpenseRepositoryCreatesUpdatesAndDeletesRecords() throws {
+        let schema = Schema([RecurringExpenseRecord.self])
+        let container = try ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let repository = SwiftDataRecurringExpenseRepository(modelContext: ModelContext(container))
+
+        var draft = RecurringExpenseDraft()
+        draft.merchantName = "Netflix"
+        draft.amountText = "720"
+        draft.category = .entertainment
+        draft.expectedDay = 15
+        draft.note = "Family plan"
+
+        try repository.addRecurringExpense(from: draft)
+        var records = try repository.fetchAllRecurringExpenses()
+
+        XCTAssertEqual(records.count, 1)
+        XCTAssertEqual(records.first?.merchantName, "Netflix")
+        XCTAssertEqual(records.first?.amount ?? 0, 720, accuracy: 0.001)
+
+        let record = try XCTUnwrap(records.first)
+        draft.amountText = "750"
+        draft.isActive = false
+        try repository.updateRecurringExpense(record, from: draft)
+        records = try repository.fetchAllRecurringExpenses()
+
+        XCTAssertEqual(records.first?.amount ?? 0, 750, accuracy: 0.001)
+        XCTAssertEqual(records.first?.isActive, false)
+
+        try repository.deleteRecurringExpense(record)
+        XCTAssertTrue(try repository.fetchAllRecurringExpenses().isEmpty)
+    }
+
+    @MainActor
     func testAppContextSaveFlowUpdatesSummary() throws {
-        let schema = Schema([TransactionRecord.self, AIResponseCacheRecord.self])
+        let schema = Schema([TransactionRecord.self, RecurringExpenseRecord.self, AIResponseCacheRecord.self])
         let container = try ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
         let modelContext = ModelContext(container)
         let repository = SwiftDataTransactionRepository(modelContext: modelContext)
+        let recurringRepository = SwiftDataRecurringExpenseRepository(modelContext: modelContext)
         let summaryService = DefaultSummaryService()
         let context = AppContext(
             repository: repository,
+            recurringExpenseRepository: recurringRepository,
             modelContext: modelContext,
             summaryService: summaryService,
+            recurringSummaryService: DefaultRecurringSummaryService(),
             aiInsightService: UnsupportedAIInsightService(reason: "Unavailable"),
             simulationService: DefaultSimulationService(),
             capabilityService: DefaultCapabilityService()
@@ -64,6 +252,7 @@ final class FinSightAITests: XCTestCase {
 
         var draft = TransactionDraft()
         draft.amountText = "250"
+        draft.merchantName = "Cafe Mary Grace"
         draft.category = .dining
         draft.note = "Lunch"
         context.activeDraft = draft
@@ -71,8 +260,39 @@ final class FinSightAITests: XCTestCase {
         try context.saveDraft()
 
         XCTAssertEqual(context.transactions.count, 1)
+        XCTAssertEqual(context.transactions.first?.merchantName, "Cafe Mary Grace")
         XCTAssertEqual(context.monthlySummary.totalSpent, 250, accuracy: 0.001)
         XCTAssertEqual(context.monthlySummary.topCategory, .dining)
+    }
+
+    @MainActor
+    func testAppContextRecurringSaveFlowUpdatesSummary() throws {
+        let schema = Schema([TransactionRecord.self, RecurringExpenseRecord.self, AIResponseCacheRecord.self])
+        let container = try ModelContainer(for: schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let modelContext = ModelContext(container)
+        let context = AppContext(
+            repository: SwiftDataTransactionRepository(modelContext: modelContext),
+            recurringExpenseRepository: SwiftDataRecurringExpenseRepository(modelContext: modelContext),
+            modelContext: modelContext,
+            summaryService: DefaultSummaryService(),
+            recurringSummaryService: DefaultRecurringSummaryService(),
+            aiInsightService: UnsupportedAIInsightService(reason: "Unavailable"),
+            simulationService: DefaultSimulationService(),
+            capabilityService: DefaultCapabilityService()
+        )
+
+        var draft = RecurringExpenseDraft()
+        draft.merchantName = "Netflix"
+        draft.amountText = "720"
+        draft.category = .entertainment
+        draft.expectedDay = 15
+        context.activeRecurringDraft = draft
+
+        try context.saveRecurringDraft()
+
+        XCTAssertEqual(context.recurringExpenses.count, 1)
+        XCTAssertEqual(context.recurringSummary.totalMonthlySpend, 720, accuracy: 0.001)
+        XCTAssertEqual(context.monthlySummary.recurringTransactionCount, 1)
     }
 
     func testMonthlyInsightFingerprintChangesWithMeaningfulSummaryChanges() {
@@ -81,6 +301,10 @@ final class FinSightAITests: XCTestCase {
             monthStart: now,
             monthLabel: "April 2024",
             totalSpent: 2_000,
+            recurringMonthlySpend: 500,
+            recurringTransactionCount: 1,
+            oneOffSpent: 1_500,
+            largestRecurringMerchant: "Netflix",
             transactionCount: 3,
             categoryBreakdown: [
                 CategorySpend(category: .groceries, amount: 1_500, percentage: 0.75),
@@ -97,6 +321,10 @@ final class FinSightAITests: XCTestCase {
             monthStart: now,
             monthLabel: "April 2024",
             totalSpent: 2_500,
+            recurringMonthlySpend: 500,
+            recurringTransactionCount: 1,
+            oneOffSpent: 2_000,
+            largestRecurringMerchant: "Netflix",
             transactionCount: 3,
             categoryBreakdown: baseSummary.categoryBreakdown,
             recentTransactions: [],
@@ -197,5 +425,9 @@ final class FinSightAITests: XCTestCase {
         XCTAssertTrue(instructions.contains("## Tradeoff"))
         XCTAssertTrue(instructions.contains("## Recommended Next Step"))
         XCTAssertTrue(instructions.localizedCaseInsensitiveContains("bullet"))
+    }
+
+    private func makeDate(year: Int, month: Int, day: Int, calendar: Calendar) -> Date {
+        calendar.date(from: DateComponents(year: year, month: month, day: day)) ?? Date()
     }
 }
