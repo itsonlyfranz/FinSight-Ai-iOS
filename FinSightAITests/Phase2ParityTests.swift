@@ -379,6 +379,22 @@ final class Phase2ParityTests: XCTestCase {
         XCTAssertEqual(Decimal(string: parsed[2][4], locale: Locale(identifier: "en_US_POSIX")), dec("1234.5"))
     }
 
+    func testFormulaInjectionIsNeutralisedInFreeTextOnly() throws {
+        for lead in ["=", "+", "-", "@", "\t", "\r"] {
+            XCTAssertEqual(CSV.neutralizeFormula("\(lead)SUM(A1)"), "'\(lead)SUM(A1)")
+        }
+        XCTAssertEqual(CSV.neutralizeFormula("Landers"), "Landers")
+        XCTAssertEqual(CSV.neutralizeFormula(""), "")
+        XCTAssertEqual(CSV.neutralizeFormula("a=b"), "a=b")
+
+        let record = TransactionRecord(
+            amount: dec("12.5"), merchantName: "=HYPERLINK(\"http://x\")", category: .other,
+            date: date(2025, 6, 20), note: "@cmd"
+        )
+        let parsed = try XCTUnwrap(CSV.parse(TransactionCSVExporter.csv(rows: [TransactionExportRow(record)], calendar: calendar)))
+        XCTAssertEqual(parsed[1], ["2025-06-20", "expense", "'=HYPERLINK(\"http://x\")", "other", "12.5", "'@cmd"])
+    }
+
     func testAmountStringsAreLocaleIndependentAndExact() {
         XCTAssertEqual(TransactionCSVExporter.amountString(dec("1234567.89")), "1234567.89")
         XCTAssertEqual(TransactionCSVExporter.amountString(100), "100")

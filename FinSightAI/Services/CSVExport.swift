@@ -15,6 +15,15 @@ enum CSV {
         return "\"" + field.replacingOccurrences(of: "\"", with: "\"\"") + "\""
     }
 
+    /// Spreadsheet apps run a cell that starts with `=`, `+`, `-`, `@`, tab or CR as a formula.
+    /// Free-text cells are neutralised by prefixing a single quote. Never apply this to numeric
+    /// or date columns.
+    static func neutralizeFormula(_ text: String) -> String {
+        guard let first = text.unicodeScalars.first,
+              ["=", "+", "-", "@", "\t", "\r"].contains(first) else { return text }
+        return "'" + text
+    }
+
     static func line(_ fields: [String]) -> String {
         fields.map(escape).joined(separator: ",")
     }
@@ -137,10 +146,10 @@ enum TransactionCSVExporter {
                 [
                     dateString(row.date, calendar: calendar),
                     row.kind.rawValue,
-                    row.merchant,
+                    CSV.neutralizeFormula(row.merchant),
                     row.category.rawValue,
                     amountString(row.amount),
-                    row.note
+                    CSV.neutralizeFormula(row.note)
                 ]
             }
         )
