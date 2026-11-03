@@ -8,6 +8,20 @@ struct TransactionEditorView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    Picker("Type", selection: Bindable(appContext).activeDraft.kind) {
+                        ForEach(TransactionKind.allCases) { kind in
+                            Text(kind.title).tag(kind)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .accessibilityLabel("Transaction type")
+                } footer: {
+                    if appContext.activeDraft.kind == .income {
+                        Text("For one-off income. Regular income, like a salary, is set up under Settings › Income.")
+                    }
+                }
+
                 Section("Amount") {
                     TextField("0.00", text: Bindable(appContext).activeDraft.amountText)
                         .keyboardType(.decimalPad)
@@ -18,17 +32,19 @@ struct TransactionEditorView: View {
                     }
                 }
 
-                Section("Category") {
-                    Picker("Category", selection: Bindable(appContext).activeDraft.category) {
-                        ForEach(SpendingCategory.allCases) { category in
-                            Label(category.title, systemImage: category.symbolName)
-                                .tag(category)
+                if appContext.activeDraft.kind != .income {
+                    Section("Category") {
+                        Picker("Category", selection: Bindable(appContext).activeDraft.category) {
+                            ForEach(SpendingCategory.allCases) { category in
+                                Label(category.title, systemImage: category.symbolName)
+                                    .tag(category)
+                            }
                         }
                     }
                 }
 
                 Section("Details") {
-                    TextField("Merchant", text: Bindable(appContext).activeDraft.merchantName)
+                    TextField(appContext.activeDraft.kind == .income ? "Source" : "Merchant", text: Bindable(appContext).activeDraft.merchantName)
                         .textInputAutocapitalization(.words)
                     DatePicker("Date", selection: Bindable(appContext).activeDraft.date, displayedComponents: .date)
                     TextField("Note", text: Bindable(appContext).activeDraft.note, axis: .vertical)

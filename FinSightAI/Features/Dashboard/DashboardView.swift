@@ -12,6 +12,9 @@ struct DashboardView: View {
                         SampleDataCard()
                     }
                     heroCard
+                    IncomeGaugeCard()
+                    BudgetOverviewCard()
+                    GoalsPreviewCard()
                     recurringSpendCard
                     spendingChartCard
                     recentTransactionsCard

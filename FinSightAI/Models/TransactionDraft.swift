@@ -28,7 +28,7 @@ struct TransactionDraft: Equatable {
         guard let amount else { return "Enter a valid amount." }
         guard amount > 0 else { return "Amount must be greater than zero." }
         guard !merchantName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            return "Merchant is required."
+            return (kind == .income ? "Source is required." : "Merchant is required.")
         }
         return nil
     }

@@ -49,6 +49,14 @@ The current version is a fully local v1 MVP. It uses SwiftData for persistence a
 - delete transactions
 - grouped monthly history
 
+### Planning (Phase 2)
+
+- income sources and a "% of income spent / buffer remaining" gauge
+- per-category monthly budgets with progress bars and a Swift Charts target line
+- savings goals with progress, months-to-reach and a "funded by" estimate
+- category filter chips and merchant search on Transactions
+- CSV export (RFC 4180) via the Settings tab, plus currency, first weekday and opt-in sample data
+
 ### Insights
 
 - budgeting insight section

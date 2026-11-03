@@ -23,7 +23,7 @@ final class SwiftDataTransactionRepository: TransactionRepository {
             amount: amount,
             kind: draft.kind,
             merchantName: draft.merchantName.trimmingCharacters(in: .whitespacesAndNewlines),
-            category: draft.category,
+            category: draft.kind == .income ? .other : draft.category,
             date: draft.date,
             note: draft.note.trimmingCharacters(in: .whitespacesAndNewlines)
         )
@@ -37,7 +37,7 @@ final class SwiftDataTransactionRepository: TransactionRepository {
         record.amount = amount
         record.kind = draft.kind
         record.merchantName = draft.merchantName.trimmingCharacters(in: .whitespacesAndNewlines)
-        record.category = draft.category
+        record.category = draft.kind == .income ? .other : draft.category
         record.date = draft.date
         record.note = draft.note.trimmingCharacters(in: .whitespacesAndNewlines)
         record.updatedAt = .now
