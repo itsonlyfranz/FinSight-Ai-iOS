@@ -74,7 +74,7 @@ struct DashboardView: View {
                     .accessibilityLabel("\(appContext.monthlySummary.recurringTransactionCount) recurring charges")
             }
 
-            if appContext.recurringSummary.items.isEmpty {
+            if appContext.recurringSummary.spendingItems.isEmpty {
                 FinSightEmptyState(
                     title: "No recurring charges set",
                     systemImage: "calendar.badge.clock",

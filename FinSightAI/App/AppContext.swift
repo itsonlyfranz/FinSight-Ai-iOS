@@ -18,7 +18,6 @@ final class AppContext {
     /// Most recent simulator scenarios whose explanations stay cached.
     static let simulationCacheLimit = 10
     private var isLoadingInsights = false
-    private var insightsRerunRequested = false
     private var activeSimulationFingerprint: String?
     private var isLoadingSimulationExplanation = false
 
@@ -89,7 +88,7 @@ final class AppContext {
             transactions: transactions,
             now: .now
         )
-        monthlyRunRate = MonthlyRunRate.estimate(from: transactions, now: .now)
+        monthlyRunRate = MonthlyRunRate.estimate(from: transactions, recurringSummary: recurringSummary, now: .now)
         sections = summaryService.monthlySections(from: transactions)
         monthlySummary = summaryService.makeMonthlySummary(from: transactions, recurringSummary: recurringSummary, now: .now)
     }
@@ -157,6 +156,13 @@ final class AppContext {
     }
 
     func loadInsights(forceRefresh: Bool = false) async {
+        while isLoadingInsights {
+            do {
+                try await Task.sleep(for: .milliseconds(100))
+            } catch {
+                return
+            }
+        }
         guard monthlySummary.transactionCount > 0 else {
             insightState = .empty
             return
@@ -177,12 +183,6 @@ final class AppContext {
             )
         } else {
             insightState = .loading
-        }
-
-        guard !isLoadingInsights else {
-            // Data changed while a generation is running: run again once it finishes.
-            insightsRerunRequested = true
-            return
         }
 
         let shouldRefresh = shouldRefreshInsights(
@@ -250,12 +250,6 @@ final class AppContext {
                 message: error.localizedDescription,
                 isAutomatic: !forceRefresh
             )
-        }
-
-        if insightsRerunRequested {
-            insightsRerunRequested = false
-            isLoadingInsights = false
-            await loadInsights()
         }
     }
 

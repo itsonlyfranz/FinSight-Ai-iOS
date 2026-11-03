@@ -414,14 +414,12 @@ final class FinSightAITests: XCTestCase {
     }
 
     func testInsightPromptInstructionsStayStructuredForMarkdownRendering() {
-        for kind in InsightKind.allCases {
-            let instructions = PromptFactory.instructions(for: kind)
+        let instructions = PromptFactory.bundleInstructions
 
-            XCTAssertTrue(instructions.contains("## Key Takeaway"))
-            XCTAssertTrue(instructions.contains("## Why It Matters"))
-            XCTAssertTrue(instructions.contains("## Next Step"))
-            XCTAssertTrue(instructions.localizedCaseInsensitiveContains("bullet"))
-        }
+        XCTAssertTrue(instructions.contains("## Key Takeaway"))
+        XCTAssertTrue(instructions.contains("## Why It Matters"))
+        XCTAssertTrue(instructions.contains("## Next Step"))
+        XCTAssertTrue(instructions.localizedCaseInsensitiveContains("bullet"))
     }
 
     func testSimulationInstructionsStayStructuredForMarkdownRendering() {

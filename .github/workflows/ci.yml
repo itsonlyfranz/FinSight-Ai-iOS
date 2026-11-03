@@ -32,7 +32,11 @@ jobs:
         run: |
           UDID=$(xcrun simctl list devices available iPhone -j | python3 -c "
           import json,sys
-          devs=[d for rt in json.load(sys.stdin)['devices'].values() for d in rt if d['isAvailable']]
+          def version(key):
+              parts=key.rsplit('.',1)[-1].split('-')
+              return tuple(int(p) for p in parts[1:]) if parts[0]=='iOS' and all(p.isdigit() for p in parts[1:]) else ()
+          runtimes=[(version(k),v) for k,v in json.load(sys.stdin)['devices'].items() if version(k)>=(26,)]
+          devs=[d for _,rt in sorted(runtimes,key=lambda r:r[0]) for d in rt if d['isAvailable']]
           print(devs[-1]['udid'])")
           echo "DESTINATION=platform=iOS Simulator,id=$UDID" >> "$GITHUB_ENV"
 

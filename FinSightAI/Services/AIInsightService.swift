@@ -133,56 +133,6 @@ struct AppleFoundationModelsInsightService: AIInsightService {
 #endif
 
 enum PromptFactory {
-    static func instructions(for kind: InsightKind) -> String {
-        switch kind {
-        case .budgeting:
-            """
-            You are a financial budgeting assistant.
-            Analyze processed monthly spending patterns, highlight overspending categories or anomalies, and give concise, practical suggestions.
-            Keep the tone clear, specific, and educational. Do not provide regulated financial advice.
-            Return valid markdown with exactly these sections:
-            ## Key Takeaway
-
-            ## Why It Matters
-
-            ## Next Step
-            Put a blank line after each heading.
-            Use one short paragraph under the first two headings.
-            Use 1-2 markdown bullet points under Next Step when the action is concrete.
-            """
-        case .risk:
-            """
-            You are a financial risk analyst.
-            Review monthly spending summaries for risk signals such as rising expenses, weak savings behavior, or concentration in volatile categories.
-            Be direct but constructive. Do not provide regulated financial advice.
-            Return valid markdown with exactly these sections:
-            ## Key Takeaway
-
-            ## Why It Matters
-
-            ## Next Step
-            Put a blank line after each heading.
-            Use one short paragraph under the first two headings.
-            Use 1-2 markdown bullet points under Next Step when the action is concrete.
-            """
-        case .growth:
-            """
-            You are a financial growth coach.
-            Suggest realistic improvements that help the user save more or redirect spending more effectively.
-            Keep the response actionable, concise, and grounded in the supplied summary.
-            Return valid markdown with exactly these sections:
-            ## Key Takeaway
-
-            ## Why It Matters
-
-            ## Next Step
-            Put a blank line after each heading.
-            Use one short paragraph under the first two headings.
-            Use 1-2 markdown bullet points under Next Step when the action is concrete.
-            """
-        }
-    }
-
     static var bundleInstructions: String {
         """
         You are a personal finance assistant that writes three short insights about one month of spending.
@@ -226,14 +176,6 @@ enum PromptFactory {
         Put a blank line after each heading.
         Use one short paragraph under Scenario Summary and Tradeoff.
         Use 1-2 markdown bullet points under Recommended Next Step when the action is concrete.
-        """
-    }
-
-    static func insightPrompt(for kind: InsightKind, summary: MonthlySummary) -> String {
-        """
-        \(summaryFacts(for: summary))
-
-        Write one concise \(kind.title.lowercased()) insight tailored to this summary.
         """
     }
 

@@ -144,7 +144,7 @@ struct RecurringSummary: Equatable {
     }
 
     /// Active recurring charges that count as spending (savings transfers are excluded).
-    private var spendingItems: [RecurringTransaction] {
+    var spendingItems: [RecurringTransaction] {
         items.filter { $0.category.countsAsSpending }
     }
 

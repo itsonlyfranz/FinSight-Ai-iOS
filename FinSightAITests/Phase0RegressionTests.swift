@@ -301,6 +301,35 @@ final class Phase0RegressionTests: XCTestCase {
         XCTAssertEqual(MonthlyRunRate.estimate(from: [], now: now, calendar: calendar), 0)
     }
 
+    func testD8_RunRateAddsRecurringChargesOnceInsteadOfScalingThem() {
+        let now = date(2024, 3, 3)
+        let rent = RecurringExpenseRecord(merchantName: "Rent", amount: 10_000, category: .bills, expectedDay: 3)
+        let rentPayment = TransactionRecord(amount: 10_000, merchantName: "Rent", category: .bills, date: date(2024, 3, 3))
+        let coffee = TransactionRecord(amount: 70, merchantName: "Cafe", category: .dining, date: date(2024, 3, 3))
+        let recurring = DefaultRecurringSummaryService(calendar: calendar).makeSummary(
+            recurringExpenses: [rent],
+            transactions: [rentPayment, coffee],
+            now: now
+        )
+
+        let logged = MonthlyRunRate.estimate(from: [rentPayment, coffee], recurringSummary: recurring, now: now, calendar: calendar)
+        XCTAssertEqual(logged, 70.0 / 7 * 30 + 10_000, accuracy: 0.001)
+
+        let notYetLogged = MonthlyRunRate.estimate(from: [coffee], recurringSummary: recurring, now: now, calendar: calendar)
+        XCTAssertEqual(notYetLogged, 70.0 / 7 * 30 + 10_000, accuracy: 0.001)
+
+        let projection = DefaultSimulationService().project(
+            input: SimulationInput(
+                monthlyRunRate: logged,
+                recurringMonthlySpend: recurring.totalMonthlySpend,
+                dailySavings: 0,
+                reductionPercent: 10,
+                savingsGoal: 0
+            )
+        )
+        XCTAssertEqual(projection.monthlySavings, 30, accuracy: 0.001)
+    }
+
     func testD8_PausedRecurringChargesAreNotDoubleCounted() {
         let projection = DefaultSimulationService().project(
             input: SimulationInput(
@@ -425,7 +454,6 @@ final class Phase0RegressionTests: XCTestCase {
     func testD9_PromptsCarryTheDeviceCurrencyCode() {
         let summary = DefaultSummaryService(calendar: calendar).makeMonthlySummary(from: [], now: date(2024, 3, 15))
 
-        XCTAssertTrue(PromptFactory.insightPrompt(for: .budgeting, summary: summary).contains("Currency: \(CurrencyFormatter.currencyCode)"))
         XCTAssertTrue(PromptFactory.bundlePrompt(summary: summary).contains("Currency: \(CurrencyFormatter.currencyCode)"))
     }
 

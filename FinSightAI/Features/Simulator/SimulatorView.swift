@@ -115,20 +115,20 @@ struct SimulatorView: View {
                     .accessibilityLabel("Paused charges save \(CurrencyFormatter.string(from: pausedRecurringMonthlySpend)) a month")
             }
 
-            if !appContext.recurringSummary.items.isEmpty {
+            if !appContext.recurringSummary.spendingItems.isEmpty {
                 Text("Charges are on by default. Turn one off to see what pausing it would save.")
                     .font(AppTheme.Typography.caption)
                     .foregroundStyle(AppTheme.mutedInk)
             }
 
-            if appContext.recurringSummary.items.isEmpty {
+            if appContext.recurringSummary.spendingItems.isEmpty {
                 FinSightEmptyState(
                     title: "No recurring charges",
                     systemImage: "calendar.badge.clock",
                     message: "Set recurring expenses from Transactions to model long-term savings here."
                 )
             } else {
-                ForEach(appContext.recurringSummary.items) { item in
+                ForEach(appContext.recurringSummary.spendingItems) { item in
                     Toggle(isOn: recurringToggleBinding(for: item)) {
                         VStack(alignment: .leading, spacing: 3) {
                             Text(item.merchantName)
@@ -224,7 +224,7 @@ struct SimulatorView: View {
     }
 
     private var pausedRecurringMonthlySpend: Double {
-        pauseSelection.pausedMonthlySpend(in: appContext.recurringSummary.items)
+        pauseSelection.pausedMonthlySpend(in: appContext.recurringSummary.spendingItems)
     }
 
     /// On = the charge keeps running; off = paused in this scenario.

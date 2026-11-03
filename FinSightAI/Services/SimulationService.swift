@@ -37,27 +37,33 @@ enum MonthlyRunRate {
     static let windowDays = 30
     static let minimumObservedDays = 7
 
+    /// Extrapolates non-recurring spending to a full month, then adds the active recurring
+    /// charges once at their monthly amount so they are never scaled.
     static func estimate(
         from transactions: [TransactionRecord],
+        recurringSummary: RecurringSummary = .empty,
         now: Date = .now,
         calendar: Calendar = .current
     ) -> Double {
+        let recurringSpend = recurringSummary.totalMonthlySpend
         let today = calendar.startOfDay(for: now)
         guard let windowEnd = calendar.date(byAdding: .day, value: 1, to: today),
               let windowStart = calendar.date(byAdding: .day, value: -(windowDays - 1), to: today) else {
-            return 0
+            return recurringSpend
         }
 
         let inWindow = transactions.filter {
-            $0.category.countsAsSpending && $0.date >= windowStart && $0.date < windowEnd
+            $0.category.countsAsSpending
+                && !recurringSummary.recurringTransactionIDs.contains($0.id)
+                && $0.date >= windowStart && $0.date < windowEnd
         }
-        guard let earliest = inWindow.map(\.date).min() else { return 0 }
+        guard let earliest = inWindow.map(\.date).min() else { return recurringSpend }
 
         let total = inWindow.reduce(0) { $0 + $1.amount }
         let earliestDay = calendar.startOfDay(for: earliest)
         let observed = (calendar.dateComponents([.day], from: earliestDay, to: today).day ?? 0) + 1
         let observedDays = min(max(observed, minimumObservedDays), windowDays)
-        return total / Double(observedDays) * Double(windowDays)
+        return total / Double(observedDays) * Double(windowDays) + recurringSpend
     }
 }
 
