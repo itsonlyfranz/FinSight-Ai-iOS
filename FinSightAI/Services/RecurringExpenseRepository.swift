@@ -7,6 +7,7 @@ protocol RecurringExpenseRepository {
     func addRecurringExpense(from draft: RecurringExpenseDraft) throws
     func updateRecurringExpense(_ record: RecurringExpenseRecord, from draft: RecurringExpenseDraft) throws
     func deleteRecurringExpense(_ record: RecurringExpenseRecord) throws
+    func setRecurringExpense(_ record: RecurringExpenseRecord, active: Bool) throws
 }
 
 @MainActor
@@ -31,9 +32,7 @@ final class SwiftDataRecurringExpenseRepository: RecurringExpenseRepository {
     }
 
     func addRecurringExpense(from draft: RecurringExpenseDraft) throws {
-        guard let amount = draft.amount else {
-            throw ValidationError.invalidAmount
-        }
+        let amount = try ValidationError.validatedAmount(draft.amount)
 
         let record = RecurringExpenseRecord(
             merchantName: draft.merchantName.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -48,9 +47,7 @@ final class SwiftDataRecurringExpenseRepository: RecurringExpenseRepository {
     }
 
     func updateRecurringExpense(_ record: RecurringExpenseRecord, from draft: RecurringExpenseDraft) throws {
-        guard let amount = draft.amount else {
-            throw ValidationError.invalidAmount
-        }
+        let amount = try ValidationError.validatedAmount(draft.amount)
 
         record.merchantName = draft.merchantName.trimmingCharacters(in: .whitespacesAndNewlines)
         record.amount = amount
@@ -64,6 +61,12 @@ final class SwiftDataRecurringExpenseRepository: RecurringExpenseRepository {
 
     func deleteRecurringExpense(_ record: RecurringExpenseRecord) throws {
         modelContext.delete(record)
+        try modelContext.save()
+    }
+
+    func setRecurringExpense(_ record: RecurringExpenseRecord, active: Bool) throws {
+        record.isActive = active
+        record.updatedAt = .now
         try modelContext.save()
     }
 }
@@ -98,6 +101,10 @@ struct DefaultRecurringSummaryService: RecurringSummaryService {
     ) -> RecurringSummary {
         let activeExpenses = recurringExpenses.filter(\.isActive)
         let items = activeExpenses.map { recurringTransaction(from: $0, now: now) }
+        let inactiveItems = recurringExpenses
+            .filter { !$0.isActive }
+            .map { recurringTransaction(from: $0, now: now) }
+            .sorted { $0.merchantName.localizedCaseInsensitiveCompare($1.merchantName) == .orderedAscending }
         let recurringIDs = Set(
             transactions
                 .filter { transaction in
@@ -115,6 +122,7 @@ struct DefaultRecurringSummaryService: RecurringSummaryService {
                 }
                 return lhs.expectedDay < rhs.expectedDay
             },
+            inactiveItems: inactiveItems,
             recurringTransactionIDs: recurringIDs
         )
     }

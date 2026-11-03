@@ -75,12 +75,13 @@ struct RecurringExpenseDraft: Equatable {
     var expectedDay = Calendar.current.component(.day, from: Date())
     var isActive = true
     var note = ""
+    var locale: Locale = .current
 
     init() {}
 
     init(record: RecurringExpenseRecord) {
         merchantName = record.merchantName
-        amountText = CurrencyFormatter.plainNumberString(from: record.amount)
+        amountText = CurrencyFormatter.plainNumberString(from: record.amount, locale: locale)
         category = record.category
         expectedDay = record.expectedDay
         isActive = record.isActive
@@ -89,14 +90,14 @@ struct RecurringExpenseDraft: Equatable {
 
     init(transaction: TransactionRecord, calendar: Calendar = .current) {
         merchantName = transaction.merchantName
-        amountText = CurrencyFormatter.plainNumberString(from: transaction.amount)
+        amountText = CurrencyFormatter.plainNumberString(from: transaction.amount, locale: locale)
         category = transaction.category
         expectedDay = calendar.component(.day, from: transaction.date)
         note = transaction.note
     }
 
     var amount: Double? {
-        Double(amountText.replacingOccurrences(of: ",", with: ""))
+        AmountParser.parse(amountText, locale: locale)
     }
 
     var validationError: String? {
@@ -126,18 +127,40 @@ struct RecurringTransaction: Identifiable, Equatable {
 struct RecurringSummary: Equatable {
     static let empty = RecurringSummary(items: [], recurringTransactionIDs: [])
 
+    /// Active recurring definitions.
     let items: [RecurringTransaction]
+    /// Paused definitions. Kept so they stay reachable to re-activate or delete.
+    let inactiveItems: [RecurringTransaction]
     let recurringTransactionIDs: Set<UUID>
 
+    init(
+        items: [RecurringTransaction],
+        inactiveItems: [RecurringTransaction] = [],
+        recurringTransactionIDs: Set<UUID>
+    ) {
+        self.items = items
+        self.inactiveItems = inactiveItems
+        self.recurringTransactionIDs = recurringTransactionIDs
+    }
+
+    /// Active recurring charges that count as spending (savings transfers are excluded).
+    var spendingItems: [RecurringTransaction] {
+        items.filter { $0.category.countsAsSpending }
+    }
+
     var totalMonthlySpend: Double {
-        items.reduce(0) { $0 + $1.monthlyAmount }
+        spendingItems.reduce(0) { $0 + $1.monthlyAmount }
     }
 
     var itemCount: Int {
-        items.count
+        spendingItems.count
+    }
+
+    var hasAnyItems: Bool {
+        !items.isEmpty || !inactiveItems.isEmpty
     }
 
     var largestItem: RecurringTransaction? {
-        items.max { $0.monthlyAmount < $1.monthlyAmount }
+        spendingItems.max { $0.monthlyAmount < $1.monthlyAmount }
     }
 }

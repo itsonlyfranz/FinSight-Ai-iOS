@@ -1,11 +1,15 @@
 import Foundation
 
 struct SimulationInput: Equatable {
-    var currentMonthlySpending: Double
+    /// Estimated full-month spending (see `MonthlyRunRate`), including recurring charges.
+    var monthlyRunRate: Double
+    /// Monthly total of all active recurring charges (already part of `monthlyRunRate`).
+    var recurringMonthlySpend: Double = 0
     var dailySavings: Double
     var reductionPercent: Double
     var savingsGoal: Double
-    var disabledRecurringMonthlySpend: Double = 0
+    /// Part of `recurringMonthlySpend` the user has paused in the simulator.
+    var pausedRecurringMonthlySpend: Double = 0
 }
 
 struct SimulationProjection: Equatable {

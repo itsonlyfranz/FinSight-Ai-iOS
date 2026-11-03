@@ -1,13 +1,32 @@
 import Foundation
 
-struct CategorySpend: Identifiable, Equatable {
+struct CategorySpend: Identifiable, Equatable, Sendable {
     let id = UUID()
     let category: SpendingCategory
     let amount: Double
     let percentage: Double
 }
 
-struct MonthlySummary: Equatable {
+/// Immutable copy of a transaction, safe to hand to background work (unlike the live SwiftData model).
+struct TransactionSnapshot: Identifiable, Equatable, Sendable {
+    let id: UUID
+    let amount: Double
+    let merchantName: String
+    let category: SpendingCategory
+    let date: Date
+    let note: String
+
+    init(_ record: TransactionRecord) {
+        id = record.id
+        amount = record.amount
+        merchantName = record.merchantName
+        category = record.category
+        date = record.date
+        note = record.note
+    }
+}
+
+struct MonthlySummary: Equatable, Sendable {
     let monthStart: Date
     let monthLabel: String
     let totalSpent: Double
@@ -17,7 +36,7 @@ struct MonthlySummary: Equatable {
     let largestRecurringMerchant: String?
     let transactionCount: Int
     let categoryBreakdown: [CategorySpend]
-    let recentTransactions: [TransactionRecord]
+    let recentTransactions: [TransactionSnapshot]
     let averageTransactionValue: Double
     let topCategory: SpendingCategory?
     let topCategoryShare: Double

@@ -8,6 +8,9 @@ struct DashboardView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
+                    if appContext.hasNoData {
+                        SampleDataCard()
+                    }
                     heroCard
                     recurringSpendCard
                     spendingChartCard
@@ -19,7 +22,10 @@ struct DashboardView: View {
             .background(AppTheme.backgroundGradient.ignoresSafeArea())
             .navigationTitle("FinSight AI")
         }
-        .task(id: appContext.monthlySummary.monthLabel) {
+        .task(id: appContext.insightsFingerprint) {
+            // Re-runs whenever the underlying data changes; the short delay coalesces rapid edits.
+            try? await Task.sleep(for: .milliseconds(400))
+            guard !Task.isCancelled else { return }
             await appContext.loadInsights()
         }
     }
@@ -30,18 +36,22 @@ struct DashboardView: View {
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(AppTheme.mutedInk)
 
-            Text(CurrencyFormatter.pesoString(from: appContext.monthlySummary.totalSpent))
+            Text(CurrencyFormatter.string(from: appContext.monthlySummary.totalSpent))
                 .font(AppTheme.Typography.heroValue)
                 .foregroundStyle(AppTheme.ink)
                 .monospacedDigit()
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
+                .accessibilityLabel("Spent this month")
+                .accessibilityValue(CurrencyFormatter.string(from: appContext.monthlySummary.totalSpent))
 
             HStack(spacing: AppTheme.Spacing.sm) {
                 metricPill(title: "Transactions", value: "\(appContext.monthlySummary.transactionCount)")
-                metricPill(title: "Average", value: CurrencyFormatter.pesoString(from: appContext.monthlySummary.averageTransactionValue))
+                metricPill(title: "Average", value: CurrencyFormatter.string(from: appContext.monthlySummary.averageTransactionValue))
             }
             HStack(spacing: AppTheme.Spacing.sm) {
-                metricPill(title: "Recurring", value: CurrencyFormatter.pesoString(from: appContext.monthlySummary.recurringMonthlySpend))
-                metricPill(title: "One-off", value: CurrencyFormatter.pesoString(from: appContext.monthlySummary.oneOffSpent))
+                metricPill(title: "Recurring", value: CurrencyFormatter.string(from: appContext.monthlySummary.recurringMonthlySpend))
+                metricPill(title: "One-off", value: CurrencyFormatter.string(from: appContext.monthlySummary.oneOffSpent))
             }
 
             Text(appContext.monthlySummary.spendingTrendDescription)
@@ -49,6 +59,7 @@ struct DashboardView: View {
                 .foregroundStyle(AppTheme.mutedInk)
         }
         .finSightCard()
+        .accessibilityElement(children: .contain)
     }
 
     private var recurringSpendCard: some View {
@@ -60,16 +71,17 @@ struct DashboardView: View {
                 Text("\(appContext.monthlySummary.recurringTransactionCount)")
                     .font(.headline.monospacedDigit())
                     .foregroundStyle(AppTheme.primary)
+                    .accessibilityLabel("\(appContext.monthlySummary.recurringTransactionCount) recurring charges")
             }
 
-            if appContext.recurringSummary.items.isEmpty {
+            if appContext.recurringSummary.spendingItems.isEmpty {
                 FinSightEmptyState(
                     title: "No recurring charges set",
                     systemImage: "calendar.badge.clock",
                     message: "Add recurring expenses from Transactions to track fixed monthly spend."
                 )
             } else {
-                Text(CurrencyFormatter.pesoString(from: appContext.monthlySummary.recurringMonthlySpend))
+                Text(CurrencyFormatter.string(from: appContext.monthlySummary.recurringMonthlySpend))
                     .font(.title2.weight(.semibold))
                     .foregroundStyle(AppTheme.ink)
                     .monospacedDigit()
@@ -87,7 +99,7 @@ struct DashboardView: View {
                                 .foregroundStyle(AppTheme.mutedInk)
                         }
                         Spacer()
-                        Text(CurrencyFormatter.pesoString(from: largest.monthlyAmount))
+                        Text(CurrencyFormatter.string(from: largest.monthlyAmount))
                             .font(.subheadline.weight(.semibold))
                             .monospacedDigit()
                     }
@@ -125,7 +137,7 @@ struct DashboardView: View {
                             .foregroundStyle(AppTheme.divider)
                         AxisValueLabel {
                             if let amount = value.as(Double.self) {
-                                Text(amount, format: .currency(code: "PHP").precision(.fractionLength(0)))
+                                Text(amount, format: .currency(code: CurrencyFormatter.currencyCode).precision(.fractionLength(0)))
                             }
                         }
                     }
@@ -135,9 +147,17 @@ struct DashboardView: View {
                 }
                 .chartXAxisLabel("Amount", position: .bottomTrailing)
                 .frame(height: 240)
+                .accessibilityLabel("Spending by category")
+                .accessibilityValue(chartAccessibilitySummary)
             }
         }
         .finSightCard()
+    }
+
+    private var chartAccessibilitySummary: String {
+        appContext.monthlySummary.categoryBreakdown
+            .map { "\($0.category.title), \(CurrencyFormatter.string(from: $0.amount)), \(PercentFormatter.string(from: $0.percentage))" }
+            .joined(separator: "; ")
     }
 
     private var recentTransactionsCard: some View {
@@ -169,6 +189,10 @@ struct DashboardView: View {
             }
 
             switch appContext.insightState {
+            case .empty:
+                Text("Add a few expenses to unlock AI insights.")
+                    .foregroundStyle(AppTheme.mutedInk)
+                    .font(AppTheme.Typography.body)
             case .idle, .loading:
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
                     FinSightSkeletonBlock(width: 180, height: 16)
@@ -214,11 +238,12 @@ struct DashboardView: View {
         .padding(.vertical, 10)
         .padding(.horizontal, 14)
         .background(AppTheme.surfaceAccent, in: Capsule())
+        .accessibilityElement(children: .combine)
     }
 }
 
 private struct TransactionRow: View {
-    let transaction: TransactionRecord
+    let transaction: TransactionSnapshot
 
     var body: some View {
         HStack(spacing: AppTheme.Spacing.sm) {
@@ -238,7 +263,7 @@ private struct TransactionRow: View {
             Spacer()
 
             VStack(alignment: .trailing, spacing: 3) {
-                Text(CurrencyFormatter.pesoString(from: transaction.amount))
+                Text(CurrencyFormatter.string(from: transaction.amount))
                     .font(.subheadline.weight(.semibold))
                     .monospacedDigit()
                 Text(transaction.date, style: .date)
@@ -246,5 +271,6 @@ private struct TransactionRow: View {
                     .foregroundStyle(AppTheme.mutedInk)
             }
         }
+        .accessibilityElement(children: .combine)
     }
 }

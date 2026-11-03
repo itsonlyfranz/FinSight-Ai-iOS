@@ -71,6 +71,8 @@ final class FinSightAITests: XCTestCase {
         )
 
         XCTAssertTrue(summary.items.isEmpty)
+        XCTAssertEqual(summary.inactiveItems.map(\.merchantName), ["Netflix"])
+        XCTAssertEqual(summary.totalMonthlySpend, 0, accuracy: 0.001)
     }
 
     func testRecurringSummaryMatchesTransactionsForClassification() {
@@ -181,21 +183,25 @@ final class FinSightAITests: XCTestCase {
     func testSimulationServiceCalculatesGoalTimeline() {
         let projection = DefaultSimulationService().project(
             input: SimulationInput(
-                currentMonthlySpending: 20_000,
+                monthlyRunRate: 20_000,
+                recurringMonthlySpend: 500,
                 dailySavings: 100,
                 reductionPercent: 20,
                 savingsGoal: 50_000,
-                disabledRecurringMonthlySpend: 500
+                pausedRecurringMonthlySpend: 500
             )
         )
 
-        XCTAssertEqual(projection.monthlySavings, 7_500, accuracy: 0.001)
-        XCTAssertEqual(projection.projectedSavingsSixMonths, 45_000, accuracy: 0.001)
+        // Reduction applies to the 19,500 of non-recurring spend: 3,900 + 3,000 daily + 500 paused.
+        XCTAssertEqual(projection.monthlySavings, 7_400, accuracy: 0.001)
+        XCTAssertEqual(projection.projectedSavingsSixMonths, 44_400, accuracy: 0.001)
         XCTAssertEqual(projection.monthsToGoal, 7)
     }
 
-    func testCurrencyFormatterUsesPesoSymbol() {
-        XCTAssertEqual(CurrencyFormatter.pesoString(from: 1234.5), "₱1,234.50")
+    func testCurrencyFormatterFollowsLocale() {
+        XCTAssertEqual(CurrencyFormatter.string(from: 1234.5, locale: Locale(identifier: "en_US")), "$1,234.50")
+        XCTAssertEqual(CurrencyFormatter.string(from: 1234.5, locale: Locale(identifier: "en_PH")), "₱1,234.50")
+        XCTAssertTrue(CurrencyFormatter.string(from: 1234.5, locale: Locale(identifier: "de_DE")).contains("€"))
     }
 
     @MainActor
@@ -346,7 +352,7 @@ final class FinSightAITests: XCTestCase {
 
     func testSimulationFingerprintIsStableForSameInputs() {
         let input = SimulationInput(
-            currentMonthlySpending: 20_000,
+            monthlyRunRate: 20_000,
             dailySavings: 100,
             reductionPercent: 20,
             savingsGoal: 50_000
@@ -408,14 +414,12 @@ final class FinSightAITests: XCTestCase {
     }
 
     func testInsightPromptInstructionsStayStructuredForMarkdownRendering() {
-        for kind in InsightKind.allCases {
-            let instructions = PromptFactory.instructions(for: kind)
+        let instructions = PromptFactory.bundleInstructions
 
-            XCTAssertTrue(instructions.contains("## Key Takeaway"))
-            XCTAssertTrue(instructions.contains("## Why It Matters"))
-            XCTAssertTrue(instructions.contains("## Next Step"))
-            XCTAssertTrue(instructions.localizedCaseInsensitiveContains("bullet"))
-        }
+        XCTAssertTrue(instructions.contains("## Key Takeaway"))
+        XCTAssertTrue(instructions.contains("## Why It Matters"))
+        XCTAssertTrue(instructions.contains("## Next Step"))
+        XCTAssertTrue(instructions.localizedCaseInsensitiveContains("bullet"))
     }
 
     func testSimulationInstructionsStayStructuredForMarkdownRendering() {

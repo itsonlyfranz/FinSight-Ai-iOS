@@ -87,7 +87,7 @@ The app is organized around protocol-backed services so the UI is not tightly co
 Core components:
 
 - `AppContext`: app-wide state and feature orchestration
-- `TransactionRepository`: local CRUD and seed handling
+- `TransactionRepository`: local CRUD and opt-in sample data
 - `RecurringExpenseRepository`: user-managed recurring expense storage
 - `SummaryService`: monthly aggregation and dashboard summary building
 - `RecurringSummaryService`: recurring expense totals and transaction classification
@@ -139,10 +139,11 @@ The codebase includes an abstraction layer for Apple Intelligence through `Found
 
 Important note:
 
-- the real Apple Intelligence path is guarded behind compile-time and runtime checks
-- when the required SDK or runtime is unavailable, the app shows a clear unavailable state instead of fake AI output
+- the app targets iOS 26+, and the model's real availability (`SystemLanguageModel.default.availability`) is checked on every request
+- when Apple Intelligence is unsupported, switched off, or still downloading, the app shows a specific, actionable message instead of fake AI output
+- the three insight cards are generated in a single model call
 
-This keeps the project buildable today while preserving the intended architecture for future Apple Intelligence-enabled environments.
+The AI layer sits behind the `AIInsightService` protocol so other providers can be added later.
 
 ## Startup Direction
 
@@ -160,28 +161,29 @@ The current app is the foundation for a broader startup roadmap. Likely evolutio
 ### Requirements
 
 - macOS
-- Xcode 16.3 or newer
+- Xcode 26 or newer (iOS 26 SDK)
+- iOS 26+ simulator or device (Apple Intelligence features need a supported device)
 - iOS Simulator
 
 ### Run In Xcode
 
 1. Open `FinSightAI.xcodeproj`
 2. Select the `FinSightAI` scheme
-3. Choose an iPhone simulator such as `iPhone 16`
+3. Choose an iPhone simulator such as `iPhone 17`
 4. Press `Cmd+R`
 
-On first launch, the app seeds sample transaction data so the UI is immediately populated.
+The app starts with an empty ledger. Tap **Load sample data** on the Dashboard to explore with example transactions; sample data is never added automatically.
 
 ### Build From Terminal
 
 ```bash
-xcodebuild -project FinSightAI.xcodeproj -scheme FinSightAI -destination 'generic/platform=iOS Simulator' build
+xcodebuild -project FinSightAI.xcodeproj -scheme FinSightAI -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build
 ```
 
 ### Run Tests
 
 ```bash
-xcodebuild -project FinSightAI.xcodeproj -scheme FinSightAI -destination 'platform=iOS Simulator,OS=18.4,name=iPhone 16' test
+xcodebuild -project FinSightAI.xcodeproj -scheme FinSightAI -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO test
 ```
 
 ## Project Structure
@@ -209,12 +211,12 @@ Automated coverage currently includes:
 - transaction validation
 - monthly summary aggregation
 - simulator projection math
-- peso currency formatting
+- locale-aware currency formatting and amount parsing
 - app-context save flow
 
 Manual smoke checks:
 
-- confirm seeded data appears on first launch
+- confirm the app starts empty and **Load sample data** populates it
 - add, edit, and delete transactions
 - verify dashboard totals update after changes
 - move simulator sliders and verify projections update instantly

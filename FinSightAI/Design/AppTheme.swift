@@ -35,7 +35,8 @@ enum AppTheme {
     }
 
     enum Typography {
-        static let heroValue = Font.system(size: 40, weight: .bold, design: .rounded)
+        /// Scales with Dynamic Type (a fixed point size would ignore the user's text size).
+        static let heroValue = Font.system(.largeTitle, design: .rounded, weight: .bold)
         static let headline = Font.headline
         static let body = Font.body
         static let caption = Font.caption

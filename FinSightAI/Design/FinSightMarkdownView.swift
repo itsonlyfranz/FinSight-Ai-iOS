@@ -170,6 +170,7 @@ private extension FinSightMarkdownStyleVariant {
     }
 }
 
+@MainActor
 private extension Theme {
     static func finSight(_ configuration: FinSightMarkdownStyleConfiguration) -> Theme {
         Theme()

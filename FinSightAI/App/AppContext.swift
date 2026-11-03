@@ -1,5 +1,6 @@
 import Foundation
 import Observation
+import OSLog
 import SwiftData
 
 @MainActor
@@ -13,6 +14,9 @@ final class AppContext {
     private let aiInsightService: AIInsightService
     let simulationService: SimulationService
     let capabilityService: CapabilityService
+    private static let logger = Logger(subsystem: "com.finsightai.app", category: "AppContext")
+    /// Most recent simulator scenarios whose explanations stay cached.
+    static let simulationCacheLimit = 10
     private var isLoadingInsights = false
     private var activeSimulationFingerprint: String?
     private var isLoadingSimulationExplanation = false
@@ -22,6 +26,8 @@ final class AppContext {
     var sections: [TransactionMonthSection] = []
     var monthlySummary: MonthlySummary
     var recurringSummary: RecurringSummary = .empty
+    /// Estimated full-month spending used as the simulator baseline.
+    var monthlyRunRate: Double = 0
     var insightState: InsightLoadState = .idle
     var simulatorExplanationState: LoadableTextState = .idle
     var activeDraft: TransactionDraft = .init()
@@ -53,9 +59,25 @@ final class AppContext {
         self.monthlySummary = summaryService.makeMonthlySummary(from: [], recurringSummary: .empty, now: .now)
     }
 
+    /// Loads what is stored. Never inserts data: an empty ledger stays empty until the
+    /// user explicitly chooses to load sample data.
     func bootstrap() throws {
-        try repository.seedIfNeeded()
         try reloadTransactions()
+    }
+
+    func loadSampleData() throws {
+        try repository.loadSampleData(now: .now)
+        try reloadTransactions()
+    }
+
+    var hasNoData: Bool {
+        transactions.isEmpty && recurringExpenses.isEmpty
+    }
+
+    /// Identifies the data the insight cards are generated from. Views key their refresh
+    /// task on it so insights regenerate when the underlying data changes.
+    var insightsFingerprint: String {
+        AIFingerprint.monthlyInsights(summary: monthlySummary)
     }
 
     func reloadTransactions() throws {
@@ -66,6 +88,7 @@ final class AppContext {
             transactions: transactions,
             now: .now
         )
+        monthlyRunRate = MonthlyRunRate.estimate(from: transactions, recurringSummary: recurringSummary, now: .now)
         sections = summaryService.monthlySections(from: transactions)
         monthlySummary = summaryService.makeMonthlySummary(from: transactions, recurringSummary: recurringSummary, now: .now)
     }
@@ -122,12 +145,28 @@ final class AppContext {
         activeRecurringDraft = RecurringExpenseDraft(record: recurringExpense)
     }
 
+    func setRecurringExpense(_ recurringExpense: RecurringExpenseRecord, active: Bool) throws {
+        try recurringExpenseRepository.setRecurringExpense(recurringExpense, active: active)
+        try reloadTransactions()
+    }
+
     func delete(_ recurringExpense: RecurringExpenseRecord) throws {
         try recurringExpenseRepository.deleteRecurringExpense(recurringExpense)
         try reloadTransactions()
     }
 
     func loadInsights(forceRefresh: Bool = false) async {
+        while isLoadingInsights {
+            do {
+                try await Task.sleep(for: .milliseconds(100))
+            } catch {
+                return
+            }
+        }
+        guard monthlySummary.transactionCount > 0 else {
+            insightState = .empty
+            return
+        }
         let cacheKey = AICacheKey.monthlyInsights(for: monthlySummary)
         let fingerprint = AIFingerprint.monthlyInsights(summary: monthlySummary)
         let dayKey = DayFormatter.dayKey(for: .now)
@@ -146,8 +185,6 @@ final class AppContext {
             insightState = .loading
         }
 
-        guard !isLoadingInsights else { return }
-
         let shouldRefresh = shouldRefreshInsights(
             record: fetchCacheRecord(cacheKey: cacheKey, feature: .monthlyInsights),
             fingerprint: fingerprint,
@@ -158,6 +195,7 @@ final class AppContext {
         guard shouldRefresh else { return }
         isLoadingInsights = true
         defer { isLoadingInsights = false }
+        let summary = monthlySummary
 
         do {
             let existingCachedCards: [InsightCard]
@@ -169,7 +207,7 @@ final class AppContext {
             }
 
             let payload = try await aiInsightService.generateInsights(
-                from: monthlySummary,
+                from: summary,
                 onUpdate: { [weak self] partialCards in
                     guard let self else { return }
                     await MainActor.run {
@@ -202,14 +240,8 @@ final class AppContext {
                     statusMessage: nil
                 )
             )
-        } catch let error as AIInsightError {
-            handleInsightRefreshFailure(
-                cacheKey: cacheKey,
-                feature: .monthlyInsights,
-                dayKey: dayKey,
-                message: error.localizedDescription,
-                isAutomatic: !forceRefresh
-            )
+        } catch is CancellationError {
+            restoreInsightStateAfterCancellation(cacheKey: cacheKey)
         } catch {
             handleInsightRefreshFailure(
                 cacheKey: cacheKey,
@@ -221,10 +253,21 @@ final class AppContext {
         }
     }
 
+    private func restoreInsightStateAfterCancellation(cacheKey: String) {
+        if let record = fetchCacheRecord(cacheKey: cacheKey, feature: .monthlyInsights),
+           let cards = decodeInsightCards(from: record) {
+            insightState = .available(
+                CachedContent(value: cards, lastUpdated: record.generatedAt, isRefreshing: false, statusMessage: record.failureMessage)
+            )
+        } else {
+            insightState = .idle
+        }
+    }
+
     func loadSimulationExplanation(input: SimulationInput, forceRefresh: Bool = false) async {
         let projection = simulationService.project(input: input)
-        let cacheKey = AICacheKey.simulationExplanation()
         let fingerprint = AIFingerprint.simulation(input: input, projection: projection)
+        let cacheKey = AICacheKey.simulationExplanation(fingerprint: fingerprint)
         let dayKey = DayFormatter.dayKey(for: .now)
 
         if let record = fetchCacheRecord(cacheKey: cacheKey, feature: .simulationExplanation) {
@@ -303,13 +346,8 @@ final class AppContext {
                     statusMessage: nil
                 )
             )
-        } catch let error as AIInsightError {
-            handleSimulationRefreshFailure(
-                cacheKey: cacheKey,
-                dayKey: dayKey,
-                message: error.localizedDescription,
-                isAutomatic: !forceRefresh
-            )
+        } catch is CancellationError {
+            // A newer scenario superseded this one; its own load updates the UI.
         } catch {
             handleSimulationRefreshFailure(
                 cacheKey: cacheKey,
@@ -360,14 +398,49 @@ final class AppContext {
                 $0.cacheKey == cacheKey && $0.featureRawValue == feature.rawValue
             }
         )
-        return try? modelContext.fetch(descriptor).first
+        do {
+            return try modelContext.fetch(descriptor).first
+        } catch {
+            Self.logger.error("Failed to fetch AI cache record \(cacheKey, privacy: .public): \(error.localizedDescription, privacy: .public)")
+            return nil
+        }
+    }
+
+    private func saveCache(_ context: String) {
+        do {
+            try modelContext.save()
+        } catch {
+            Self.logger.error("Failed to persist AI cache (\(context, privacy: .public)): \(error.localizedDescription, privacy: .public)")
+        }
+    }
+
+    /// Keeps only the most recent simulator scenarios so the cache cannot grow without bound.
+    private func pruneSimulationCache() {
+        let feature = AICacheFeature.simulationExplanation.rawValue
+        let descriptor = FetchDescriptor<AIResponseCacheRecord>(
+            predicate: #Predicate { $0.featureRawValue == feature },
+            sortBy: [SortDescriptor(\.updatedAt, order: .reverse)]
+        )
+        do {
+            let records = try modelContext.fetch(descriptor)
+            guard records.count > Self.simulationCacheLimit else { return }
+            for stale in records.dropFirst(Self.simulationCacheLimit) {
+                modelContext.delete(stale)
+            }
+            saveCache("prune simulation cache")
+        } catch {
+            Self.logger.error("Failed to prune simulation cache: \(error.localizedDescription, privacy: .public)")
+        }
     }
 
     private func decodeInsightCards(from record: AIResponseCacheRecord) -> [InsightCard]? {
-        guard let generatedCards = try? AICacheCodec.decodeInsights(from: record.payload) else {
+        do {
+            let generatedCards = try AICacheCodec.decodeInsights(from: record.payload)
+            return generatedCards.map { InsightCard(kind: $0.kind, markdown: $0.markdown) }
+        } catch {
+            Self.logger.error("Failed to decode cached insights: \(error.localizedDescription, privacy: .public)")
             return nil
         }
-        return generatedCards.map { InsightCard(kind: $0.kind, markdown: $0.markdown) }
     }
 
     private func upsertInsightsCache(
@@ -376,7 +449,13 @@ final class AppContext {
         payload: GeneratedInsightPayload,
         dayKey: String
     ) -> AIResponseCacheRecord {
-        let encoded = (try? AICacheCodec.encodeInsights(payload.cards)) ?? "[]"
+        let encoded: String
+        do {
+            encoded = try AICacheCodec.encodeInsights(payload.cards)
+        } catch {
+            Self.logger.error("Failed to encode insight cards: \(error.localizedDescription, privacy: .public)")
+            encoded = "[]"
+        }
         let record = fetchCacheRecord(cacheKey: cacheKey, feature: .monthlyInsights)
             ?? AIResponseCacheRecord(
                 cacheKey: cacheKey,
@@ -398,7 +477,7 @@ final class AppContext {
         if record.modelContext == nil {
             modelContext.insert(record)
         }
-        try? modelContext.save()
+        saveCache("upsert")
         return record
     }
 
@@ -429,7 +508,8 @@ final class AppContext {
         if record.modelContext == nil {
             modelContext.insert(record)
         }
-        try? modelContext.save()
+        saveCache("upsert")
+        pruneSimulationCache()
         return record
     }
 
@@ -447,7 +527,7 @@ final class AppContext {
                 record.lastAutoRefreshDayKey = dayKey
             }
             record.updatedAt = .now
-            try? modelContext.save()
+            saveCache("record failure")
 
             insightState = .available(
                 CachedContent(
@@ -474,7 +554,7 @@ final class AppContext {
                 record.lastAutoRefreshDayKey = dayKey
             }
             record.updatedAt = .now
-            try? modelContext.save()
+            saveCache("record failure")
 
             simulatorExplanationState = .available(
                 CachedContent(
