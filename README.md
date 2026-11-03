@@ -213,6 +213,10 @@ Automated coverage currently includes:
 - simulator projection math
 - locale-aware currency formatting and amount parsing
 - app-context save flow
+- exact Decimal money storage and transaction kinds (expense, income, transfer)
+- budgets, income sources, savings goals, and app settings
+- app-level dedupe in place of `.unique` constraints
+- V1 to V2 schema migration from an unversioned V1 store fixture
 
 Manual smoke checks:
 
