@@ -314,7 +314,7 @@ final class Phase1DataModelTests: XCTestCase {
 
     /// Writes a genuine V1 store (the pre-versioning schema, Double amounts, `.unique` ids) to disk.
     private func writeV1Store(at url: URL) throws -> V1Fixture {
-        let schema = Schema(versionedSchema: FinSightSchemaV1.self)
+        let schema = Schema(FinSightSchemaV1.models)
         let container = try ModelContainer(for: schema, configurations: ModelConfiguration(schema: schema, url: url))
         let context = ModelContext(container)
 
@@ -415,7 +415,7 @@ final class Phase1DataModelTests: XCTestCase {
 
     func testMigrationOfEmptyV1StoreSucceeds() throws {
         let url = try makeTemporaryStoreURL()
-        let schema = Schema(versionedSchema: FinSightSchemaV1.self)
+        let schema = Schema(FinSightSchemaV1.models)
         do {
             let container = try ModelContainer(for: schema, configurations: ModelConfiguration(schema: schema, url: url))
             try ModelContext(container).save()
