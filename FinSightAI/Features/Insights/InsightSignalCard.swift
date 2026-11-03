@@ -40,7 +40,7 @@ struct InsightSignalCard: View {
                     .monospacedDigit()
                     .minimumScaleFactor(0.5)
                     .lineLimit(1)
-                Text(insight.kind.impactCaption)
+                Text(insight.impactCaption)
                     .font(AppTheme.Typography.caption)
                     .foregroundStyle(AppTheme.mutedInk)
             }
@@ -114,24 +114,6 @@ extension Insight.Severity {
         case .info: AppTheme.cardTintGrowth
         case .notice, .warning: AppTheme.cardTintBudget
         case .critical: AppTheme.cardTintRisk
-        }
-    }
-}
-
-extension Insight.Kind {
-    /// What the big number on a card means.
-    var impactCaption: String {
-        switch self {
-        case .budgetBreach: "over budget"
-        case .projectedOverrun: "projected over budget"
-        case .categoryChange: "change against the comparison period"
-        case .categoryAnomaly: "above a typical month"
-        case .merchantAnomaly: "above the usual charge"
-        case .recurringCharges: "per month in recurring charges"
-        case .priceCreep: "extra per year"
-        case .savingsRate: "savings gap or amount saved"
-        case .emergencyRunway: "to the next emergency-fund milestone"
-        case .noSpendStreak: "estimated spending avoided"
         }
     }
 }

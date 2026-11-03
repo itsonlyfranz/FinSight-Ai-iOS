@@ -47,15 +47,17 @@ struct RecurringChargeDetector: Sendable {
         }
 
         let amounts = series.map(\.amount)
-        let priors = Array(amounts.dropLast())
-        let priorMedian = InsightStatistics.median(priors)
-        let priorsStable = priors.count >= 2 && Self.allWithin(priors, of: priorMedian, tolerance: Self.fixedTolerance)
-        let median = InsightStatistics.median(amounts)
         let latest = amounts[amounts.count - 1]
+        let median = InsightStatistics.median(amounts)
         let steadyBill = Self.allWithin(amounts, of: median, tolerance: configuration.recurringAmountTolerance)
-        // A fixed-price subscription may jump by more than the tolerance in one step (a price hike).
-        let fixedThenJump = priorsStable && latest >= priorMedian / 2 && latest <= priorMedian * 2
-        guard median > 0, steadyBill || fixedThenJump else { return nil }
+        // A fixed-price subscription may jump by more than the tolerance at each price step (a price
+        // hike): every earlier price must have held for at least two charges.
+        let prices = Self.priceStretches(of: amounts)
+        let current = prices[prices.count - 1]
+        let previousMedian = prices.count >= 2 ? InsightStatistics.median(prices[prices.count - 2]) : latest
+        let isFixedAmount = prices.dropLast().allSatisfy { $0.count >= 2 }
+            && latest >= previousMedian / 2 && latest <= previousMedian * 2
+        guard median > 0, steadyBill || isFixedAmount else { return nil }
 
         return DetectedRecurringCharge(
             key: key,
@@ -63,13 +65,13 @@ struct RecurringChargeDetector: Sendable {
             category: last.category,
             cadence: cadence,
             occurrences: series.count,
-            typicalAmount: median,
+            typicalAmount: isFixedAmount ? InsightStatistics.median(current) : median,
             latestAmount: latest,
-            previousAmount: priors.last ?? latest,
+            previousAmount: amounts[amounts.count - 2],
             firstDate: first.date,
             lastDate: last.date,
             nextExpectedDate: Self.nextDate(after: last.date, cadence: cadence, calendar: calendar),
-            isFixedAmount: priorsStable
+            isFixedAmount: isFixedAmount
         )
     }
 
@@ -86,6 +88,19 @@ struct RecurringChargeDetector: Sendable {
 
     /// Tolerance for "the same price".
     static let fixedTolerance = Decimal(string: "0.02")!
+
+    /// Splits the amounts, oldest first, into runs at one price: each run is within `fixedTolerance`
+    /// of its own last amount.
+    static func priceStretches(of amounts: [Decimal]) -> [[Decimal]] {
+        var remaining = amounts[...]
+        var stretches: [[Decimal]] = []
+        while let last = remaining.last {
+            let count = remaining.reversed().prefix { abs($0 - last) <= last * fixedTolerance }.count
+            stretches.insert(Array(remaining.suffix(count)), at: 0)
+            remaining = remaining.dropLast(count)
+        }
+        return stretches
+    }
 
     static func allWithin(_ values: [Decimal], of center: Decimal, tolerance: Decimal) -> Bool {
         let allowed = center * tolerance

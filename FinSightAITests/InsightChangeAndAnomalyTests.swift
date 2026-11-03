@@ -173,6 +173,17 @@ final class InsightChangeAndAnomalyTests: XCTestCase {
         XCTAssertDecimal(change.money("Month before"), 1000)
     }
 
+    func testEarlyMonthAnomalyDoesNotHideLastMonthsChange() throws {
+        // 3 Nov: the change compares October with September, the anomaly is about November.
+        let entries = F.monthly(.shopping, amounts: [1000, 1000, 1000, 1600], endingBefore: 2026, 11)
+            + F.monthly(.groceries, amounts: [2000, 2000, 2000, 2000], endingBefore: 2026, 11)
+            + [F.spend(3000, .shopping, on: F.date(2026, 11, 2))]
+        let insights = F.run(now: F.date(2026, 11, 3), entries: entries)
+        XCTAssertNotNil(insights.first(.categoryAnomaly, category: .shopping))
+        let change = try XCTUnwrap(insights.first(.categoryChange, category: .shopping))
+        XCTAssertEqual(change.id, "categoryChange:shopping:2026-10")
+    }
+
     func testMinimumElapsedDaysBoundary() {
         let entries = [
             F.spend(1000, .dining, on: F.date(2026, 10, 1)), F.spend(1000, .groceries, on: F.date(2026, 10, 1)),

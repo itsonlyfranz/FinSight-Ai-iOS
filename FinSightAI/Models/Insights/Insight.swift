@@ -28,6 +28,22 @@ struct Insight: Identifiable, Equatable, Sendable {
         /// Consecutive days without spending. Impact: estimated spending avoided.
         case noSpendStreak
 
+        /// What the big number on a card means, unless the insight gives its own caption.
+        var impactCaption: String {
+            switch self {
+            case .budgetBreach: "over budget"
+            case .projectedOverrun: "projected over budget"
+            case .categoryChange: "change against the comparison period"
+            case .categoryAnomaly: "above a typical month"
+            case .merchantAnomaly: "above the usual charge"
+            case .recurringCharges: "per month in recurring charges"
+            case .priceCreep: "extra per year"
+            case .savingsRate: "savings gap or amount saved"
+            case .emergencyRunway: "to the next emergency-fund milestone"
+            case .noSpendStreak: "estimated spending avoided"
+            }
+        }
+
         var systemImage: String {
             switch self {
             case .budgetBreach: "xmark.octagon.fill"
@@ -93,6 +109,8 @@ struct Insight: Identifiable, Equatable, Sendable {
     let title: String
     let summary: String
     let impactAmount: Decimal
+    /// What `impactAmount` means for this particular insight.
+    let impactCaption: String
     let evidence: [Evidence]
     let suggestedAction: String
     let category: SpendingCategory?
@@ -105,6 +123,7 @@ struct Insight: Identifiable, Equatable, Sendable {
         title: String,
         summary: String,
         impactAmount: Decimal,
+        impactCaption: String? = nil,
         evidence: [Evidence],
         suggestedAction: String,
         category: SpendingCategory? = nil,
@@ -116,6 +135,7 @@ struct Insight: Identifiable, Equatable, Sendable {
         self.title = title
         self.summary = summary
         self.impactAmount = impactAmount
+        self.impactCaption = impactCaption ?? kind.impactCaption
         self.evidence = evidence
         self.suggestedAction = suggestedAction
         self.category = category
@@ -192,7 +212,7 @@ struct DetectedRecurringCharge: Identifiable, Equatable, Sendable {
     let category: SpendingCategory
     let cadence: RecurringCadence
     let occurrences: Int
-    /// Median charge across the history.
+    /// Median charge at the current price for a fixed-price charge, otherwise across the history.
     let typicalAmount: Decimal
     let latestAmount: Decimal
     /// The charge immediately before the latest one.
@@ -200,8 +220,8 @@ struct DetectedRecurringCharge: Identifiable, Equatable, Sendable {
     let firstDate: Date
     let lastDate: Date
     let nextExpectedDate: Date?
-    /// True when the charges before the latest are within 2% of each other (a subscription rather
-    /// than a variable bill).
+    /// True when the charges are within 2% of each other before and after the latest price step (a
+    /// subscription rather than a variable bill).
     let isFixedAmount: Bool
 
     var id: String { key }

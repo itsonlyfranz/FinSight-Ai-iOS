@@ -106,6 +106,20 @@ final class InsightSavingsRunwayStreakTests: XCTestCase {
         }
     }
 
+    func testImpactCaptionDescribesTheNumberShown() throws {
+        let covered = try XCTUnwrap(F.run(now: now, entries: steadySpending, reserve: 12_000).first(.emergencyRunway))
+        XCTAssertEqual(covered.impactCaption, "in your emergency reserve")
+        let short = try XCTUnwrap(F.run(now: now, entries: steadySpending, reserve: 1_000).first(.emergencyRunway))
+        XCTAssertEqual(short.impactCaption, "to reach 3 months of spending")
+        let midway = try XCTUnwrap(F.run(now: now, entries: steadySpending, reserve: 4_000).first(.emergencyRunway))
+        XCTAssertEqual(midway.impactCaption, "to reach 6 months of spending")
+
+        let saved = try XCTUnwrap(F.run(now: now, entries: [F.spend(7_500, .bills, on: F.date(2026, 10, 12))], income: 10_000).first(.savingsRate))
+        XCTAssertEqual(saved.impactCaption, "saved in October")
+        let gap = try XCTUnwrap(F.run(now: now, entries: [F.spend(9_000, .bills, on: F.date(2026, 10, 12))], income: 10_000).first(.savingsRate))
+        XCTAssertEqual(gap.impactCaption, "short of the savings target")
+    }
+
     func testRunwayUsesTheMostRecentThreeMonthsWithSpending() throws {
         // July 5,000 is older than the three most recent months, so it is ignored.
         let entries = F.monthly(.bills, amounts: [5000, 1000, 1000, 1000], endingBefore: 2026, 11)

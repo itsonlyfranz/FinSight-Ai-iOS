@@ -15,9 +15,10 @@ struct InsightEngine: Sendable {
 
         let categoryAnomalies = categoryAnomalyInsights(context)
         let anomalousCategories = Set(categoryAnomalies.compactMap(\.category))
-        // A category-level outlier already explains a large increase; don't report it twice.
+        // A category-level outlier already explains a large increase in the same month; don't report it twice.
+        let comparesCurrentMonth = context.elapsedDays >= context.configuration.minimumElapsedDaysForPace
         let changes = categoryChangeInsights(context)
-            .filter { !($0.severity >= .notice && $0.category.map(anomalousCategories.contains) == true) }
+            .filter { !(comparesCurrentMonth && $0.severity >= .notice && $0.category.map(anomalousCategories.contains) == true) }
 
         let all = budgetInsights(context)
             + changes
@@ -390,6 +391,7 @@ struct InsightEngine: Sendable {
                 ? "\(name) savings rate was \(rate.wholePercent)%, against a \(Double(truncating: target as NSNumber).wholePercent)% target."
                 : "\(name) savings rate was \(rate.wholePercent)%, at or above your \(Double(truncating: target as NSNumber).wholePercent)% target.",
             impactAmount: belowTarget ? gap : saved,
+            impactCaption: belowTarget ? "short of the savings target" : "saved in \(name)",
             evidence: [
                 .init("Income", .money(income)),
                 .init("Spending", .money(spent)),
@@ -438,6 +440,7 @@ struct InsightEngine: Sendable {
                 ? "Your reserve covers six months or more of typical spending."
                 : "Your reserve covers \(rounded.formatted(.number.precision(.fractionLength(0...1)))) months of typical spending; \(milestone) is a common minimum.",
             impactAmount: gap,
+            impactCaption: months >= 6 ? "in your emergency reserve" : "to reach \(milestone) months of spending",
             evidence: [
                 .init("Reserve", .money(reserve)),
                 .init("Typical monthly spending", .money(typical)),

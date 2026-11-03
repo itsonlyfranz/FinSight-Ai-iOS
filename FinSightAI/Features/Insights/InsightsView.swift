@@ -2,6 +2,7 @@ import SwiftUI
 
 struct InsightsView: View {
     @Environment(AppContext.self) private var appContext
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
         NavigationStack {
@@ -27,6 +28,10 @@ struct InsightsView: View {
                     }
                 }
             }
+        }
+        .task(id: scenePhase) {
+            guard scenePhase == .active else { return }
+            try? appContext.reloadPlanning()
         }
         .task(id: appContext.insightsFingerprint) {
             try? await Task.sleep(for: .milliseconds(400))

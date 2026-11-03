@@ -253,6 +253,33 @@ final class InsightRecurringTests: XCTestCase {
         }
     }
 
+    func testSubscriptionStaysRecurringAfterABigPriceRise() throws {
+        // The month after a 40% rise the series is 10,10,10,10,14,14: still one fixed-price subscription.
+        let entries = series("Netflix", amounts: [10, 10, 10, 10, 14, 14], daysAgo: [155, 125, 95, 65, 35, 5])
+        let charge = try XCTUnwrap(detect(entries).first)
+        XCTAssertTrue(charge.isFixedAmount)
+        XCTAssertEqual(charge.typicalAmount, 14)
+        XCTAssertEqual(charge.previousAmount, 14)
+        XCTAssertDecimal(charge.monthlyEquivalent, 14)
+        XCTAssertNil(F.run(now: now, entries: entries).first(.priceCreep), "the rise was already reported last month")
+
+        // A further rise on the new price is price creep again.
+        let again = series("Netflix", amounts: [10, 10, 10, 14, 14, 16], daysAgo: [155, 125, 95, 65, 35, 5])
+        let creep = try XCTUnwrap(F.run(now: now, entries: again).first(.priceCreep))
+        XCTAssertEqual(creep.money("Previous charge"), 14)
+
+        // A variable bill whose amounts only briefly line up is not a fixed-price subscription.
+        let bill = series("Meralco", amounts: [3000, 3300, 3100, 3102, 3400], daysAgo: [125, 95, 65, 35, 5], category: .bills)
+        XCTAssertEqual(detect(bill).first?.isFixedAmount, false)
+        XCTAssertNil(F.run(now: now, entries: bill).first(.priceCreep))
+
+        // A 60% rise keeps the merchant recurring, so the new regular charge is not an outlier.
+        let big = series("Netflix", amounts: [10, 10, 10, 10, 16, 16], daysAgo: [155, 125, 95, 65, 35, 5])
+        let insights = F.run(now: now, entries: big)
+        XCTAssertEqual(detect(big).first?.typicalAmount, 16)
+        XCTAssertNil(insights.first(.merchantAnomaly))
+    }
+
     func testPriceCreepOnAWeeklyChargeAnnualizesByChargesPerYear() throws {
         let entries = series("Gym", amounts: [100, 100, 110], daysAgo: [15, 8, 1], category: .health)
         let creep = try XCTUnwrap(F.run(now: now, entries: entries).first(.priceCreep))
