@@ -91,46 +91,6 @@ struct GeneratedSimulationExplanation: Equatable {
     let providerIdentifier: String
 }
 
-@Model
-final class AIResponseCacheRecord {
-    @Attribute(.unique) var cacheKey: String
-    var featureRawValue: String
-    var sourceFingerprint: String
-    var payload: String
-    var generatedAt: Date
-    var lastAutoRefreshDayKey: String?
-    var providerIdentifier: String
-    var failureMessage: String?
-    var updatedAt: Date
-
-    init(
-        cacheKey: String,
-        feature: AICacheFeature,
-        sourceFingerprint: String,
-        payload: String,
-        generatedAt: Date,
-        lastAutoRefreshDayKey: String? = nil,
-        providerIdentifier: String,
-        failureMessage: String? = nil,
-        updatedAt: Date = .now
-    ) {
-        self.cacheKey = cacheKey
-        self.featureRawValue = feature.rawValue
-        self.sourceFingerprint = sourceFingerprint
-        self.payload = payload
-        self.generatedAt = generatedAt
-        self.lastAutoRefreshDayKey = lastAutoRefreshDayKey
-        self.providerIdentifier = providerIdentifier
-        self.failureMessage = failureMessage
-        self.updatedAt = updatedAt
-    }
-
-    var feature: AICacheFeature {
-        get { AICacheFeature(rawValue: featureRawValue) ?? .monthlyInsights }
-        set { featureRawValue = newValue.rawValue }
-    }
-}
-
 enum AIFingerprint {
     static func monthlyInsights(summary: MonthlySummary) -> String {
         let categoryBreakdown = summary.categoryBreakdown

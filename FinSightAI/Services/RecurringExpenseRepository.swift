@@ -142,7 +142,7 @@ struct DefaultRecurringSummaryService: RecurringSummaryService {
             merchantName: record.merchantName,
             normalizedMerchantName: Self.normalizedMerchantName(record.merchantName),
             category: record.category,
-            monthlyAmount: record.amount,
+            monthlyAmount: record.amount.doubleValue,
             expectedDay: record.expectedDay,
             expectedDate: expectedDate(for: record.expectedDay, now: now),
             status: status(for: record.expectedDay, now: now),
@@ -156,7 +156,8 @@ struct DefaultRecurringSummaryService: RecurringSummaryService {
         let recurringMerchant = Self.normalizedMerchantName(recurringExpense.merchantName)
         guard !transactionMerchant.isEmpty, transactionMerchant == recurringMerchant else { return false }
         guard recurringExpense.amount > 0 else { return false }
-        return abs(transaction.amount - recurringExpense.amount) / recurringExpense.amount <= amountTolerance
+        let difference = abs(transaction.amount - recurringExpense.amount) / recurringExpense.amount
+        return difference.doubleValue <= amountTolerance
     }
 
     private func expectedDate(for expectedDay: Int, now: Date) -> Date {

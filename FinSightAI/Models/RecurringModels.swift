@@ -23,51 +23,6 @@ enum RecurringTransactionStatus: String, Equatable {
     }
 }
 
-@Model
-final class RecurringExpenseRecord {
-    @Attribute(.unique) var id: UUID
-    var merchantNameStorage: String?
-    var amount: Double
-    var categoryRawValue: String
-    var expectedDay: Int
-    var isActive: Bool
-    var note: String
-    var createdAt: Date
-    var updatedAt: Date
-
-    init(
-        id: UUID = UUID(),
-        merchantName: String,
-        amount: Double,
-        category: SpendingCategory,
-        expectedDay: Int,
-        isActive: Bool = true,
-        note: String = "",
-        createdAt: Date = .now,
-        updatedAt: Date = .now
-    ) {
-        self.id = id
-        self.merchantNameStorage = merchantName
-        self.amount = amount
-        self.categoryRawValue = category.rawValue
-        self.expectedDay = min(max(expectedDay, 1), 31)
-        self.isActive = isActive
-        self.note = note
-        self.createdAt = createdAt
-        self.updatedAt = updatedAt
-    }
-
-    var merchantName: String {
-        get { merchantNameStorage ?? "" }
-        set { merchantNameStorage = newValue }
-    }
-
-    var category: SpendingCategory {
-        get { SpendingCategory(rawValue: categoryRawValue) ?? .other }
-        set { categoryRawValue = newValue.rawValue }
-    }
-}
-
 struct RecurringExpenseDraft: Equatable {
     var merchantName = ""
     var amountText = ""
@@ -96,7 +51,7 @@ struct RecurringExpenseDraft: Equatable {
         note = transaction.note
     }
 
-    var amount: Double? {
+    var amount: Decimal? {
         AmountParser.parse(amountText, locale: locale)
     }
 

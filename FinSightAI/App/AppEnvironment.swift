@@ -10,7 +10,7 @@ struct AppEnvironment {
     /// Builds the store and services. Throws if the store can't be opened, so the app can show a
     /// recoverable error instead of crashing.
     static func make(configuration: ModelConfiguration = ModelConfiguration(isStoredInMemoryOnly: false)) throws -> AppEnvironment {
-        let modelContainer = try ModelContainer(for: AppStoreSchema.schema, configurations: configuration)
+        let modelContainer = try AppStoreSchema.makeContainer(configuration: configuration)
         let modelContext = ModelContext(modelContainer)
         let capabilityService = DefaultCapabilityService()
 

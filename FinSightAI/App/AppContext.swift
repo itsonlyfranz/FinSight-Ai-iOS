@@ -21,6 +21,8 @@ final class AppContext {
     private var activeSimulationFingerprint: String?
     private var isLoadingSimulationExplanation = false
 
+    /// App-wide settings (currency, first weekday, onboarding). Loaded in `bootstrap()`.
+    private(set) var settings: AppSettings?
     var transactions: [TransactionRecord] = []
     var recurringExpenses: [RecurringExpenseRecord] = []
     var sections: [TransactionMonthSection] = []
@@ -62,6 +64,8 @@ final class AppContext {
     /// Loads what is stored. Never inserts data: an empty ledger stays empty until the
     /// user explicitly chooses to load sample data.
     func bootstrap() throws {
+        try StoreIntegrity.dedupe(in: modelContext)
+        settings = try AppSettings.fetchOrCreate(in: modelContext)
         try reloadTransactions()
     }
 

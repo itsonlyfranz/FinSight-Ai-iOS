@@ -2,6 +2,7 @@ import Foundation
 
 struct TransactionDraft: Equatable {
     var amountText = ""
+    var kind: TransactionKind = .expense
     var merchantName = ""
     var category: SpendingCategory = .groceries
     var date = Date()
@@ -12,13 +13,14 @@ struct TransactionDraft: Equatable {
 
     init(record: TransactionRecord) {
         amountText = CurrencyFormatter.plainNumberString(from: record.amount, locale: locale)
+        kind = record.kind
         merchantName = record.merchantName
         category = record.category
         date = record.date
         note = record.note
     }
 
-    var amount: Double? {
+    var amount: Decimal? {
         AmountParser.parse(amountText, locale: locale)
     }
 

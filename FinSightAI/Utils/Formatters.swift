@@ -12,7 +12,20 @@ enum CurrencyFormatter {
         value.formatted(.currency(code: currencyCode(for: locale)).locale(locale))
     }
 
+    static func string(from value: Decimal, currencyCode: String? = nil, locale: Locale = .current) -> String {
+        value.formatted(.currency(code: currencyCode ?? self.currencyCode(for: locale)).locale(locale))
+    }
+
     /// Editable representation of an amount: no grouping, locale decimal separator.
+    static func plainNumberString(from value: Decimal, locale: Locale = .current) -> String {
+        value.formatted(
+            .number
+                .locale(locale)
+                .grouping(.never)
+                .precision(.fractionLength(0...Money.scale))
+        )
+    }
+
     static func plainNumberString(from value: Double, locale: Locale = .current) -> String {
         value.formatted(
             .number
@@ -26,7 +39,7 @@ enum CurrencyFormatter {
 /// Parses user-typed amounts using the rules of a locale, so `12,50` is 12.5 in a
 /// comma-decimal locale and `1,250.50` is 1250.5 in en_US.
 enum AmountParser {
-    static func parse(_ text: String, locale: Locale = .current) -> Double? {
+    static func parse(_ text: String, locale: Locale = .current) -> Decimal? {
         let trimmed = text.unicodeScalars
             .filter { !CharacterSet.whitespacesAndNewlines.contains($0) }
             .map(String.init)
@@ -40,8 +53,8 @@ enum AmountParser {
         formatter.generatesDecimalNumbers = true
         guard let number = formatter.number(from: trimmed) as? NSDecimalNumber else { return nil }
 
-        let value = number.doubleValue
-        return value.isFinite ? value : nil
+        let value = number.decimalValue
+        return value.isNaN ? nil : value
     }
 }
 

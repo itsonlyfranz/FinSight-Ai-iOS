@@ -10,7 +10,7 @@ struct CategorySpend: Identifiable, Equatable, Sendable {
 /// Immutable copy of a transaction, safe to hand to background work (unlike the live SwiftData model).
 struct TransactionSnapshot: Identifiable, Equatable, Sendable {
     let id: UUID
-    let amount: Double
+    let amount: Decimal
     let merchantName: String
     let category: SpendingCategory
     let date: Date
