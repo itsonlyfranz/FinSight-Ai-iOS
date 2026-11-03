@@ -9,54 +9,24 @@ struct InsightsView: View {
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
                     summaryHeader
 
-                    switch appContext.insightState {
-                    case .empty:
-                        FinSightEmptyState(
-                            title: "No insights yet",
-                            systemImage: "sparkles",
-                            message: "Log a few expenses and FinSight AI will turn them into insights."
-                        )
-                        .finSightCard()
-                    case .idle, .loading:
-                        VStack(spacing: AppTheme.Spacing.md) {
-                            FinSightInsightSkeleton()
-                            FinSightInsightSkeleton()
-                            FinSightInsightSkeleton()
-                        }
-                    case .available(let content):
-                        VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
-                            HStack {
-                                FinSightStatusLine(text: RelativeTimestampFormatter.updatedString(for: content.lastUpdated))
-                                Spacer()
-                                FinSightStreamingRefreshControl(
-                                    isRefreshing: content.isRefreshing || appContext.isInsightRefreshInFlight,
-                                    action: {
-                                    Task {
-                                        await appContext.loadInsights(forceRefresh: true)
-                                    }
-                                },
-                                    buttonStyleKind: .prominent
-                                )
-                            }
-                            if let statusMessage = content.statusMessage {
-                                Text(statusMessage)
-                                    .font(AppTheme.Typography.caption)
-                                    .foregroundStyle(AppTheme.mutedInk)
-                            }
-                        }
+                    signalSection
 
-                        ForEach(content.value) { card in
-                            InsightPanel(card: card)
-                        }
-                    case .unavailable(let message), .failure(let message):
-                        unsupportedPanel(message: message)
-                    }
+                    narrationSection
                 }
                 .padding(AppTheme.Spacing.lg)
             }
             .background(AppTheme.backgroundGradient.ignoresSafeArea())
-            .navigationTitle("AI Insights")
+            .navigationTitle("Insights")
             .toolbarTitleDisplayMode(.inline)
+            .toolbar {
+                if appContext.hiddenInsightCount > 0 {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Show \(appContext.hiddenInsightCount) hidden", systemImage: "eye") {
+                            try? appContext.restoreHiddenInsights()
+                        }
+                    }
+                }
+            }
         }
         .task(id: appContext.insightsFingerprint) {
             try? await Task.sleep(for: .milliseconds(400))
@@ -77,16 +47,91 @@ struct InsightsView: View {
                 .lineLimit(1)
             Text("Across \(appContext.monthlySummary.transactionCount) entries")
                 .font(.title3.weight(.semibold))
-            Text("Insights are generated from processed monthly summaries rather than raw logs.")
+            Text(appContext.monthlySummary.spendingTrendDescription)
                 .font(AppTheme.Typography.caption)
                 .foregroundStyle(AppTheme.mutedInk)
         }
         .finSightCard()
     }
 
+    // MARK: - Deterministic insights
+
+    @ViewBuilder
+    private var signalSection: some View {
+        if appContext.engineInsights.isEmpty {
+            FinSightEmptyState(
+                title: appContext.allEngineInsights.isEmpty ? "No insights yet" : "All caught up",
+                systemImage: appContext.allEngineInsights.isEmpty ? "chart.bar.doc.horizontal" : "checkmark.seal",
+                message: appContext.allEngineInsights.isEmpty
+                    ? "Log a few weeks of expenses, and add income and budgets, to see budget, trend and subscription insights."
+                    : "You've dismissed or snoozed every insight for now."
+            )
+            .finSightCard()
+        } else {
+            ForEach(appContext.engineInsights) { insight in
+                InsightSignalCard(
+                    insight: insight,
+                    onSnooze: { try? appContext.snoozeInsight(insight) },
+                    onDismiss: { try? appContext.dismissInsight(insight) }
+                )
+            }
+        }
+    }
+
+    // MARK: - Optional AI narration
+
+    @ViewBuilder
+    private var narrationSection: some View {
+        switch appContext.insightState {
+        case .empty, .idle:
+            EmptyView()
+        case .loading:
+            narrationHeader
+            FinSightInsightSkeleton()
+        case .available(let content):
+            narrationHeader
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
+                HStack {
+                    FinSightStatusLine(text: RelativeTimestampFormatter.updatedString(for: content.lastUpdated))
+                    Spacer()
+                    FinSightStreamingRefreshControl(
+                        isRefreshing: content.isRefreshing || appContext.isInsightRefreshInFlight,
+                        action: {
+                            Task {
+                                await appContext.loadInsights(forceRefresh: true)
+                            }
+                        },
+                        buttonStyleKind: .prominent
+                    )
+                }
+                if let statusMessage = content.statusMessage {
+                    Text(statusMessage)
+                        .font(AppTheme.Typography.caption)
+                        .foregroundStyle(AppTheme.mutedInk)
+                }
+            }
+            ForEach(content.value) { card in
+                InsightPanel(card: card)
+            }
+        case .unavailable(let message):
+            Text("AI narration is optional and isn't available here: \(message)")
+                .font(AppTheme.Typography.caption)
+                .foregroundStyle(AppTheme.mutedInk)
+        case .failure(let message):
+            unsupportedPanel(message: message)
+        }
+    }
+
+    private var narrationHeader: some View {
+        Label("AI narration", systemImage: "sparkles")
+            .font(AppTheme.Typography.headline)
+            .foregroundStyle(AppTheme.ink)
+            .padding(.top, AppTheme.Spacing.xs)
+    }
+
     private func unsupportedPanel(message: String) -> some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
-            Label("AI unavailable", systemImage: "exclamationmark.triangle.fill")
+            Label("AI narration unavailable", systemImage: "exclamationmark.triangle.fill")
                 .font(AppTheme.Typography.headline)
             Text(message)
                 .foregroundStyle(AppTheme.mutedInk)
