@@ -118,6 +118,10 @@ struct InsightsView: View {
             ForEach(content.value) { card in
                 InsightPanel(card: card)
             }
+        case .modelUnavailable(let reason):
+            AIUnavailablePanel(reason: reason) {
+                Task { await appContext.loadInsights(forceRefresh: true) }
+            }
         case .unavailable(let message):
             Text("AI narration is optional and isn't available here: \(message)")
                 .font(AppTheme.Typography.caption)
@@ -149,6 +153,37 @@ struct InsightsView: View {
             .tint(AppTheme.primary)
         }
         .finSightCard()
+    }
+}
+
+/// Why AI narration can't run, what to do about it, and a reminder that the insights above don't need it.
+private struct AIUnavailablePanel: View {
+    let reason: AIUnavailableReason
+    let onCheckAgain: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
+            Label(reason.title, systemImage: reason.systemImage)
+                .font(AppTheme.Typography.headline)
+                .foregroundStyle(AppTheme.ink)
+            Text(reason.message)
+                .foregroundStyle(AppTheme.mutedInk)
+            if let hint = reason.actionHint {
+                Text(hint)
+                    .font(AppTheme.Typography.caption)
+                    .foregroundStyle(AppTheme.mutedInk)
+            }
+            Text("The insights above are calculated on your device and don't need AI.")
+                .font(AppTheme.Typography.caption)
+                .foregroundStyle(AppTheme.mutedInk)
+            if reason.isRecoverable {
+                Button("Check Again", action: onCheckAgain)
+                    .buttonStyle(.bordered)
+                    .tint(AppTheme.primary)
+            }
+        }
+        .finSightCard()
+        .accessibilityElement(children: .contain)
     }
 }
 

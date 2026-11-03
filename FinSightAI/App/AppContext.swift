@@ -11,9 +11,10 @@ final class AppContext {
     let modelContext: ModelContext
     private let summaryService: SummaryService
     private let recurringSummaryService: RecurringSummaryService
-    private let aiInsightService: AIInsightService
+    let aiInsightService: AIInsightService
     let simulationService: SimulationService
     let capabilityService: CapabilityService
+    let transactionAssistant: TransactionAssistant
     private static let logger = Logger(subsystem: "com.finsightai.app", category: "AppContext")
     /// Most recent simulator scenarios whose explanations stay cached.
     static let simulationCacheLimit = 10
@@ -45,6 +46,8 @@ final class AppContext {
     var insightState: InsightLoadState = .idle
     var simulatorExplanationState: LoadableTextState = .idle
     var activeDraft: TransactionDraft = .init()
+    /// The category the assistant last chose for the draft, so the editor can say so.
+    var categorySuggestion: CategorySuggestion?
     var activeRecurringDraft: RecurringExpenseDraft = .init()
     var editingTransaction: TransactionRecord?
     var editingRecurringExpense: RecurringExpenseRecord?
@@ -60,7 +63,8 @@ final class AppContext {
         recurringSummaryService: RecurringSummaryService,
         aiInsightService: AIInsightService,
         simulationService: SimulationService,
-        capabilityService: CapabilityService
+        capabilityService: CapabilityService,
+        transactionAssistant: TransactionAssistant = RuleBasedTransactionAssistant()
     ) {
         self.repository = repository
         self.recurringExpenseRepository = recurringExpenseRepository
@@ -70,6 +74,7 @@ final class AppContext {
         self.aiInsightService = aiInsightService
         self.simulationService = simulationService
         self.capabilityService = capabilityService
+        self.transactionAssistant = transactionAssistant
         self.monthlySummary = summaryService.makeMonthlySummary(from: [], recurringSummary: .empty, now: .now)
     }
 
@@ -95,7 +100,19 @@ final class AppContext {
     /// Identifies the data the insight cards are generated from. Views key their refresh
     /// task on it so insights regenerate when the underlying data changes.
     var insightsFingerprint: String {
-        AIFingerprint.monthlyInsights(summary: monthlySummary)
+        AIFingerprint.monthlyInsights(summary: monthlySummary, insights: engineInsights, historyTotals: narrationLedger.historyTotals)
+    }
+
+    /// The ledger the narration and its tools read: the same in-memory transactions and budgets the
+    /// engine insights were computed from.
+    var narrationLedger: LedgerSnapshot {
+        let calendar = settings?.calendar() ?? .current
+        return LedgerSnapshot(
+            now: .now,
+            calendar: calendar,
+            entries: LedgerEntry.history(from: transactions, now: .now, calendar: calendar),
+            budgets: budgetProgress.map { BudgetLimit(category: $0.category, limit: $0.limit) }
+        )
     }
 
     func reloadTransactions() throws {
@@ -126,11 +143,13 @@ final class AppContext {
     func prepareNewTransaction() {
         editingTransaction = nil
         activeDraft = .init()
+        categorySuggestion = nil
     }
 
     func prepareEdit(for transaction: TransactionRecord) {
         editingTransaction = transaction
         activeDraft = TransactionDraft(record: transaction)
+        categorySuggestion = nil
     }
 
     func delete(_ transaction: TransactionRecord) throws {
@@ -187,7 +206,7 @@ final class AppContext {
             return
         }
         let cacheKey = AICacheKey.monthlyInsights(for: monthlySummary)
-        let fingerprint = AIFingerprint.monthlyInsights(summary: monthlySummary)
+        let fingerprint = insightsFingerprint
         let dayKey = DayFormatter.dayKey(for: .now)
 
         if let record = fetchCacheRecord(cacheKey: cacheKey, feature: .monthlyInsights),
@@ -214,7 +233,7 @@ final class AppContext {
         guard shouldRefresh else { return }
         isLoadingInsights = true
         defer { isLoadingInsights = false }
-        let summary = monthlySummary
+        let context = NarrationContext(summary: monthlySummary, insights: engineInsights, ledger: narrationLedger)
 
         do {
             let existingCachedCards: [InsightCard]
@@ -226,7 +245,7 @@ final class AppContext {
             }
 
             let payload = try await aiInsightService.generateInsights(
-                from: summary,
+                from: context,
                 onUpdate: { [weak self] partialCards in
                     guard let self else { return }
                     await MainActor.run {
@@ -267,6 +286,9 @@ final class AppContext {
                 feature: .monthlyInsights,
                 dayKey: dayKey,
                 message: error.localizedDescription,
+                unavailableReason: (error as? AIInsightError).flatMap {
+                    if case .modelUnavailable(let reason) = $0 { reason } else { nil }
+                },
                 isAutomatic: !forceRefresh
             )
         }
@@ -537,6 +559,7 @@ final class AppContext {
         feature: AICacheFeature,
         dayKey: String,
         message: String,
+        unavailableReason: AIUnavailableReason? = nil,
         isAutomatic: Bool
     ) {
         if let record = fetchCacheRecord(cacheKey: cacheKey, feature: feature),
@@ -556,6 +579,8 @@ final class AppContext {
                     statusMessage: message
                 )
             )
+        } else if let unavailableReason {
+            insightState = .modelUnavailable(unavailableReason)
         } else {
             insightState = .unavailable(message)
         }

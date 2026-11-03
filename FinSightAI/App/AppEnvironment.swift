@@ -22,7 +22,8 @@ struct AppEnvironment {
             recurringSummaryService: DefaultRecurringSummaryService(),
             aiInsightService: AppleFoundationModelsInsightService(capabilityService: capabilityService),
             simulationService: DefaultSimulationService(),
-            capabilityService: capabilityService
+            capabilityService: capabilityService,
+            transactionAssistant: FoundationModelsTransactionAssistant(capabilityService: capabilityService)
         )
         return AppEnvironment(modelContainer: modelContainer, appContext: appContext)
     }
