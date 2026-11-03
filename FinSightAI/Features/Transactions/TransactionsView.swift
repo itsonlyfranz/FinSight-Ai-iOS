@@ -5,6 +5,13 @@ struct TransactionsView: View {
     @State private var showingEditor = false
     @State private var showingRecurringEditor = false
     @State private var errorMessage: String?
+    @State private var filter = TransactionFilter()
+
+    /// All months, or only the transactions matching the chips and search text.
+    private var visibleSections: [TransactionMonthSection] {
+        guard filter.isActive else { return appContext.sections }
+        return DefaultSummaryService().monthlySections(from: filter.apply(to: appContext.transactions))
+    }
 
     var body: some View {
         NavigationStack {
@@ -13,6 +20,13 @@ struct TransactionsView: View {
                     SampleDataCard()
                         .listRowBackground(Color.clear)
                         .listRowInsets(EdgeInsets())
+                }
+
+                if !appContext.transactions.isEmpty {
+                    CategoryFilterChips(filter: $filter)
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+                        .listRowSeparator(.hidden)
                 }
 
                 Section("Recurring") {
@@ -37,7 +51,18 @@ struct TransactionsView: View {
                     }
                 }
 
-                ForEach(appContext.sections) { section in
+                if filter.isActive, visibleSections.isEmpty {
+                    ContentUnavailableView {
+                        Label("No matching transactions", systemImage: "magnifyingglass")
+                    } description: {
+                        Text("Try a different merchant name or clear the category filters.")
+                    } actions: {
+                        Button("Clear filters") { filter.reset() }
+                    }
+                    .listRowBackground(Color.clear)
+                }
+
+                ForEach(visibleSections) { section in
                     Section(section.title) {
                         ForEach(section.transactions) { transaction in
                             TransactionListRow(transaction: transaction)
@@ -69,6 +94,7 @@ struct TransactionsView: View {
             .scrollContentBackground(.hidden)
             .background(AppTheme.backgroundGradient.ignoresSafeArea())
             .navigationTitle("Transactions")
+            .searchable(text: $filter.searchText, prompt: "Search merchants and notes")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
@@ -118,6 +144,49 @@ struct TransactionsView: View {
     }
 }
 
+private struct CategoryFilterChips: View {
+    @Binding var filter: TransactionFilter
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: AppTheme.Spacing.xs) {
+                if filter.isActive {
+                    Button {
+                        filter.reset()
+                    } label: {
+                        Label("Clear", systemImage: "xmark.circle.fill")
+                            .font(.subheadline.weight(.medium))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(AppTheme.surfaceAccent, in: Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("Clear all filters")
+                }
+                ForEach(SpendingCategory.allCases) { category in
+                    let isSelected = filter.categories.contains(category)
+                    Button {
+                        filter.toggle(category)
+                    } label: {
+                        Label(category.title, systemImage: category.symbolName)
+                            .font(.subheadline.weight(.medium))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .foregroundStyle(isSelected ? Color.white : AppTheme.ink)
+                            .background(isSelected ? category.tint : AppTheme.surfaceAccent, in: Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("\(category.title) filter")
+                    .accessibilityAddTraits(isSelected ? .isSelected : [])
+                }
+            }
+            .padding(.horizontal, AppTheme.Spacing.md)
+        }
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("Category filters")
+    }
+}
+
 private struct TransactionListRow: View {
     let transaction: TransactionRecord
 
@@ -131,7 +200,7 @@ private struct TransactionListRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(transaction.merchantName.isEmpty ? transaction.category.title : transaction.merchantName)
                     .font(.headline)
-                Text(transaction.note.isEmpty ? "Quick expense log" : transaction.note)
+                Text(transaction.note.isEmpty ? (transaction.kind == .income ? "Income" : "Quick expense log") : transaction.note)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -139,15 +208,33 @@ private struct TransactionListRow: View {
             Spacer()
 
             VStack(alignment: .trailing, spacing: 4) {
-                Text(CurrencyFormatter.string(from: transaction.amount))
+                Text(amountText)
                     .font(.headline)
+                    .monospacedDigit()
+                    .foregroundStyle(transaction.kind == .income ? Color.green : Color.primary)
                 Text(transaction.date, style: .date)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
         }
         .padding(.vertical, 6)
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityText)
+    }
+
+    private var amountText: String {
+        let amount = CurrencyFormatter.string(from: transaction.amount)
+        return transaction.kind == .income ? "+\(amount)" : amount
+    }
+
+    private var title: String {
+        transaction.merchantName.isEmpty ? transaction.category.title : transaction.merchantName
+    }
+
+    private var accessibilityText: String {
+        let kind = transaction.kind == .expense ? "" : "\(transaction.kind.title), "
+        let date = transaction.date.formatted(date: .abbreviated, time: .omitted)
+        return "\(kind)\(title), \(transaction.category.title), \(CurrencyFormatter.string(from: transaction.amount)), \(date)"
     }
 }
 

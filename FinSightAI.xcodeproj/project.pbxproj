@@ -7,358 +7,388 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		059B8BC6A7D4EF81AFAF8447 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8E233A225310B8D67B44A3CF /* MarkdownUI */; };
-		0B07C59748EF4AA05A84C827 /* FinSightAITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05E0BD713396287E55A7A270 /* FinSightAITests.swift */; };
-		0BF994B274D52C1A6B6CD066 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC04ABBFBB6E35346B4A425 /* Foundation.framework */; };
-		1860EB3C76951083E786DD09 /* DefaultSummaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09B09F790CA7121FD9E50C7 /* DefaultSummaryService.swift */; };
-		216E68107AC68CDAD43647EF /* StoreIntegrity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9ED376CEECF68BD7E44783DF /* StoreIntegrity.swift */; };
-		240EB376436045E97DE21FE0 /* StoreRecovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E2944B1DDF1722ADEA87D98 /* StoreRecovery.swift */; };
-		25ACF3CE6F4D50A5A3B40ED7 /* SummaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E598B312C8D5B9A99F2CBCF /* SummaryService.swift */; };
-		2B8A532803365A41ABEC45FD /* FinSightSchemaV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FA4DA1CE036646D8A2DAC04 /* FinSightSchemaV2.swift */; };
-		2CDCD970EBE481F460036B1A /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 472BAFB833A3A1F3A5A8FF28 /* AppEnvironment.swift */; };
-		2E921E59388F8D3285495EEC /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99CF917937FD19E200E55191 /* TransactionRepository.swift */; };
-		31C029484B0AEF5AD3DEE8B0 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC9B88E18BD43DA85AAE0130 /* AppContext.swift */; };
-		3352C8A02E78E09F3535FFDB /* RecurringModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526571DFECB9365B58D8646B /* RecurringModels.swift */; };
-		33B1200D0FF1D066E1A65F1E /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5823FD1060CC03BC3CB0E846 /* RootTabView.swift */; };
-		3C33D1BE6A540F25E347AEAE /* TransactionEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFDB9296C14D665CB110E212 /* TransactionEditorView.swift */; };
-		411AC2EF41DB39EBC64A2225 /* Phase0RegressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE4FCEB6828C5823C9CA88F /* Phase0RegressionTests.swift */; };
-		42F431F35D5846F969630CE1 /* SimulationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = E16E78A87E3D12ABCD62F713 /* SimulationModels.swift */; };
-		49F6F0EA2E61235A9D21BD34 /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F4C4E25EF58A37BD2C5486 /* Money.swift */; };
-		4B6B65D41FEA575FF440FC62 /* FinSightMigrationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32192FF4FA5E094A5EF05B36 /* FinSightMigrationPlan.swift */; };
-		4D3F0AC3C93330BAD895942B /* SwiftDataTransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66F4B3C0E5567B330DF05C3C /* SwiftDataTransactionRepository.swift */; };
-		4E2D196DFBA88407ACBF8D7F /* Phase1DataModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FBE01C8744E7CC8CE22D454 /* Phase1DataModelTests.swift */; };
-		516D17B5EE81EA4B13274A4C /* FinSightMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70646F37027B6A4D8B38C0C3 /* FinSightMarkdownView.swift */; };
-		529F5240C10801C57F592D2F /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECBE0028215ACA7CA4B5A629 /* DashboardView.swift */; };
-		60AADA37E6F736C8B2EACEFE /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833C5B2F2D4173018D121155 /* Formatters.swift */; };
-		654D91E30C18AE383144F51C /* AIInsightService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31AD60998EB7EE64355479D /* AIInsightService.swift */; };
-		73D6877D301275094C51477C /* FinSightAIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DC3B92E800B869B90BF2894 /* FinSightAIApp.swift */; };
-		750180FA691AD47BA0B59BF5 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6552F469C9DBE8F0C9163B59 /* AppTheme.swift */; };
-		7A554154D92AC2269492B359 /* CurrentSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28F61672BF5C3317B8B2BC0C /* CurrentSchema.swift */; };
-		8882791F014374AFA5D1ED8A /* TransactionKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E62B62AD791361C55DB0BA /* TransactionKind.swift */; };
-		9439913DB0F7EF66B3B602FD /* CapabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBF35B09E2620EA553F6ABD2 /* CapabilityService.swift */; };
-		9D8CEAE53ECDBC14F5D9029F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 2E790D0BB9D3BA6EA70845AE /* PrivacyInfo.xcprivacy */; };
-		A02A3E79A5114DBA7A25845D /* SimulationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7175F921D94F8216F88EAD2C /* SimulationService.swift */; };
-		A48E49737D1900500954256E /* SpendingCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2327BBF551827FE6EC46697B /* SpendingCategory.swift */; };
-		AE48D4B2A0C94140BB612620 /* TransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E85F8EA0CAC4C87ECEB53C /* TransactionsView.swift */; };
-		B4EDBE8A7AA248D759A568A5 /* SimulatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EE813FEE86618D983EE87F0C /* SimulatorView.swift */; };
-		C174134F357B218A14A6370F /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB993A0613B0A16091CF8C6 /* SampleData.swift */; };
-		C89CFB07E8F1E6106CB9E85C /* SampleDataCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DBAA86BCB971E65835C6BBA /* SampleDataCard.swift */; };
-		CA4B19BD879D57ABB1A37015 /* RecurringExpenseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46A5127822AF2D6C19AD0D01 /* RecurringExpenseRepository.swift */; };
-		CCFC6544899B27552C263A41 /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CEF99F326CCA0786551B80F /* InsightsView.swift */; };
-		D5C8405834BC25AAF9602E14 /* InsightModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C638E0902091D0043850599A /* InsightModels.swift */; };
-		D776E767905F00C4E7F0272C /* MonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = E89E1BABF7071A592FC01BD7 /* MonthlySummary.swift */; };
-		E49FFB958B364C8E5D771D80 /* FinSightSchemaV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB09051364D1D01CBE8F972 /* FinSightSchemaV1.swift */; };
-		E77FF447526357C56CC6CA16 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFC04ABBFBB6E35346B4A425 /* Foundation.framework */; };
-		E9136475E96C9B5D2677A53B /* TransactionDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3BC3CAD64E5441958CB2C77 /* TransactionDraft.swift */; };
-		F4F343E3FC34DE778481D60F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 111AD9662537DF3563727B54 /* Assets.xcassets */; };
+		001CDBA2F2987B926A689E33 /* Money.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49AB04414930CD5E2A0F92D5 /* Money.swift */; };
+		01B38BAE8AFF3F4F3C659455 /* FinSightAIApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F888760DDA3875924CE9427 /* FinSightAIApp.swift */; };
+		07F45909B314F76BEF462F46 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = F651A836685CFC41950EB689 /* MarkdownUI */; };
+		098464BC6FE1BDB98ACA177C /* MonthlySummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F28044EC2D5AAFECA60F6F1 /* MonthlySummary.swift */; };
+		1387CC156B2E19C9A35BA79C /* TransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD6EE65C16AE0491635C152 /* TransactionRepository.swift */; };
+		1579BDA73F9F53B8B325FAD0 /* SimulatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9647CA23BD2DF2B3D15D4263 /* SimulatorView.swift */; };
+		2180C8E013AB3EAC95117EDA /* RecurringModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1172003EACDE8F7679C814A6 /* RecurringModels.swift */; };
+		259A7CA15A4E9BB75A7471F8 /* BudgetsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A46594A553A12E2355A83FB /* BudgetsView.swift */; };
+		2BBBBA7602C1AB8752B04A1A /* DashboardPlanningCards.swift in Sources */ = {isa = PBXBuildFile; fileRef = A464A2C51958B243DBE85025 /* DashboardPlanningCards.swift */; };
+		32322610568079EEB3DD0EC2 /* DefaultSummaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB410248BEB75CB88E9B20D3 /* DefaultSummaryService.swift */; };
+		33E6B6CE1DE2871F2AE06066 /* FinSightSchemaV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D896F2CD11E384AC04BD139 /* FinSightSchemaV2.swift */; };
+		3AE032DCA8102EB6B353F3CB /* PlanningComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E98CA06FF0394D853CE581FA /* PlanningComponents.swift */; };
+		3E09E2DBFFEE17BA490FBC3C /* FinSightMarkdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB753F8B95D6F3B3A3FE2D6F /* FinSightMarkdownView.swift */; };
+		44DE20DC8A1B0DC253322CBA /* Phase0RegressionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42D8FF63AA5F09809788773 /* Phase0RegressionTests.swift */; };
+		485ADBFC52C936E981AD5EAC /* FinSightMigrationPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = F27286136B77CEEF8486BB0D /* FinSightMigrationPlan.swift */; };
+		4B84801BD43CD139E9543848 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B18754FD44EEE7012DF6E2FC /* SampleData.swift */; };
+		5C10C8D9F92CDC64F109AE67 /* CSVExport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460CAF3F0602E8812C46E4B7 /* CSVExport.swift */; };
+		5DCA99C9C3933A9EA7694FBA /* CurrentSchema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98F456C0245F30F58082EA11 /* CurrentSchema.swift */; };
+		60BCFD83E1D62C3D918729DF /* SpendingCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9F0F654CD25BAC652784F0D /* SpendingCategory.swift */; };
+		68C33EDE6C0ECC9F0A35BBA1 /* TransactionDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59659A6C02ED738A09E01A8 /* TransactionDraft.swift */; };
+		6A97BB3C38C2432D1F999DA1 /* FinSightAITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C7601209167992DC6F398A /* FinSightAITests.swift */; };
+		711F92E47D99A1F319D94DC6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF65681D3D96FCC2EE645C31 /* SettingsView.swift */; };
+		73EC15551BF29FDF535D6298 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A1ECFDC8FD8C155151A4408 /* Formatters.swift */; };
+		76B683AF51D7B7C69219E6D8 /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 094375BA734D6571B180E02B /* AppContext.swift */; };
+		7711B9A21E3D432B506FC15B /* TransactionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB58E5305213812A14D1994A /* TransactionsView.swift */; };
+		7C3C0BB5CE8E49198380EA4F /* TransactionKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4DABA8A176AFAA0A9E3C9A9 /* TransactionKind.swift */; };
+		801DC8DE172BAABF419CF7C5 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE0502410AA3DD5B6E7665D /* DashboardView.swift */; };
+		822D567511D211803DEA3E74 /* RecurringExpenseRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = C168579477BBE18568FB1763 /* RecurringExpenseRepository.swift */; };
+		86E115EA8C4145E4C5888B3A /* FinSightSchemaV1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B8244319ACA9159C7DBD88A /* FinSightSchemaV1.swift */; };
+		8B10C4874D946EB20A6525A5 /* AppContext+Planning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771193E156DF9B41FB65EFB3 /* AppContext+Planning.swift */; };
+		8B1856D937692230FA7E0DCD /* SimulationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF4FD163C7FDE0FE93AE8E1 /* SimulationService.swift */; };
+		8EAE0C7AE942E21669DFDF4C /* SimulationModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = F30DA5A0E70832B161433B6C /* SimulationModels.swift */; };
+		928BADA9C1E6BC59B1BC39E6 /* StoreRecovery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 546D719CC3E83BF1A0848F1A /* StoreRecovery.swift */; };
+		9D7C508731F0F76DE6E35977 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEFCD20BF03FBBECCF8108A7 /* Foundation.framework */; };
+		A79194DFF4D1F8A575C46349 /* CapabilityService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF6C15DCF0FDB88FD9371458 /* CapabilityService.swift */; };
+		B4CCE51DBD4AE1E5EE9C8F63 /* IncomeSourcesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9249C449F8F4804AD44288E7 /* IncomeSourcesView.swift */; };
+		BBD767A8970B502505CCC6B9 /* AIInsightService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97A996E0AD41E913C17445C /* AIInsightService.swift */; };
+		BE95D6960EFC3371714DE94D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEFCD20BF03FBBECCF8108A7 /* Foundation.framework */; };
+		C0221FBBA4CD8881CB504667 /* SummaryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C51923FA04021555B729392B /* SummaryService.swift */; };
+		C03241676D64D7806EA96B0C /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 672BA4C5728D3F4B820FE759 /* AppEnvironment.swift */; };
+		C38D7645FAB488E1607AEE9F /* SampleDataCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B7045BC78B469CA923B55C /* SampleDataCard.swift */; };
+		C4B9FCBE2747EC93623A14C7 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F26A7CA1556EC69A1B8274A /* AppTheme.swift */; };
+		C6B83AE41F661D3D892B6972 /* InsightModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C2911E108ED514EDA49E083 /* InsightModels.swift */; };
+		CACD91815B61D8E249A84F96 /* TransactionEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DCBBB391A369BD981C483A /* TransactionEditorView.swift */; };
+		CFE0415B9C09B244A4AFD832 /* StoreIntegrity.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED12AD8B835876667F6DEC0A /* StoreIntegrity.swift */; };
+		D1CABA8B8CCD1A879995D8E1 /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D56EE9F65044C81680EDFFA5 /* RootTabView.swift */; };
+		D6E8630F901007B9ACDA2903 /* SavingsGoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD492AE3A2E83F2A4975FCDA /* SavingsGoalsView.swift */; };
+		DAC0C4BEC155CCF6C3869F41 /* SwiftDataTransactionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAEDB9AE626CD89FE11C326C /* SwiftDataTransactionRepository.swift */; };
+		DCBC302B619BC4A058807DA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8096BE21E04D6916BB6E4D29 /* Assets.xcassets */; };
+		E1D166937BAF2BC12E4F64BC /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B178634DD704598EC5FB87 /* InsightsView.swift */; };
+		ED094B56EA92C58A91B84BF9 /* PlanningCalculators.swift in Sources */ = {isa = PBXBuildFile; fileRef = C316053E30BF69CD20D3F566 /* PlanningCalculators.swift */; };
+		F734025091EAD1A84BBD5856 /* Phase2ParityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17AED2BC0CA68414811FAEFF /* Phase2ParityTests.swift */; };
+		F880ADCDD45DEA6CB6E22DE7 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = AC20AFAF11BC8DDD20323A43 /* PrivacyInfo.xcprivacy */; };
+		FEEF0EE519E2324AF947748A /* Phase1DataModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52F83B8997B3DDD92E197C7B /* Phase1DataModelTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3B70B2CA45B5471FE43E4571 /* PBXContainerItemProxy */ = {
+		B7C76C4236293ACE376050C3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 7BB16E61592F8C601E7FEE3C /* Project object */;
+			containerPortal = B0450D9BD4E9484F7B5FF2F9 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = FC5F31B5C5A6A12916C53C7B;
+			remoteGlobalIDString = AC409647F2229498B7DE6A2E;
 			remoteInfo = FinSightAI;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		05E0BD713396287E55A7A270 /* FinSightAITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightAITests.swift; sourceTree = "<group>"; };
-		111AD9662537DF3563727B54 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		2327BBF551827FE6EC46697B /* SpendingCategory.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpendingCategory.swift; sourceTree = "<group>"; };
-		28F61672BF5C3317B8B2BC0C /* CurrentSchema.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CurrentSchema.swift; sourceTree = "<group>"; };
-		2E790D0BB9D3BA6EA70845AE /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		32192FF4FA5E094A5EF05B36 /* FinSightMigrationPlan.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightMigrationPlan.swift; sourceTree = "<group>"; };
-		3DBAA86BCB971E65835C6BBA /* SampleDataCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SampleDataCard.swift; sourceTree = "<group>"; };
-		46A5127822AF2D6C19AD0D01 /* RecurringExpenseRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecurringExpenseRepository.swift; sourceTree = "<group>"; };
-		472BAFB833A3A1F3A5A8FF28 /* AppEnvironment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
-		526571DFECB9365B58D8646B /* RecurringModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecurringModels.swift; sourceTree = "<group>"; };
-		5823FD1060CC03BC3CB0E846 /* RootTabView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
-		5DC3B92E800B869B90BF2894 /* FinSightAIApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightAIApp.swift; sourceTree = "<group>"; };
-		5EB993A0613B0A16091CF8C6 /* SampleData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
-		5FBE01C8744E7CC8CE22D454 /* Phase1DataModelTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Phase1DataModelTests.swift; sourceTree = "<group>"; };
-		651BD14E68653775FE976836 /* FinSightAITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = FinSightAITests.xctest; path = FinSightAITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6552F469C9DBE8F0C9163B59 /* AppTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
-		66F4B3C0E5567B330DF05C3C /* SwiftDataTransactionRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SwiftDataTransactionRepository.swift; sourceTree = "<group>"; };
-		6CEF99F326CCA0786551B80F /* InsightsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
-		70646F37027B6A4D8B38C0C3 /* FinSightMarkdownView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightMarkdownView.swift; sourceTree = "<group>"; };
-		7175F921D94F8216F88EAD2C /* SimulationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SimulationService.swift; sourceTree = "<group>"; };
-		833C5B2F2D4173018D121155 /* Formatters.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
-		8E598B312C8D5B9A99F2CBCF /* SummaryService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SummaryService.swift; sourceTree = "<group>"; };
-		99CF917937FD19E200E55191 /* TransactionRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionRepository.swift; sourceTree = "<group>"; };
-		9E2944B1DDF1722ADEA87D98 /* StoreRecovery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StoreRecovery.swift; sourceTree = "<group>"; };
-		9ED376CEECF68BD7E44783DF /* StoreIntegrity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StoreIntegrity.swift; sourceTree = "<group>"; };
-		9FA4DA1CE036646D8A2DAC04 /* FinSightSchemaV2.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightSchemaV2.swift; sourceTree = "<group>"; };
-		A4E62B62AD791361C55DB0BA /* TransactionKind.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionKind.swift; sourceTree = "<group>"; };
-		B09B09F790CA7121FD9E50C7 /* DefaultSummaryService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DefaultSummaryService.swift; sourceTree = "<group>"; };
-		BBE4FCEB6828C5823C9CA88F /* Phase0RegressionTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Phase0RegressionTests.swift; sourceTree = "<group>"; };
-		BBF35B09E2620EA553F6ABD2 /* CapabilityService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapabilityService.swift; sourceTree = "<group>"; };
-		BFC04ABBFBB6E35346B4A425 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		C638E0902091D0043850599A /* InsightModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InsightModels.swift; sourceTree = "<group>"; };
-		D31AD60998EB7EE64355479D /* AIInsightService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AIInsightService.swift; sourceTree = "<group>"; };
-		E0F4C4E25EF58A37BD2C5486 /* Money.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
-		E16E78A87E3D12ABCD62F713 /* SimulationModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SimulationModels.swift; sourceTree = "<group>"; };
-		E3BC3CAD64E5441958CB2C77 /* TransactionDraft.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionDraft.swift; sourceTree = "<group>"; };
-		E89E1BABF7071A592FC01BD7 /* MonthlySummary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MonthlySummary.swift; sourceTree = "<group>"; };
-		ECBE0028215ACA7CA4B5A629 /* DashboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
-		ED3831FDBD6611F24B754D52 /* FinSightAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = FinSightAI.app; path = FinSightAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		EE813FEE86618D983EE87F0C /* SimulatorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SimulatorView.swift; sourceTree = "<group>"; };
-		EFB09051364D1D01CBE8F972 /* FinSightSchemaV1.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightSchemaV1.swift; sourceTree = "<group>"; };
-		EFDB9296C14D665CB110E212 /* TransactionEditorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionEditorView.swift; sourceTree = "<group>"; };
-		F2E85F8EA0CAC4C87ECEB53C /* TransactionsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionsView.swift; sourceTree = "<group>"; };
-		FC9B88E18BD43DA85AAE0130 /* AppContext.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
+		06DCBBB391A369BD981C483A /* TransactionEditorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionEditorView.swift; sourceTree = "<group>"; };
+		094375BA734D6571B180E02B /* AppContext.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppContext.swift; sourceTree = "<group>"; };
+		0EF4FD163C7FDE0FE93AE8E1 /* SimulationService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SimulationService.swift; sourceTree = "<group>"; };
+		0F26A7CA1556EC69A1B8274A /* AppTheme.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		1172003EACDE8F7679C814A6 /* RecurringModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecurringModels.swift; sourceTree = "<group>"; };
+		17AED2BC0CA68414811FAEFF /* Phase2ParityTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Phase2ParityTests.swift; sourceTree = "<group>"; };
+		1D896F2CD11E384AC04BD139 /* FinSightSchemaV2.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightSchemaV2.swift; sourceTree = "<group>"; };
+		1F28044EC2D5AAFECA60F6F1 /* MonthlySummary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MonthlySummary.swift; sourceTree = "<group>"; };
+		2B8244319ACA9159C7DBD88A /* FinSightSchemaV1.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightSchemaV1.swift; sourceTree = "<group>"; };
+		2C2911E108ED514EDA49E083 /* InsightModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InsightModels.swift; sourceTree = "<group>"; };
+		2FD6EE65C16AE0491635C152 /* TransactionRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionRepository.swift; sourceTree = "<group>"; };
+		460CAF3F0602E8812C46E4B7 /* CSVExport.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CSVExport.swift; sourceTree = "<group>"; };
+		49AB04414930CD5E2A0F92D5 /* Money.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Money.swift; sourceTree = "<group>"; };
+		4A1ECFDC8FD8C155151A4408 /* Formatters.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
+		4A46594A553A12E2355A83FB /* BudgetsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BudgetsView.swift; sourceTree = "<group>"; };
+		4AE0502410AA3DD5B6E7665D /* DashboardView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		4F888760DDA3875924CE9427 /* FinSightAIApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightAIApp.swift; sourceTree = "<group>"; };
+		52F83B8997B3DDD92E197C7B /* Phase1DataModelTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Phase1DataModelTests.swift; sourceTree = "<group>"; };
+		546D719CC3E83BF1A0848F1A /* StoreRecovery.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StoreRecovery.swift; sourceTree = "<group>"; };
+		54AB38D6593C44E36AF2855F /* FinSightAITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = FinSightAITests.xctest; path = FinSightAITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		58B7045BC78B469CA923B55C /* SampleDataCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SampleDataCard.swift; sourceTree = "<group>"; };
+		672BA4C5728D3F4B820FE759 /* AppEnvironment.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		771193E156DF9B41FB65EFB3 /* AppContext+Planning.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "AppContext+Planning.swift"; sourceTree = "<group>"; };
+		8096BE21E04D6916BB6E4D29 /* Assets.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8AF2B21B7A188F583BE2D99C /* FinSightAI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = FinSightAI.app; path = FinSightAI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9249C449F8F4804AD44288E7 /* IncomeSourcesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = IncomeSourcesView.swift; sourceTree = "<group>"; };
+		9647CA23BD2DF2B3D15D4263 /* SimulatorView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SimulatorView.swift; sourceTree = "<group>"; };
+		98F456C0245F30F58082EA11 /* CurrentSchema.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CurrentSchema.swift; sourceTree = "<group>"; };
+		A42D8FF63AA5F09809788773 /* Phase0RegressionTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Phase0RegressionTests.swift; sourceTree = "<group>"; };
+		A464A2C51958B243DBE85025 /* DashboardPlanningCards.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DashboardPlanningCards.swift; sourceTree = "<group>"; };
+		A4C7601209167992DC6F398A /* FinSightAITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightAITests.swift; sourceTree = "<group>"; };
+		AB753F8B95D6F3B3A3FE2D6F /* FinSightMarkdownView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightMarkdownView.swift; sourceTree = "<group>"; };
+		AC20AFAF11BC8DDD20323A43 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		AEFCD20BF03FBBECCF8108A7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		B18754FD44EEE7012DF6E2FC /* SampleData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		C168579477BBE18568FB1763 /* RecurringExpenseRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecurringExpenseRepository.swift; sourceTree = "<group>"; };
+		C316053E30BF69CD20D3F566 /* PlanningCalculators.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PlanningCalculators.swift; sourceTree = "<group>"; };
+		C51923FA04021555B729392B /* SummaryService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SummaryService.swift; sourceTree = "<group>"; };
+		CD492AE3A2E83F2A4975FCDA /* SavingsGoalsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SavingsGoalsView.swift; sourceTree = "<group>"; };
+		CF6C15DCF0FDB88FD9371458 /* CapabilityService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CapabilityService.swift; sourceTree = "<group>"; };
+		D56EE9F65044C81680EDFFA5 /* RootTabView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		D97A996E0AD41E913C17445C /* AIInsightService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AIInsightService.swift; sourceTree = "<group>"; };
+		E98CA06FF0394D853CE581FA /* PlanningComponents.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = PlanningComponents.swift; sourceTree = "<group>"; };
+		EAEDB9AE626CD89FE11C326C /* SwiftDataTransactionRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SwiftDataTransactionRepository.swift; sourceTree = "<group>"; };
+		EB410248BEB75CB88E9B20D3 /* DefaultSummaryService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DefaultSummaryService.swift; sourceTree = "<group>"; };
+		EB58E5305213812A14D1994A /* TransactionsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionsView.swift; sourceTree = "<group>"; };
+		ED12AD8B835876667F6DEC0A /* StoreIntegrity.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StoreIntegrity.swift; sourceTree = "<group>"; };
+		F27286136B77CEEF8486BB0D /* FinSightMigrationPlan.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FinSightMigrationPlan.swift; sourceTree = "<group>"; };
+		F2B178634DD704598EC5FB87 /* InsightsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
+		F30DA5A0E70832B161433B6C /* SimulationModels.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SimulationModels.swift; sourceTree = "<group>"; };
+		F4DABA8A176AFAA0A9E3C9A9 /* TransactionKind.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionKind.swift; sourceTree = "<group>"; };
+		F59659A6C02ED738A09E01A8 /* TransactionDraft.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TransactionDraft.swift; sourceTree = "<group>"; };
+		F9F0F654CD25BAC652784F0D /* SpendingCategory.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SpendingCategory.swift; sourceTree = "<group>"; };
+		FF65681D3D96FCC2EE645C31 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		486CD7D16DFEC992B1337F2A /* Frameworks */ = {
+		28EEA4A818D4443B2F3D352A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0BF994B274D52C1A6B6CD066 /* Foundation.framework in Frameworks */,
+				BE95D6960EFC3371714DE94D /* Foundation.framework in Frameworks */,
+				07F45909B314F76BEF462F46 /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		FFFB9CCF342CCF648263DD4B /* Frameworks */ = {
+		62D7298D7C4E651BCFE65E6A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E77FF447526357C56CC6CA16 /* Foundation.framework in Frameworks */,
-				059B8BC6A7D4EF81AFAF8447 /* MarkdownUI in Frameworks */,
+				9D7C508731F0F76DE6E35977 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		19921E70221F11C2442AAFEE /* Models */ = {
+		131CA65C05FAF27C5C8BE23C /* Simulator */ = {
 			isa = PBXGroup;
 			children = (
-				C638E0902091D0043850599A /* InsightModels.swift */,
-				E0F4C4E25EF58A37BD2C5486 /* Money.swift */,
-				E89E1BABF7071A592FC01BD7 /* MonthlySummary.swift */,
-				526571DFECB9365B58D8646B /* RecurringModels.swift */,
-				26BE661539E02E8057679B4D /* Schema */,
-				E16E78A87E3D12ABCD62F713 /* SimulationModels.swift */,
-				2327BBF551827FE6EC46697B /* SpendingCategory.swift */,
-				E3BC3CAD64E5441958CB2C77 /* TransactionDraft.swift */,
-				A4E62B62AD791361C55DB0BA /* TransactionKind.swift */,
-			);
-			name = Models;
-			path = Models;
-			sourceTree = "<group>";
-		};
-		26B83A066D58544204C9B34F /* Utils */ = {
-			isa = PBXGroup;
-			children = (
-				833C5B2F2D4173018D121155 /* Formatters.swift */,
-				5EB993A0613B0A16091CF8C6 /* SampleData.swift */,
-			);
-			name = Utils;
-			path = Utils;
-			sourceTree = "<group>";
-		};
-		26BE661539E02E8057679B4D /* Schema */ = {
-			isa = PBXGroup;
-			children = (
-				28F61672BF5C3317B8B2BC0C /* CurrentSchema.swift */,
-				32192FF4FA5E094A5EF05B36 /* FinSightMigrationPlan.swift */,
-				EFB09051364D1D01CBE8F972 /* FinSightSchemaV1.swift */,
-				9FA4DA1CE036646D8A2DAC04 /* FinSightSchemaV2.swift */,
-				9ED376CEECF68BD7E44783DF /* StoreIntegrity.swift */,
-			);
-			name = Schema;
-			path = Schema;
-			sourceTree = "<group>";
-		};
-		32B22A0D88794AEAB6AF19D3 /* FinSightAITests */ = {
-			isa = PBXGroup;
-			children = (
-				05E0BD713396287E55A7A270 /* FinSightAITests.swift */,
-				BBE4FCEB6828C5823C9CA88F /* Phase0RegressionTests.swift */,
-				5FBE01C8744E7CC8CE22D454 /* Phase1DataModelTests.swift */,
-			);
-			name = FinSightAITests;
-			path = FinSightAITests;
-			sourceTree = "<group>";
-		};
-		34C3BC25E14CE21CEB9537B4 /* App */ = {
-			isa = PBXGroup;
-			children = (
-				FC9B88E18BD43DA85AAE0130 /* AppContext.swift */,
-				472BAFB833A3A1F3A5A8FF28 /* AppEnvironment.swift */,
-				5DC3B92E800B869B90BF2894 /* FinSightAIApp.swift */,
-				5823FD1060CC03BC3CB0E846 /* RootTabView.swift */,
-				9E2944B1DDF1722ADEA87D98 /* StoreRecovery.swift */,
-			);
-			name = App;
-			path = App;
-			sourceTree = "<group>";
-		};
-		3F9FD032FDDAF918BEEC8C4D /* FinSightAI */ = {
-			isa = PBXGroup;
-			children = (
-				34C3BC25E14CE21CEB9537B4 /* App */,
-				B7F474C5DA35418D9FF2767E /* Design */,
-				8AAB048F0D2133D7C2E2B7ED /* Features */,
-				19921E70221F11C2442AAFEE /* Models */,
-				D4DAFF630EC826E996AA2B1A /* Services */,
-				26B83A066D58544204C9B34F /* Utils */,
-				111AD9662537DF3563727B54 /* Assets.xcassets */,
-				2E790D0BB9D3BA6EA70845AE /* PrivacyInfo.xcprivacy */,
-			);
-			name = FinSightAI;
-			path = FinSightAI;
-			sourceTree = "<group>";
-		};
-		562E26DB9FFB95D8F8BA416D /* Transactions */ = {
-			isa = PBXGroup;
-			children = (
-				EFDB9296C14D665CB110E212 /* TransactionEditorView.swift */,
-				F2E85F8EA0CAC4C87ECEB53C /* TransactionsView.swift */,
-			);
-			name = Transactions;
-			path = Transactions;
-			sourceTree = "<group>";
-		};
-		61837458D724F8FFBE92A190 /* Dashboard */ = {
-			isa = PBXGroup;
-			children = (
-				ECBE0028215ACA7CA4B5A629 /* DashboardView.swift */,
-			);
-			name = Dashboard;
-			path = Dashboard;
-			sourceTree = "<group>";
-		};
-		68FE52619BE3A91C6C867F57 /* Insights */ = {
-			isa = PBXGroup;
-			children = (
-				6CEF99F326CCA0786551B80F /* InsightsView.swift */,
-			);
-			name = Insights;
-			path = Insights;
-			sourceTree = "<group>";
-		};
-		6EA5D93A20BDD529F916DA34 /* Shared */ = {
-			isa = PBXGroup;
-			children = (
-				3DBAA86BCB971E65835C6BBA /* SampleDataCard.swift */,
-			);
-			name = Shared;
-			path = Shared;
-			sourceTree = "<group>";
-		};
-		8A42F29333F87DFDC8809AA9 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				EFCC46D715BE63885A1CA31C /* iOS */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		8AAB048F0D2133D7C2E2B7ED /* Features */ = {
-			isa = PBXGroup;
-			children = (
-				61837458D724F8FFBE92A190 /* Dashboard */,
-				68FE52619BE3A91C6C867F57 /* Insights */,
-				6EA5D93A20BDD529F916DA34 /* Shared */,
-				C922CBC98E84D0CD62A86C95 /* Simulator */,
-				562E26DB9FFB95D8F8BA416D /* Transactions */,
-			);
-			name = Features;
-			path = Features;
-			sourceTree = "<group>";
-		};
-		B7F474C5DA35418D9FF2767E /* Design */ = {
-			isa = PBXGroup;
-			children = (
-				6552F469C9DBE8F0C9163B59 /* AppTheme.swift */,
-				70646F37027B6A4D8B38C0C3 /* FinSightMarkdownView.swift */,
-			);
-			name = Design;
-			path = Design;
-			sourceTree = "<group>";
-		};
-		C922CBC98E84D0CD62A86C95 /* Simulator */ = {
-			isa = PBXGroup;
-			children = (
-				EE813FEE86618D983EE87F0C /* SimulatorView.swift */,
+				9647CA23BD2DF2B3D15D4263 /* SimulatorView.swift */,
 			);
 			name = Simulator;
 			path = Simulator;
 			sourceTree = "<group>";
 		};
-		CC125AF34A2E350CE8E5A895 /* Products */ = {
+		2733D6CB64E22CB0BDA646D6 /* FinSightAI */ = {
 			isa = PBXGroup;
 			children = (
-				ED3831FDBD6611F24B754D52 /* FinSightAI.app */,
-				651BD14E68653775FE976836 /* FinSightAITests.xctest */,
+				EC937B6731D7A3D088FBA88E /* App */,
+				5C98F4BAA341C6232A3BF694 /* Design */,
+				64E60B3CD7977D889FDFCD71 /* Features */,
+				8CB95E8FBC4A7CF070AC7ADF /* Models */,
+				8DD30929C565AA7A0331143F /* Services */,
+				E0C149CE9CD54D26EF865940 /* Utils */,
+				8096BE21E04D6916BB6E4D29 /* Assets.xcassets */,
+				AC20AFAF11BC8DDD20323A43 /* PrivacyInfo.xcprivacy */,
+			);
+			name = FinSightAI;
+			path = FinSightAI;
+			sourceTree = "<group>";
+		};
+		3775E8BB4712CBB824CE46C2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8AF2B21B7A188F583BE2D99C /* FinSightAI.app */,
+				54AB38D6593C44E36AF2855F /* FinSightAITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CEE8B3C6A90C49095E49F2EF = {
+		3C3C1F63204B3C308A47C9A3 = {
 			isa = PBXGroup;
 			children = (
-				CC125AF34A2E350CE8E5A895 /* Products */,
-				8A42F29333F87DFDC8809AA9 /* Frameworks */,
-				3F9FD032FDDAF918BEEC8C4D /* FinSightAI */,
-				32B22A0D88794AEAB6AF19D3 /* FinSightAITests */,
+				3775E8BB4712CBB824CE46C2 /* Products */,
+				F4A3B14918AE1D8072B788CE /* Frameworks */,
+				2733D6CB64E22CB0BDA646D6 /* FinSightAI */,
+				44BCC3A5F71FACE44AFA56B1 /* FinSightAITests */,
 			);
 			sourceTree = "<group>";
 		};
-		D4DAFF630EC826E996AA2B1A /* Services */ = {
+		44BCC3A5F71FACE44AFA56B1 /* FinSightAITests */ = {
 			isa = PBXGroup;
 			children = (
-				D31AD60998EB7EE64355479D /* AIInsightService.swift */,
-				BBF35B09E2620EA553F6ABD2 /* CapabilityService.swift */,
-				B09B09F790CA7121FD9E50C7 /* DefaultSummaryService.swift */,
-				46A5127822AF2D6C19AD0D01 /* RecurringExpenseRepository.swift */,
-				7175F921D94F8216F88EAD2C /* SimulationService.swift */,
-				8E598B312C8D5B9A99F2CBCF /* SummaryService.swift */,
-				66F4B3C0E5567B330DF05C3C /* SwiftDataTransactionRepository.swift */,
-				99CF917937FD19E200E55191 /* TransactionRepository.swift */,
+				A4C7601209167992DC6F398A /* FinSightAITests.swift */,
+				A42D8FF63AA5F09809788773 /* Phase0RegressionTests.swift */,
+				52F83B8997B3DDD92E197C7B /* Phase1DataModelTests.swift */,
+				17AED2BC0CA68414811FAEFF /* Phase2ParityTests.swift */,
+			);
+			name = FinSightAITests;
+			path = FinSightAITests;
+			sourceTree = "<group>";
+		};
+		5C98F4BAA341C6232A3BF694 /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				0F26A7CA1556EC69A1B8274A /* AppTheme.swift */,
+				AB753F8B95D6F3B3A3FE2D6F /* FinSightMarkdownView.swift */,
+			);
+			name = Design;
+			path = Design;
+			sourceTree = "<group>";
+		};
+		64E60B3CD7977D889FDFCD71 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				70D4410522E9DF73A630A35C /* Dashboard */,
+				FDE10DA4953D7B195B5EB069 /* Insights */,
+				C419DD98835E5B64A5436C7F /* Planning */,
+				689937AF83C42ACCD2B48323 /* Settings */,
+				DDABD3EAB5B4886EF0F7E748 /* Shared */,
+				131CA65C05FAF27C5C8BE23C /* Simulator */,
+				AF77ECFA70B544780B8B47E7 /* Transactions */,
+			);
+			name = Features;
+			path = Features;
+			sourceTree = "<group>";
+		};
+		689937AF83C42ACCD2B48323 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				FF65681D3D96FCC2EE645C31 /* SettingsView.swift */,
+			);
+			name = Settings;
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		70D4410522E9DF73A630A35C /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+				A464A2C51958B243DBE85025 /* DashboardPlanningCards.swift */,
+				4AE0502410AA3DD5B6E7665D /* DashboardView.swift */,
+			);
+			name = Dashboard;
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		8CB95E8FBC4A7CF070AC7ADF /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2C2911E108ED514EDA49E083 /* InsightModels.swift */,
+				49AB04414930CD5E2A0F92D5 /* Money.swift */,
+				1F28044EC2D5AAFECA60F6F1 /* MonthlySummary.swift */,
+				1172003EACDE8F7679C814A6 /* RecurringModels.swift */,
+				8FC44B099C0F94111B003E08 /* Schema */,
+				F30DA5A0E70832B161433B6C /* SimulationModels.swift */,
+				F9F0F654CD25BAC652784F0D /* SpendingCategory.swift */,
+				F59659A6C02ED738A09E01A8 /* TransactionDraft.swift */,
+				F4DABA8A176AFAA0A9E3C9A9 /* TransactionKind.swift */,
+			);
+			name = Models;
+			path = Models;
+			sourceTree = "<group>";
+		};
+		8DD30929C565AA7A0331143F /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D97A996E0AD41E913C17445C /* AIInsightService.swift */,
+				460CAF3F0602E8812C46E4B7 /* CSVExport.swift */,
+				CF6C15DCF0FDB88FD9371458 /* CapabilityService.swift */,
+				EB410248BEB75CB88E9B20D3 /* DefaultSummaryService.swift */,
+				C316053E30BF69CD20D3F566 /* PlanningCalculators.swift */,
+				C168579477BBE18568FB1763 /* RecurringExpenseRepository.swift */,
+				0EF4FD163C7FDE0FE93AE8E1 /* SimulationService.swift */,
+				C51923FA04021555B729392B /* SummaryService.swift */,
+				EAEDB9AE626CD89FE11C326C /* SwiftDataTransactionRepository.swift */,
+				2FD6EE65C16AE0491635C152 /* TransactionRepository.swift */,
 			);
 			name = Services;
 			path = Services;
 			sourceTree = "<group>";
 		};
-		EFCC46D715BE63885A1CA31C /* iOS */ = {
+		8FC44B099C0F94111B003E08 /* Schema */ = {
 			isa = PBXGroup;
 			children = (
-				BFC04ABBFBB6E35346B4A425 /* Foundation.framework */,
+				98F456C0245F30F58082EA11 /* CurrentSchema.swift */,
+				F27286136B77CEEF8486BB0D /* FinSightMigrationPlan.swift */,
+				2B8244319ACA9159C7DBD88A /* FinSightSchemaV1.swift */,
+				1D896F2CD11E384AC04BD139 /* FinSightSchemaV2.swift */,
+				ED12AD8B835876667F6DEC0A /* StoreIntegrity.swift */,
+			);
+			name = Schema;
+			path = Schema;
+			sourceTree = "<group>";
+		};
+		A1C5F9912B9F8F3A575CD962 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				AEFCD20BF03FBBECCF8108A7 /* Foundation.framework */,
 			);
 			name = iOS;
+			sourceTree = "<group>";
+		};
+		AF77ECFA70B544780B8B47E7 /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				06DCBBB391A369BD981C483A /* TransactionEditorView.swift */,
+				EB58E5305213812A14D1994A /* TransactionsView.swift */,
+			);
+			name = Transactions;
+			path = Transactions;
+			sourceTree = "<group>";
+		};
+		C419DD98835E5B64A5436C7F /* Planning */ = {
+			isa = PBXGroup;
+			children = (
+				4A46594A553A12E2355A83FB /* BudgetsView.swift */,
+				9249C449F8F4804AD44288E7 /* IncomeSourcesView.swift */,
+				E98CA06FF0394D853CE581FA /* PlanningComponents.swift */,
+				CD492AE3A2E83F2A4975FCDA /* SavingsGoalsView.swift */,
+			);
+			name = Planning;
+			path = Planning;
+			sourceTree = "<group>";
+		};
+		DDABD3EAB5B4886EF0F7E748 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				58B7045BC78B469CA923B55C /* SampleDataCard.swift */,
+			);
+			name = Shared;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		E0C149CE9CD54D26EF865940 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				4A1ECFDC8FD8C155151A4408 /* Formatters.swift */,
+				B18754FD44EEE7012DF6E2FC /* SampleData.swift */,
+			);
+			name = Utils;
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		EC937B6731D7A3D088FBA88E /* App */ = {
+			isa = PBXGroup;
+			children = (
+				771193E156DF9B41FB65EFB3 /* AppContext+Planning.swift */,
+				094375BA734D6571B180E02B /* AppContext.swift */,
+				672BA4C5728D3F4B820FE759 /* AppEnvironment.swift */,
+				4F888760DDA3875924CE9427 /* FinSightAIApp.swift */,
+				D56EE9F65044C81680EDFFA5 /* RootTabView.swift */,
+				546D719CC3E83BF1A0848F1A /* StoreRecovery.swift */,
+			);
+			name = App;
+			path = App;
+			sourceTree = "<group>";
+		};
+		F4A3B14918AE1D8072B788CE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A1C5F9912B9F8F3A575CD962 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		FDE10DA4953D7B195B5EB069 /* Insights */ = {
+			isa = PBXGroup;
+			children = (
+				F2B178634DD704598EC5FB87 /* InsightsView.swift */,
+			);
+			name = Insights;
+			path = Insights;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AFCBC6F399BD31F0311A1BFA /* FinSightAITests */ = {
+		AC409647F2229498B7DE6A2E /* FinSightAI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 289C20B6BACAE75E74C0C36F /* Build configuration list for PBXNativeTarget "FinSightAITests" */;
+			buildConfigurationList = BD4371B1774D65C194A1F2F4 /* Build configuration list for PBXNativeTarget "FinSightAI" */;
 			buildPhases = (
-				73644F26D8B8E106D1FF6484 /* Sources */,
-				486CD7D16DFEC992B1337F2A /* Frameworks */,
-				ADF7EFDA334D4215DE0A64E3 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				369B3DEF7C0989796B80EB3B /* PBXTargetDependency */,
-			);
-			name = FinSightAITests;
-			productName = FinSightAITests;
-			productReference = 651BD14E68653775FE976836 /* FinSightAITests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		FC5F31B5C5A6A12916C53C7B /* FinSightAI */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F744428A27D5F5E57CDF65ED /* Build configuration list for PBXNativeTarget "FinSightAI" */;
-			buildPhases = (
-				958D01BE26C261053EBD0D23 /* Sources */,
-				FFFB9CCF342CCF648263DD4B /* Frameworks */,
-				AB393101CC71D128133099AB /* Resources */,
+				C799CE963A46382B99114E50 /* Sources */,
+				28EEA4A818D4443B2F3D352A /* Frameworks */,
+				C69C8BF1329A9B33A2838B65 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -366,22 +396,40 @@
 			);
 			name = FinSightAI;
 			packageProductDependencies = (
-				8E233A225310B8D67B44A3CF /* MarkdownUI */,
+				F651A836685CFC41950EB689 /* MarkdownUI */,
 			);
 			productName = FinSightAI;
-			productReference = ED3831FDBD6611F24B754D52 /* FinSightAI.app */;
+			productReference = 8AF2B21B7A188F583BE2D99C /* FinSightAI.app */;
 			productType = "com.apple.product-type.application";
+		};
+		F2C4A04B23BAFF8179E8E5CC /* FinSightAITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 462522BA4463AF5AD0B7FFE3 /* Build configuration list for PBXNativeTarget "FinSightAITests" */;
+			buildPhases = (
+				D418203B93EABBD228A3A95E /* Sources */,
+				62D7298D7C4E651BCFE65E6A /* Frameworks */,
+				D5EE8F0D12E0E4320748726B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				68A47D4CB95CD8D1058F9A62 /* PBXTargetDependency */,
+			);
+			name = FinSightAITests;
+			productName = FinSightAITests;
+			productReference = 54AB38D6593C44E36AF2855F /* FinSightAITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		7BB16E61592F8C601E7FEE3C /* Project object */ = {
+		B0450D9BD4E9484F7B5FF2F9 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1630;
 				LastUpgradeCheck = 1630;
 			};
-			buildConfigurationList = 8BAF0CC5851E6F36E947DA74 /* Build configuration list for PBXProject "FinSightAI" */;
+			buildConfigurationList = 6DD5A1C0B31A8EF911051E7D /* Build configuration list for PBXProject "FinSightAI" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -389,33 +437,33 @@
 				en,
 				Base,
 			);
-			mainGroup = CEE8B3C6A90C49095E49F2EF;
+			mainGroup = 3C3C1F63204B3C308A47C9A3;
 			minimizedProjectReferenceProxies = 0;
 			packageReferences = (
-				84DF5285E5509887E5A94342 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
+				F78882CB4BA94F1FDA297F02 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 			);
 			preferredProjectObjectVersion = 100;
-			productRefGroup = CC125AF34A2E350CE8E5A895 /* Products */;
+			productRefGroup = 3775E8BB4712CBB824CE46C2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FC5F31B5C5A6A12916C53C7B /* FinSightAI */,
-				AFCBC6F399BD31F0311A1BFA /* FinSightAITests */,
+				AC409647F2229498B7DE6A2E /* FinSightAI */,
+				F2C4A04B23BAFF8179E8E5CC /* FinSightAITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		AB393101CC71D128133099AB /* Resources */ = {
+		C69C8BF1329A9B33A2838B65 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F4F343E3FC34DE778481D60F /* Assets.xcassets in Resources */,
-				9D8CEAE53ECDBC14F5D9029F /* PrivacyInfo.xcprivacy in Resources */,
+				DCBC302B619BC4A058807DA5 /* Assets.xcassets in Resources */,
+				F880ADCDD45DEA6CB6E22DE7 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		ADF7EFDA334D4215DE0A64E3 /* Resources */ = {
+		D5EE8F0D12E0E4320748726B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -425,72 +473,106 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		73644F26D8B8E106D1FF6484 /* Sources */ = {
+		C799CE963A46382B99114E50 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B07C59748EF4AA05A84C827 /* FinSightAITests.swift in Sources */,
-				411AC2EF41DB39EBC64A2225 /* Phase0RegressionTests.swift in Sources */,
-				4E2D196DFBA88407ACBF8D7F /* Phase1DataModelTests.swift in Sources */,
+				8B10C4874D946EB20A6525A5 /* AppContext+Planning.swift in Sources */,
+				76B683AF51D7B7C69219E6D8 /* AppContext.swift in Sources */,
+				C03241676D64D7806EA96B0C /* AppEnvironment.swift in Sources */,
+				01B38BAE8AFF3F4F3C659455 /* FinSightAIApp.swift in Sources */,
+				D1CABA8B8CCD1A879995D8E1 /* RootTabView.swift in Sources */,
+				928BADA9C1E6BC59B1BC39E6 /* StoreRecovery.swift in Sources */,
+				C4B9FCBE2747EC93623A14C7 /* AppTheme.swift in Sources */,
+				3E09E2DBFFEE17BA490FBC3C /* FinSightMarkdownView.swift in Sources */,
+				2BBBBA7602C1AB8752B04A1A /* DashboardPlanningCards.swift in Sources */,
+				801DC8DE172BAABF419CF7C5 /* DashboardView.swift in Sources */,
+				E1D166937BAF2BC12E4F64BC /* InsightsView.swift in Sources */,
+				259A7CA15A4E9BB75A7471F8 /* BudgetsView.swift in Sources */,
+				B4CCE51DBD4AE1E5EE9C8F63 /* IncomeSourcesView.swift in Sources */,
+				3AE032DCA8102EB6B353F3CB /* PlanningComponents.swift in Sources */,
+				D6E8630F901007B9ACDA2903 /* SavingsGoalsView.swift in Sources */,
+				711F92E47D99A1F319D94DC6 /* SettingsView.swift in Sources */,
+				C38D7645FAB488E1607AEE9F /* SampleDataCard.swift in Sources */,
+				1579BDA73F9F53B8B325FAD0 /* SimulatorView.swift in Sources */,
+				CACD91815B61D8E249A84F96 /* TransactionEditorView.swift in Sources */,
+				7711B9A21E3D432B506FC15B /* TransactionsView.swift in Sources */,
+				C6B83AE41F661D3D892B6972 /* InsightModels.swift in Sources */,
+				001CDBA2F2987B926A689E33 /* Money.swift in Sources */,
+				098464BC6FE1BDB98ACA177C /* MonthlySummary.swift in Sources */,
+				2180C8E013AB3EAC95117EDA /* RecurringModels.swift in Sources */,
+				5DCA99C9C3933A9EA7694FBA /* CurrentSchema.swift in Sources */,
+				485ADBFC52C936E981AD5EAC /* FinSightMigrationPlan.swift in Sources */,
+				86E115EA8C4145E4C5888B3A /* FinSightSchemaV1.swift in Sources */,
+				33E6B6CE1DE2871F2AE06066 /* FinSightSchemaV2.swift in Sources */,
+				CFE0415B9C09B244A4AFD832 /* StoreIntegrity.swift in Sources */,
+				8EAE0C7AE942E21669DFDF4C /* SimulationModels.swift in Sources */,
+				60BCFD83E1D62C3D918729DF /* SpendingCategory.swift in Sources */,
+				68C33EDE6C0ECC9F0A35BBA1 /* TransactionDraft.swift in Sources */,
+				7C3C0BB5CE8E49198380EA4F /* TransactionKind.swift in Sources */,
+				BBD767A8970B502505CCC6B9 /* AIInsightService.swift in Sources */,
+				5C10C8D9F92CDC64F109AE67 /* CSVExport.swift in Sources */,
+				A79194DFF4D1F8A575C46349 /* CapabilityService.swift in Sources */,
+				32322610568079EEB3DD0EC2 /* DefaultSummaryService.swift in Sources */,
+				ED094B56EA92C58A91B84BF9 /* PlanningCalculators.swift in Sources */,
+				822D567511D211803DEA3E74 /* RecurringExpenseRepository.swift in Sources */,
+				8B1856D937692230FA7E0DCD /* SimulationService.swift in Sources */,
+				C0221FBBA4CD8881CB504667 /* SummaryService.swift in Sources */,
+				DAC0C4BEC155CCF6C3869F41 /* SwiftDataTransactionRepository.swift in Sources */,
+				1387CC156B2E19C9A35BA79C /* TransactionRepository.swift in Sources */,
+				73EC15551BF29FDF535D6298 /* Formatters.swift in Sources */,
+				4B84801BD43CD139E9543848 /* SampleData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		958D01BE26C261053EBD0D23 /* Sources */ = {
+		D418203B93EABBD228A3A95E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				31C029484B0AEF5AD3DEE8B0 /* AppContext.swift in Sources */,
-				2CDCD970EBE481F460036B1A /* AppEnvironment.swift in Sources */,
-				73D6877D301275094C51477C /* FinSightAIApp.swift in Sources */,
-				33B1200D0FF1D066E1A65F1E /* RootTabView.swift in Sources */,
-				240EB376436045E97DE21FE0 /* StoreRecovery.swift in Sources */,
-				750180FA691AD47BA0B59BF5 /* AppTheme.swift in Sources */,
-				516D17B5EE81EA4B13274A4C /* FinSightMarkdownView.swift in Sources */,
-				529F5240C10801C57F592D2F /* DashboardView.swift in Sources */,
-				CCFC6544899B27552C263A41 /* InsightsView.swift in Sources */,
-				C89CFB07E8F1E6106CB9E85C /* SampleDataCard.swift in Sources */,
-				B4EDBE8A7AA248D759A568A5 /* SimulatorView.swift in Sources */,
-				3C33D1BE6A540F25E347AEAE /* TransactionEditorView.swift in Sources */,
-				AE48D4B2A0C94140BB612620 /* TransactionsView.swift in Sources */,
-				D5C8405834BC25AAF9602E14 /* InsightModels.swift in Sources */,
-				49F6F0EA2E61235A9D21BD34 /* Money.swift in Sources */,
-				D776E767905F00C4E7F0272C /* MonthlySummary.swift in Sources */,
-				3352C8A02E78E09F3535FFDB /* RecurringModels.swift in Sources */,
-				7A554154D92AC2269492B359 /* CurrentSchema.swift in Sources */,
-				4B6B65D41FEA575FF440FC62 /* FinSightMigrationPlan.swift in Sources */,
-				E49FFB958B364C8E5D771D80 /* FinSightSchemaV1.swift in Sources */,
-				2B8A532803365A41ABEC45FD /* FinSightSchemaV2.swift in Sources */,
-				216E68107AC68CDAD43647EF /* StoreIntegrity.swift in Sources */,
-				42F431F35D5846F969630CE1 /* SimulationModels.swift in Sources */,
-				A48E49737D1900500954256E /* SpendingCategory.swift in Sources */,
-				E9136475E96C9B5D2677A53B /* TransactionDraft.swift in Sources */,
-				8882791F014374AFA5D1ED8A /* TransactionKind.swift in Sources */,
-				654D91E30C18AE383144F51C /* AIInsightService.swift in Sources */,
-				9439913DB0F7EF66B3B602FD /* CapabilityService.swift in Sources */,
-				1860EB3C76951083E786DD09 /* DefaultSummaryService.swift in Sources */,
-				CA4B19BD879D57ABB1A37015 /* RecurringExpenseRepository.swift in Sources */,
-				A02A3E79A5114DBA7A25845D /* SimulationService.swift in Sources */,
-				25ACF3CE6F4D50A5A3B40ED7 /* SummaryService.swift in Sources */,
-				4D3F0AC3C93330BAD895942B /* SwiftDataTransactionRepository.swift in Sources */,
-				2E921E59388F8D3285495EEC /* TransactionRepository.swift in Sources */,
-				60AADA37E6F736C8B2EACEFE /* Formatters.swift in Sources */,
-				C174134F357B218A14A6370F /* SampleData.swift in Sources */,
+				6A97BB3C38C2432D1F999DA1 /* FinSightAITests.swift in Sources */,
+				44DE20DC8A1B0DC253322CBA /* Phase0RegressionTests.swift in Sources */,
+				FEEF0EE519E2324AF947748A /* Phase1DataModelTests.swift in Sources */,
+				F734025091EAD1A84BBD5856 /* Phase2ParityTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		369B3DEF7C0989796B80EB3B /* PBXTargetDependency */ = {
+		68A47D4CB95CD8D1058F9A62 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = FinSightAI;
-			target = FC5F31B5C5A6A12916C53C7B /* FinSightAI */;
-			targetProxy = 3B70B2CA45B5471FE43E4571 /* PBXContainerItemProxy */;
+			target = AC409647F2229498B7DE6A2E /* FinSightAI */;
+			targetProxy = B7C76C4236293ACE376050C3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		17EAE18B998D2DC92CD03254 /* Release */ = {
+		0214710F1FF46D5E3497325F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "FinSight AI";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.finsightai.app;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		07343B2751076977B76503D1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -544,87 +626,7 @@
 			};
 			name = Release;
 		};
-		2497E09FE76C8F58A7EAEDA9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_STYLE = Automatic;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.finsightai.tests;
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FinSightAI.app/FinSightAI";
-			};
-			name = Debug;
-		};
-		40A2F8F3F5884616041A5A93 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_STYLE = Automatic;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.finsightai.tests;
-				SDKROOT = iphoneos;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FinSightAI.app/FinSightAI";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		54421D099C303DA9A0218A77 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_STYLE = Automatic;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "FinSight AI";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.finsightai.app;
-				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
-		73584B4A16E1FCFF00F938B7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGN_STYLE = Automatic;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "FinSight AI";
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.finsightai.app;
-				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 6.0;
-				TARGETED_DEVICE_FAMILY = 1;
-			};
-			name = Debug;
-		};
-		7B8142E94FD01EB4F5F93DED /* Debug */ = {
+		3E8C9ACF492F14DC5F7E090E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -685,32 +687,88 @@
 			};
 			name = Debug;
 		};
+		47E312717086A6BEED294C4A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.finsightai.tests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FinSightAI.app/FinSightAI";
+			};
+			name = Debug;
+		};
+		4CD74412B2D90F1976D9F038 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.finsightai.tests;
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FinSightAI.app/FinSightAI";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A20C4F1843AF64D9054D2787 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "FinSight AI";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.finsightai.app;
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		289C20B6BACAE75E74C0C36F /* Build configuration list for PBXNativeTarget "FinSightAITests" */ = {
+		462522BA4463AF5AD0B7FFE3 /* Build configuration list for PBXNativeTarget "FinSightAITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				40A2F8F3F5884616041A5A93 /* Release */,
-				2497E09FE76C8F58A7EAEDA9 /* Debug */,
+				4CD74412B2D90F1976D9F038 /* Release */,
+				47E312717086A6BEED294C4A /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8BAF0CC5851E6F36E947DA74 /* Build configuration list for PBXProject "FinSightAI" */ = {
+		6DD5A1C0B31A8EF911051E7D /* Build configuration list for PBXProject "FinSightAI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				7B8142E94FD01EB4F5F93DED /* Debug */,
-				17EAE18B998D2DC92CD03254 /* Release */,
+				3E8C9ACF492F14DC5F7E090E /* Debug */,
+				07343B2751076977B76503D1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		F744428A27D5F5E57CDF65ED /* Build configuration list for PBXNativeTarget "FinSightAI" */ = {
+		BD4371B1774D65C194A1F2F4 /* Build configuration list for PBXNativeTarget "FinSightAI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				54421D099C303DA9A0218A77 /* Release */,
-				73584B4A16E1FCFF00F938B7 /* Debug */,
+				0214710F1FF46D5E3497325F /* Release */,
+				A20C4F1843AF64D9054D2787 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -718,7 +776,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		84DF5285E5509887E5A94342 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+		F78882CB4BA94F1FDA297F02 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
 			requirement = {
@@ -729,12 +787,12 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8E233A225310B8D67B44A3CF /* MarkdownUI */ = {
+		F651A836685CFC41950EB689 /* MarkdownUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 84DF5285E5509887E5A94342 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			package = F78882CB4BA94F1FDA297F02 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
 			productName = MarkdownUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
-	rootObject = 7BB16E61592F8C601E7FEE3C /* Project object */;
+	rootObject = B0450D9BD4E9484F7B5FF2F9 /* Project object */;
 }

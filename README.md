@@ -49,6 +49,14 @@ The current version is a fully local v1 MVP. It uses SwiftData for persistence a
 - delete transactions
 - grouped monthly history
 
+### Planning (Phase 2)
+
+- income sources and a "% of income spent / buffer remaining" gauge
+- per-category monthly budgets with progress bars and a Swift Charts target line
+- savings goals with progress, months-to-reach and a "funded by" estimate
+- category filter chips and merchant search on Transactions
+- CSV export (RFC 4180) via the Settings tab, plus currency, first weekday and opt-in sample data
+
 ### Insights
 
 - budgeting insight section
@@ -195,6 +203,9 @@ FinSightAI/
   Features/
     Dashboard/
     Insights/
+    Planning/
+    Settings/
+    Shared/
     Simulator/
     Transactions/
   Models/
@@ -217,6 +228,9 @@ Automated coverage currently includes:
 - budgets, income sources, savings goals, and app settings
 - app-level dedupe in place of `.unique` constraints
 - V1 to V2 schema migration from an unversioned V1 store fixture
+- budget progress and rollover, the income gauge, and savings-goal projections
+- category chips and merchant search filtering
+- RFC 4180 CSV export, including formula-injection neutralisation of free-text cells
 
 Manual smoke checks:
 

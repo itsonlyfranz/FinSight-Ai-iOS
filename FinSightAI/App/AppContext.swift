@@ -8,7 +8,7 @@ import SwiftData
 final class AppContext {
     private let repository: TransactionRepository
     private let recurringExpenseRepository: RecurringExpenseRepository
-    private let modelContext: ModelContext
+    let modelContext: ModelContext
     private let summaryService: SummaryService
     private let recurringSummaryService: RecurringSummaryService
     private let aiInsightService: AIInsightService
@@ -30,6 +30,13 @@ final class AppContext {
     var recurringSummary: RecurringSummary = .empty
     /// Estimated full-month spending used as the simulator baseline.
     var monthlyRunRate: Double = 0
+    var incomeSources: [IncomeSource] = []
+    var budgets: [Budget] = []
+    var savingsGoals: [SavingsGoal] = []
+    /// This month's income against spending, for the dashboard gauge.
+    var incomeGauge: IncomeGauge = .empty
+    /// This month's progress for every budgeted category.
+    var budgetProgress: [BudgetProgress] = []
     var insightState: InsightLoadState = .idle
     var simulatorExplanationState: LoadableTextState = .idle
     var activeDraft: TransactionDraft = .init()
@@ -66,11 +73,13 @@ final class AppContext {
     func bootstrap() throws {
         try StoreIntegrity.dedupe(in: modelContext)
         settings = try AppSettings.fetchOrCreate(in: modelContext)
+        applyCurrencySetting()
         try reloadTransactions()
     }
 
     func loadSampleData() throws {
         try repository.loadSampleData(now: .now)
+        try loadSamplePlanning()
         try reloadTransactions()
     }
 
@@ -95,6 +104,7 @@ final class AppContext {
         monthlyRunRate = MonthlyRunRate.estimate(from: transactions, recurringSummary: recurringSummary, now: .now)
         sections = summaryService.monthlySections(from: transactions)
         monthlySummary = summaryService.makeMonthlySummary(from: transactions, recurringSummary: recurringSummary, now: .now)
+        try reloadPlanning()
     }
 
     func saveDraft() throws {

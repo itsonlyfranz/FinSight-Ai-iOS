@@ -14,7 +14,7 @@ struct DefaultSummaryService: SummaryService {
     ) -> MonthlySummary {
         let monthInterval = calendar.dateInterval(of: .month, for: now) ?? DateInterval(start: now, end: now)
         let monthlyTransactions = transactions
-            .filter { monthInterval.contains($0.date) && $0.countsAsSpending }
+            .filter { monthInterval.containsExcludingEnd($0.date) && $0.countsAsSpending }
             .sorted(by: { $0.date > $1.date })
 
         // Sum exactly in Decimal; only the presentation values below are Doubles.

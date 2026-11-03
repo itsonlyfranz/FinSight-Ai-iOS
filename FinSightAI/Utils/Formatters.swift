@@ -1,19 +1,36 @@
 import Foundation
+import os
 
 enum CurrencyFormatter {
+    /// The currency the user picked in Settings. `nil` means "follow the device region".
+    private static let selectedCode = OSAllocatedUnfairLock<String?>(initialState: nil)
+
+    /// Applies (or, with `nil`, clears) the currency chosen in Settings for every default-argument call.
+    static func setSelectedCurrencyCode(_ code: String?) {
+        let normalized = code.map(AppSettings.normalizedCurrencyCode)
+        selectedCode.withLock { $0 = normalized }
+    }
+
     /// ISO 4217 code for the device region (falls back to USD when the locale has no currency).
     static func currencyCode(for locale: Locale = .current) -> String {
         locale.currency?.identifier ?? "USD"
     }
 
-    static var currencyCode: String { currencyCode() }
-
-    static func string(from value: Double, locale: Locale = .current) -> String {
-        value.formatted(.currency(code: currencyCode(for: locale)).locale(locale))
+    /// The code amounts are shown in: the Settings choice, else the device region's currency.
+    static var currencyCode: String {
+        selectedCode.withLock { $0 } ?? currencyCode(for: .current)
     }
 
-    static func string(from value: Decimal, currencyCode: String? = nil, locale: Locale = .current) -> String {
-        value.formatted(.currency(code: currencyCode ?? self.currencyCode(for: locale)).locale(locale))
+    /// With no `locale`, uses the selected currency; with one, that locale's own currency.
+    static func string(from value: Double, locale: Locale? = nil) -> String {
+        let resolved = locale ?? .current
+        return value.formatted(.currency(code: locale == nil ? currencyCode : currencyCode(for: resolved)).locale(resolved))
+    }
+
+    static func string(from value: Decimal, currencyCode: String? = nil, locale: Locale? = nil) -> String {
+        let resolved = locale ?? .current
+        let code = currencyCode ?? (locale == nil ? self.currencyCode : self.currencyCode(for: resolved))
+        return value.formatted(.currency(code: code).locale(resolved))
     }
 
     /// Editable representation of an amount: no grouping, locale decimal separator.
