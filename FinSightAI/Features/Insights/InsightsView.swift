@@ -10,6 +10,13 @@ struct InsightsView: View {
                     summaryHeader
 
                     switch appContext.insightState {
+                    case .empty:
+                        FinSightEmptyState(
+                            title: "No insights yet",
+                            systemImage: "sparkles",
+                            message: "Log a few expenses and FinSight AI will turn them into insights."
+                        )
+                        .finSightCard()
                     case .idle, .loading:
                         VStack(spacing: AppTheme.Spacing.md) {
                             FinSightInsightSkeleton()
@@ -51,7 +58,9 @@ struct InsightsView: View {
             .navigationTitle("AI Insights")
             .toolbarTitleDisplayMode(.inline)
         }
-        .task(id: appContext.monthlySummary.monthLabel) {
+        .task(id: appContext.insightsFingerprint) {
+            try? await Task.sleep(for: .milliseconds(400))
+            guard !Task.isCancelled else { return }
             await appContext.loadInsights()
         }
     }
@@ -60,10 +69,12 @@ struct InsightsView: View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
             Text("This month")
                 .font(AppTheme.Typography.headline)
-            Text(CurrencyFormatter.pesoString(from: appContext.monthlySummary.totalSpent))
+            Text(CurrencyFormatter.string(from: appContext.monthlySummary.totalSpent))
                 .font(AppTheme.Typography.heroValue)
                 .foregroundStyle(AppTheme.ink)
                 .monospacedDigit()
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
             Text("Across \(appContext.monthlySummary.transactionCount) entries")
                 .font(.title3.weight(.semibold))
             Text("Insights are generated from processed monthly summaries rather than raw logs.")
@@ -107,6 +118,8 @@ private struct InsightPanel: View {
             }
         }
         .finSightCard(surface: panelTint)
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel("\(card.kind.title) insight")
     }
 
     private var panelTint: Color {

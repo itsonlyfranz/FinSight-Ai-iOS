@@ -38,6 +38,10 @@ todos:
 isProject: false
 ---
 
+> **SUPERSEDED.** The decision is to replace the ChatGPT-subscription (Codex OAuth) login described below with an
+> official-API approach, and to keep on-device Apple Intelligence as the primary AI path. This plan is kept for
+> history only and must not be implemented as written.
+
 # FinSight AI — Codex OAuth Integration Plan
 
 ## Key Architectural Insight

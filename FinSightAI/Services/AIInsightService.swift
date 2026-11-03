@@ -1,6 +1,6 @@
 import Foundation
 
-protocol AIInsightService {
+protocol AIInsightService: Sendable {
     var providerIdentifier: String { get }
     func generateInsights(
         from summary: MonthlySummary,
@@ -48,33 +48,64 @@ struct UnsupportedAIInsightService: AIInsightService {
 #if canImport(FoundationModels)
 import FoundationModels
 
-@available(iOS 26.0, *)
+/// All three insight cards come back from a single model call.
+@Generable
+struct InsightBundle {
+    @Guide(description: "Budgeting insight as markdown with the headings Key Takeaway, Why It Matters and Next Step.")
+    var budgeting: String
+    @Guide(description: "Risk insight as markdown with the headings Key Takeaway, Why It Matters and Next Step.")
+    var risk: String
+    @Guide(description: "Growth insight as markdown with the headings Key Takeaway, Why It Matters and Next Step.")
+    var growth: String
+}
+
 struct AppleFoundationModelsInsightService: AIInsightService {
     let providerIdentifier = "apple-foundation-models"
+    private let capabilityService: CapabilityService
+
+    init(capabilityService: CapabilityService = DefaultCapabilityService()) {
+        self.capabilityService = capabilityService
+    }
+
+    /// Checked on every call so a model that finishes downloading (or Apple Intelligence being
+    /// switched on) is picked up by a retry without relaunching the app.
+    private func ensureAvailable() throws {
+        if case .unavailable(let message) = capabilityService.aiAvailability {
+            throw AIInsightError.unavailable(message)
+        }
+    }
 
     func generateInsights(
         from summary: MonthlySummary,
         onUpdate: (@Sendable ([GeneratedInsightCard]) async -> Void)? = nil
     ) async throws -> GeneratedInsightPayload {
-        var cards: [GeneratedInsightCard] = []
+        try ensureAvailable()
 
-        for kind in InsightKind.allCases {
-            let prompt = PromptFactory.insightPrompt(for: kind, summary: summary)
-            let session = LanguageModelSession(instructions: PromptFactory.instructions(for: kind))
-            var streamedMarkdown = ""
+        let session = LanguageModelSession(instructions: PromptFactory.bundleInstructions)
+        let prompt = PromptFactory.bundlePrompt(summary: summary)
+        var latest: [GeneratedInsightCard] = []
 
-            for try await snapshot in session.streamResponse(to: prompt) {
-                streamedMarkdown = snapshot.content
-                let partialCards = cards + [GeneratedInsightCard(kind: kind, markdown: streamedMarkdown)]
-                await onUpdate?(partialCards)
+        for try await snapshot in session.streamResponse(to: prompt, generating: InsightBundle.self) {
+            let partial = snapshot.content
+            latest = InsightKind.allCases.compactMap { kind in
+                let text: String?
+                switch kind {
+                case .budgeting: text = partial.budgeting
+                case .risk: text = partial.risk
+                case .growth: text = partial.growth
+                }
+                guard let text, !text.isEmpty else { return nil }
+                return GeneratedInsightCard(kind: kind, markdown: text)
             }
-
-            let text = streamedMarkdown.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard !text.isEmpty else { throw AIInsightError.emptyResponse }
-            cards.append(GeneratedInsightCard(kind: kind, markdown: text))
-            await onUpdate?(cards)
+            await onUpdate?(latest)
         }
 
+        let cards = latest.map {
+            GeneratedInsightCard(kind: $0.kind, markdown: $0.markdown.trimmingCharacters(in: .whitespacesAndNewlines))
+        }
+        guard cards.count == InsightKind.allCases.count, cards.allSatisfy({ !$0.markdown.isEmpty }) else {
+            throw AIInsightError.emptyResponse
+        }
         return GeneratedInsightPayload(cards: cards, providerIdentifier: providerIdentifier)
     }
 
@@ -83,6 +114,8 @@ struct AppleFoundationModelsInsightService: AIInsightService {
         projection: SimulationProjection,
         onUpdate: (@Sendable (String) async -> Void)? = nil
     ) async throws -> GeneratedSimulationExplanation {
+        try ensureAvailable()
+
         let session = LanguageModelSession(instructions: PromptFactory.simulationInstructions)
         let prompt = PromptFactory.simulationPrompt(input: input, projection: projection)
         var streamedMarkdown = ""
@@ -150,6 +183,35 @@ enum PromptFactory {
         }
     }
 
+    static var bundleInstructions: String {
+        """
+        You are a personal finance assistant that writes three short insights about one month of spending.
+        Use only the supplied numbers; never change them. Do not provide regulated financial advice.
+        Write each insight as valid markdown with exactly these sections:
+        ## Key Takeaway
+
+        ## Why It Matters
+
+        ## Next Step
+        Put a blank line after each heading.
+        Use one short paragraph under the first two headings.
+        Use 1-2 markdown bullet points under Next Step when the action is concrete.
+
+        Insights to write:
+        - budgeting: \(InsightKind.budgeting.focus)
+        - risk: \(InsightKind.risk.focus)
+        - growth: \(InsightKind.growth.focus)
+        """
+    }
+
+    static func bundlePrompt(summary: MonthlySummary) -> String {
+        """
+        \(summaryFacts(for: summary))
+
+        Write the budgeting, risk and growth insights tailored to this summary.
+        """
+    }
+
     static var simulationInstructions: String {
         """
         You explain savings simulations in plain language.
@@ -169,35 +231,44 @@ enum PromptFactory {
 
     static func insightPrompt(for kind: InsightKind, summary: MonthlySummary) -> String {
         """
-        Month: \(summary.monthLabel)
-        Total spent: \(CurrencyFormatter.pesoString(from: summary.totalSpent))
-        Recurring monthly spend: \(CurrencyFormatter.pesoString(from: summary.recurringMonthlySpend))
-        Recurring item count: \(summary.recurringTransactionCount)
-        Largest recurring merchant: \(summary.largestRecurringMerchant ?? "None")
-        One-off spending this month: \(CurrencyFormatter.pesoString(from: summary.oneOffSpent))
-        Transaction count: \(summary.transactionCount)
-        Average transaction: \(CurrencyFormatter.pesoString(from: summary.averageTransactionValue))
-        Top category: \(summary.topCategory?.title ?? "None")
-        Top category share: \(PercentFormatter.string(from: summary.topCategoryShare))
-        Trend: \(summary.spendingTrendDescription)
-        Category breakdown:
-        \(summary.categoryBreakdown.map { "- \($0.category.title): \(CurrencyFormatter.pesoString(from: $0.amount)) (\(PercentFormatter.string(from: $0.percentage)))" }.joined(separator: "\n"))
+        \(summaryFacts(for: summary))
 
         Write one concise \(kind.title.lowercased()) insight tailored to this summary.
         """
     }
 
+    private static func summaryFacts(for summary: MonthlySummary) -> String {
+        """
+        Currency: \(CurrencyFormatter.currencyCode)
+        Month: \(summary.monthLabel)
+        Total spent: \(CurrencyFormatter.string(from: summary.totalSpent))
+        Recurring monthly spend: \(CurrencyFormatter.string(from: summary.recurringMonthlySpend))
+        Recurring item count: \(summary.recurringTransactionCount)
+        Largest recurring merchant: \(summary.largestRecurringMerchant ?? "None")
+        One-off spending this month: \(CurrencyFormatter.string(from: summary.oneOffSpent))
+        Transaction count: \(summary.transactionCount)
+        Average transaction: \(CurrencyFormatter.string(from: summary.averageTransactionValue))
+        Top category: \(summary.topCategory?.title ?? "None")
+        Top category share: \(PercentFormatter.string(from: summary.topCategoryShare))
+        Trend: \(summary.spendingTrendDescription)
+        Category breakdown:
+        \(summary.categoryBreakdown.map { "- \($0.category.title): \(CurrencyFormatter.string(from: $0.amount)) (\(PercentFormatter.string(from: $0.percentage)))" }.joined(separator: "\n"))
+        """
+    }
+
     static func simulationPrompt(input: SimulationInput, projection: SimulationProjection) -> String {
         """
-        Current monthly spending: \(CurrencyFormatter.pesoString(from: input.currentMonthlySpending))
-        Daily savings target: \(CurrencyFormatter.pesoString(from: input.dailySavings))
+        Currency: \(CurrencyFormatter.currencyCode)
+        Estimated monthly spending (full-month run-rate): \(CurrencyFormatter.string(from: input.monthlyRunRate))
+        Recurring charges included in that spending: \(CurrencyFormatter.string(from: input.recurringMonthlySpend))
+        Daily savings target: \(CurrencyFormatter.string(from: input.dailySavings))
         Spending reduction: \(PercentFormatter.string(from: input.reductionPercent / 100))
-        Recurring expenses paused: \(CurrencyFormatter.pesoString(from: input.disabledRecurringMonthlySpend))
-        Savings goal: \(CurrencyFormatter.pesoString(from: input.savingsGoal))
-        Monthly savings result: \(CurrencyFormatter.pesoString(from: projection.monthlySavings))
-        3-month projection: \(CurrencyFormatter.pesoString(from: projection.projectedSavingsThreeMonths))
-        6-month projection: \(CurrencyFormatter.pesoString(from: projection.projectedSavingsSixMonths))
-        12-month projection: \(CurrencyFormatter.pesoString(from: projection.projectedSavingsTwelveMonths))
+        Recurring charges paused: \(CurrencyFormatter.string(from: input.pausedRecurringMonthlySpend))
+        Savings goal: \(CurrencyFormatter.string(from: input.savingsGoal))
+        Monthly savings result: \(CurrencyFormatter.string(from: projection.monthlySavings))
+        3-month projection: \(CurrencyFormatter.string(from: projection.projectedSavingsThreeMonths))
+        6-month projection: \(CurrencyFormatter.string(from: projection.projectedSavingsSixMonths))
+        12-month projection: \(CurrencyFormatter.string(from: projection.projectedSavingsTwelveMonths))
         Months to goal: \(projection.monthsToGoal.map(String.init) ?? "Not available")
 
         Explain the tradeoff and suggest one realistic next step without changing the numbers.

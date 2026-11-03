@@ -1,66 +1,111 @@
+import OSLog
 import SwiftData
 import SwiftUI
 
 @main
 struct FinSightAIApp: App {
-    private let modelContainer: ModelContainer
-    @State private var appContext: AppContext
+    private static let logger = Logger(subsystem: "com.finsightai.app", category: "Launch")
+
+    @State private var launchState: LaunchState
 
     init() {
-        let schema = Schema([TransactionRecord.self, RecurringExpenseRecord.self, AIResponseCacheRecord.self])
-        let configuration = ModelConfiguration(isStoredInMemoryOnly: false)
-
-        do {
-            modelContainer = try ModelContainer(for: schema, configurations: configuration)
-        } catch {
-            fatalError("Unable to create model container: \(error.localizedDescription)")
-        }
-
-        let modelContext = ModelContext(modelContainer)
-        let capabilityService = DefaultCapabilityService()
-        let aiService: AIInsightService
-
-        switch capabilityService.aiAvailability {
-        case .available:
-            #if canImport(FoundationModels)
-            if #available(iOS 26.0, *) {
-                aiService = AppleFoundationModelsInsightService()
-            } else {
-                aiService = UnsupportedAIInsightService(reason: "Apple Intelligence needs iOS 26 or newer.")
-            }
-            #else
-            aiService = UnsupportedAIInsightService(reason: "Apple Intelligence requires a newer Apple SDK than the one used to build this app.")
-            #endif
-        case .unavailable(let message):
-            aiService = UnsupportedAIInsightService(reason: message)
-        }
-
-        _appContext = State(
-            initialValue: AppContext(
-                repository: SwiftDataTransactionRepository(modelContext: modelContext),
-                recurringExpenseRepository: SwiftDataRecurringExpenseRepository(modelContext: modelContext),
-                modelContext: modelContext,
-                summaryService: DefaultSummaryService(),
-                recurringSummaryService: DefaultRecurringSummaryService(),
-                aiInsightService: aiService,
-                simulationService: DefaultSimulationService(),
-                capabilityService: capabilityService
-            )
-        )
+        _launchState = State(initialValue: Self.makeLaunchState())
     }
 
     var body: some Scene {
         WindowGroup {
-            RootTabView()
-                .environment(appContext)
-                .modelContainer(modelContainer)
-                .task {
-                    do {
-                        try appContext.bootstrap()
-                    } catch {
-                        assertionFailure("Bootstrap failed: \(error.localizedDescription)")
+            switch launchState {
+            case .ready(let environment):
+                RootTabView()
+                    .environment(environment.appContext)
+                    .modelContainer(environment.modelContainer)
+                    .task {
+                        do {
+                            try environment.appContext.bootstrap()
+                        } catch {
+                            Self.logger.error("Bootstrap failed: \(error.localizedDescription, privacy: .public)")
+                            launchState = .failed(error.localizedDescription)
+                        }
                     }
-                }
+            case .failed(let message):
+                StoreRecoveryView(
+                    message: message,
+                    onRetry: { launchState = Self.makeLaunchState() },
+                    onStartFresh: { startFresh() }
+                )
+            }
+        }
+    }
+
+    private static func makeLaunchState() -> LaunchState {
+        do {
+            return .ready(try AppEnvironment.make())
+        } catch {
+            logger.error("Unable to open the data store: \(error.localizedDescription, privacy: .public)")
+            return .failed(error.localizedDescription)
+        }
+    }
+
+    /// Moves the unreadable store aside (kept on disk, not deleted) and opens a new, empty one.
+    private func startFresh() {
+        do {
+            let backup = try StoreBackup.moveStoreAside(storeURL: ModelConfiguration().url)
+            Self.logger.notice("Moved unreadable store to \(backup.path, privacy: .public)")
+            launchState = Self.makeLaunchState()
+        } catch {
+            Self.logger.error("Could not move the store aside: \(error.localizedDescription, privacy: .public)")
+            launchState = .failed("Your data couldn't be backed up, so nothing was changed. \(error.localizedDescription)")
+        }
+    }
+}
+
+private enum LaunchState {
+    case ready(AppEnvironment)
+    case failed(String)
+}
+
+private struct StoreRecoveryView: View {
+    let message: String
+    let onRetry: () -> Void
+    let onStartFresh: () -> Void
+    @State private var confirmingStartFresh = false
+
+    var body: some View {
+        VStack(spacing: AppTheme.Spacing.lg) {
+            Image(systemName: "externaldrive.badge.exclamationmark")
+                .font(.system(size: 56))
+                .foregroundStyle(AppTheme.primary)
+                .accessibilityHidden(true)
+            Text("FinSight AI can't open your data")
+                .font(.title2.weight(.bold))
+                .multilineTextAlignment(.center)
+            Text("Nothing has been deleted. You can try again, or start with an empty ledger — your existing data is moved to a backup folder on this device, not erased.")
+                .foregroundStyle(AppTheme.mutedInk)
+                .multilineTextAlignment(.center)
+            Text(message)
+                .font(.footnote)
+                .foregroundStyle(AppTheme.mutedInk)
+                .multilineTextAlignment(.center)
+
+            Button("Try Again", action: onRetry)
+                .buttonStyle(.borderedProminent)
+                .tint(AppTheme.primary)
+            Button("Start Fresh (keep a backup)", role: .destructive) {
+                confirmingStartFresh = true
+            }
+        }
+        .padding(AppTheme.Spacing.xl)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(AppTheme.backgroundGradient.ignoresSafeArea())
+        .confirmationDialog(
+            "Start with an empty ledger?",
+            isPresented: $confirmingStartFresh,
+            titleVisibility: .visible
+        ) {
+            Button("Move data to backup and start fresh", role: .destructive, action: onStartFresh)
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Your current data is moved to a backup folder, not deleted.")
         }
     }
 }

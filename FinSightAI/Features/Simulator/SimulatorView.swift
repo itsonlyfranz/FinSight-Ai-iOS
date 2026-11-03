@@ -5,16 +5,17 @@ struct SimulatorView: View {
     @State private var dailySavings: Double = 100
     @State private var reductionPercent: Double = 15
     @State private var savingsGoal: Double = 50_000
-    @State private var disabledRecurringIDs: Set<UUID> = []
+    @State private var pauseSelection = RecurringPauseSelection()
     @State private var explanationInput: SimulationInput?
 
     var body: some View {
         let input = SimulationInput(
-            currentMonthlySpending: appContext.monthlySummary.totalSpent,
+            monthlyRunRate: appContext.monthlyRunRate,
+            recurringMonthlySpend: appContext.recurringSummary.totalMonthlySpend,
             dailySavings: dailySavings,
             reductionPercent: reductionPercent,
             savingsGoal: savingsGoal,
-            disabledRecurringMonthlySpend: disabledRecurringMonthlySpend
+            pausedRecurringMonthlySpend: pausedRecurringMonthlySpend
         )
         let projection = appContext.simulationService.project(input: input)
 
@@ -48,16 +49,20 @@ struct SimulatorView: View {
             Text("Scenario Builder")
                 .font(.headline)
                 .foregroundStyle(AppTheme.surface.opacity(0.85))
-            Text(CurrencyFormatter.pesoString(from: projection.monthlySavings))
+            Text(CurrencyFormatter.string(from: projection.monthlySavings))
                 .font(AppTheme.Typography.heroValue)
                 .foregroundStyle(AppTheme.primary)
                 .monospacedDigit()
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
+                .accessibilityLabel("Projected monthly savings")
                 .contentTransition(.numericText())
                 .animation(.spring(duration: 0.3), value: projection.monthlySavings)
-            Text("Projected monthly savings if you set aside \(CurrencyFormatter.pesoString(from: input.dailySavings)) a day, trim \(Int(input.reductionPercent))% of current spending, and pause selected recurring charges.")
+            Text("Projected monthly savings if you set aside \(CurrencyFormatter.string(from: input.dailySavings)) a day, trim \(Int(input.reductionPercent))% of your everyday spending, and pause the recurring charges you turn off.")
                 .foregroundStyle(AppTheme.surface.opacity(0.88))
         }
         .finSightCard(surface: AppTheme.surfaceElevated)
+        .accessibilityElement(children: .contain)
     }
 
     private var controlsCard: some View {
@@ -65,7 +70,7 @@ struct SimulatorView: View {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
                 Text("Daily savings")
                     .font(.headline)
-                Text(CurrencyFormatter.pesoString(from: dailySavings))
+                Text(CurrencyFormatter.string(from: dailySavings))
                     .font(.title3.weight(.semibold))
                     .monospacedDigit()
                     .contentTransition(.numericText())
@@ -87,7 +92,7 @@ struct SimulatorView: View {
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
                 Text("Savings goal")
                     .font(.headline)
-                Text(CurrencyFormatter.pesoString(from: savingsGoal))
+                Text(CurrencyFormatter.string(from: savingsGoal))
                     .font(.title3.weight(.semibold))
                     .monospacedDigit()
                     .contentTransition(.numericText())
@@ -104,9 +109,16 @@ struct SimulatorView: View {
                 Label("Recurring expenses", systemImage: "repeat.circle.fill")
                     .font(.headline)
                 Spacer()
-                Text(CurrencyFormatter.pesoString(from: disabledRecurringMonthlySpend))
+                Text(CurrencyFormatter.string(from: pausedRecurringMonthlySpend))
                     .font(.headline.monospacedDigit())
                     .foregroundStyle(AppTheme.primary)
+                    .accessibilityLabel("Paused charges save \(CurrencyFormatter.string(from: pausedRecurringMonthlySpend)) a month")
+            }
+
+            if !appContext.recurringSummary.items.isEmpty {
+                Text("Charges are on by default. Turn one off to see what pausing it would save.")
+                    .font(AppTheme.Typography.caption)
+                    .foregroundStyle(AppTheme.mutedInk)
             }
 
             if appContext.recurringSummary.items.isEmpty {
@@ -121,7 +133,7 @@ struct SimulatorView: View {
                         VStack(alignment: .leading, spacing: 3) {
                             Text(item.merchantName)
                                 .font(.subheadline.weight(.semibold))
-                            Text(CurrencyFormatter.pesoString(from: item.monthlyAmount) + "/mo")
+                            Text(CurrencyFormatter.string(from: item.monthlyAmount) + (pauseSelection.isPaused(item.id) ? "/mo - paused" : "/mo"))
                                 .font(AppTheme.Typography.caption)
                                 .foregroundStyle(AppTheme.mutedInk)
                         }
@@ -211,21 +223,16 @@ struct SimulatorView: View {
         return false
     }
 
-    private var disabledRecurringMonthlySpend: Double {
-        appContext.recurringSummary.items
-            .filter { disabledRecurringIDs.contains($0.id) }
-            .reduce(0) { $0 + $1.monthlyAmount }
+    private var pausedRecurringMonthlySpend: Double {
+        pauseSelection.pausedMonthlySpend(in: appContext.recurringSummary.items)
     }
 
+    /// On = the charge keeps running; off = paused in this scenario.
     private func recurringToggleBinding(for item: RecurringTransaction) -> Binding<Bool> {
         Binding {
-            disabledRecurringIDs.contains(item.id)
-        } set: { isEnabled in
-            if isEnabled {
-                disabledRecurringIDs.insert(item.id)
-            } else {
-                disabledRecurringIDs.remove(item.id)
-            }
+            pauseSelection.isIncluded(item.id)
+        } set: { isIncluded in
+            pauseSelection.setIncluded(isIncluded, for: item.id)
         }
     }
 
@@ -233,7 +240,7 @@ struct SimulatorView: View {
         HStack {
             Text(label)
             Spacer()
-            Text(CurrencyFormatter.pesoString(from: value))
+            Text(CurrencyFormatter.string(from: value))
                 .fontWeight(.semibold)
                 .monospacedDigit()
                 .contentTransition(.numericText())

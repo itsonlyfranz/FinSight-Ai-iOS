@@ -17,9 +17,7 @@ final class SwiftDataTransactionRepository: TransactionRepository {
     }
 
     func addTransaction(from draft: TransactionDraft) throws {
-        guard let amount = draft.amount else {
-            throw ValidationError.invalidAmount
-        }
+        let amount = try ValidationError.validatedAmount(draft.amount)
 
         let record = TransactionRecord(
             amount: amount,
@@ -33,9 +31,7 @@ final class SwiftDataTransactionRepository: TransactionRepository {
     }
 
     func updateTransaction(_ record: TransactionRecord, from draft: TransactionDraft) throws {
-        guard let amount = draft.amount else {
-            throw ValidationError.invalidAmount
-        }
+        let amount = try ValidationError.validatedAmount(draft.amount)
 
         record.amount = amount
         record.merchantName = draft.merchantName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -51,10 +47,12 @@ final class SwiftDataTransactionRepository: TransactionRepository {
         try modelContext.save()
     }
 
-    func seedIfNeeded() throws {
+    /// Inserts demo transactions. Only ever called from an explicit user action, and
+    /// only into an empty ledger so it can never duplicate or overwrite real data.
+    func loadSampleData(now: Date = .now) throws {
         guard try fetchAllTransactions().isEmpty else { return }
 
-        for sample in SampleData.transactions {
+        for sample in SampleData.makeTransactions(now: now) {
             modelContext.insert(sample)
         }
         try modelContext.save()
@@ -68,5 +66,13 @@ enum ValidationError: LocalizedError {
         switch self {
         case .invalidAmount: "Enter a valid amount greater than zero."
         }
+    }
+
+    /// Repository-level guard: the amount must be a finite number greater than zero.
+    static func validatedAmount(_ amount: Double?) throws -> Double {
+        guard let amount, amount.isFinite, amount > 0 else {
+            throw ValidationError.invalidAmount
+        }
+        return amount
     }
 }

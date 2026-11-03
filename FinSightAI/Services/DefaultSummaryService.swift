@@ -14,7 +14,7 @@ struct DefaultSummaryService: SummaryService {
     ) -> MonthlySummary {
         let monthInterval = calendar.dateInterval(of: .month, for: now) ?? DateInterval(start: now, end: now)
         let monthlyTransactions = transactions
-            .filter { monthInterval.contains($0.date) }
+            .filter { monthInterval.contains($0.date) && $0.category.countsAsSpending }
             .sorted(by: { $0.date > $1.date })
 
         let totalSpent = monthlyTransactions.reduce(0) { $0 + $1.amount }
@@ -45,11 +45,11 @@ struct DefaultSummaryService: SummaryService {
             largestRecurringMerchant: recurringSummary.largestItem?.merchantName,
             transactionCount: monthlyTransactions.count,
             categoryBreakdown: categoryBreakdown,
-            recentTransactions: Array(monthlyTransactions.prefix(5)),
+            recentTransactions: monthlyTransactions.prefix(5).map(TransactionSnapshot.init),
             averageTransactionValue: averageValue,
             topCategory: topCategory,
             topCategoryShare: topShare,
-            spendingTrendDescription: spendingTrendDescription(from: monthlyTransactions, now: now)
+            spendingTrendDescription: spendingTrendDescription(from: transactions, now: now)
         )
     }
 
@@ -70,29 +70,37 @@ struct DefaultSummaryService: SummaryService {
             .sorted { lhs, rhs in lhs.id > rhs.id }
     }
 
+    /// Compares the last 7 days with the 7 days before, across all transactions
+    /// (not just the current month), so the comparison is meaningful on day 1 of a month.
     private func spendingTrendDescription(from transactions: [TransactionRecord], now: Date) -> String {
-        guard !transactions.isEmpty else {
+        let spending = transactions.filter { $0.category.countsAsSpending }
+        guard !spending.isEmpty else {
             return "Start logging a few expenses to unlock spending pattern analysis."
         }
 
-        let currentWeek = transactions.filter {
-            calendar.isDate($0.date, equalTo: now, toGranularity: .weekOfYear)
-        }.reduce(0) { $0 + $1.amount }
+        let today = calendar.startOfDay(for: now)
+        guard let windowEnd = calendar.date(byAdding: .day, value: 1, to: today),
+              let currentStart = calendar.date(byAdding: .day, value: -6, to: today),
+              let previousStart = calendar.date(byAdding: .day, value: -13, to: today) else {
+            return "Your weekly spending pace is relatively stable right now."
+        }
 
-        let previousWeekDate = calendar.date(byAdding: .day, value: -7, to: now) ?? now
-        let previousWeek = transactions.filter {
-            calendar.isDate($0.date, equalTo: previousWeekDate, toGranularity: .weekOfYear)
-        }.reduce(0) { $0 + $1.amount }
+        let currentWeek = spending
+            .filter { $0.date >= currentStart && $0.date < windowEnd }
+            .reduce(0) { $0 + $1.amount }
+        let previousWeek = spending
+            .filter { $0.date >= previousStart && $0.date < currentStart }
+            .reduce(0) { $0 + $1.amount }
 
         if previousWeek == 0 {
-            return "This month is building its first visible spending baseline."
+            return "Not enough spending in the previous 7 days yet to compare against."
         }
 
         let change = (currentWeek - previousWeek) / previousWeek
         if change > 0.15 {
-            return "Your current week is trending higher than the week before."
+            return "Your last 7 days are trending higher than the 7 days before."
         } else if change < -0.15 {
-            return "Your current week is trending lower than the week before."
+            return "Your last 7 days are trending lower than the 7 days before."
         } else {
             return "Your weekly spending pace is relatively stable right now."
         }

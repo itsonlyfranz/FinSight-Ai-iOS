@@ -1,4 +1,5 @@
 import Foundation
+import CryptoKit
 import SwiftData
 
 enum InsightKind: String, CaseIterable, Identifiable, Codable {
@@ -13,6 +14,15 @@ enum InsightKind: String, CaseIterable, Identifiable, Codable {
         case .budgeting: "Budgeting"
         case .risk: "Risk"
         case .growth: "Growth"
+        }
+    }
+
+    /// What this card should concentrate on; used to brief the model in one pass.
+    var focus: String {
+        switch self {
+        case .budgeting: "spot overspending categories or anomalies and give concise, practical budgeting suggestions."
+        case .risk: "flag risk signals such as rising expenses or concentration in a few categories; be direct but constructive."
+        case .growth: "suggest realistic improvements that help the user save more or redirect spending."
         }
     }
 
@@ -41,6 +51,8 @@ struct CachedContent<Value: Equatable>: Equatable {
 enum InsightLoadState: Equatable {
     case idle
     case loading
+    /// Nothing logged yet, so there is nothing to analyse.
+    case empty
     case available(CachedContent<[InsightCard]>)
     case unavailable(String)
     case failure(String)
@@ -144,11 +156,12 @@ enum AIFingerprint {
 
     static func simulation(input: SimulationInput, projection: SimulationProjection) -> String {
         [
-            "current=\(normalizedDecimal(input.currentMonthlySpending))",
+            "runRate=\(normalizedDecimal(input.monthlyRunRate))",
+            "recurring=\(normalizedDecimal(input.recurringMonthlySpend))",
             "daily=\(normalizedDecimal(input.dailySavings))",
             "reduction=\(normalizedDecimal(input.reductionPercent))",
             "goal=\(normalizedDecimal(input.savingsGoal))",
-            "disabledRecurring=\(normalizedDecimal(input.disabledRecurringMonthlySpend))",
+            "pausedRecurring=\(normalizedDecimal(input.pausedRecurringMonthlySpend))",
             "monthly=\(normalizedDecimal(projection.monthlySavings))",
             "three=\(normalizedDecimal(projection.projectedSavingsThreeMonths))",
             "six=\(normalizedDecimal(projection.projectedSavingsSixMonths))",
@@ -167,9 +180,15 @@ enum AICacheKey {
         "monthly-insights:\(MonthFormatter.sectionID(for: summary.monthStart))"
     }
 
-    static func simulationExplanation() -> String {
-        "simulation-explanation"
+    /// Each scenario gets its own cache entry, so one scenario never overwrites (or is shown as)
+    /// another. `fingerprint` is the scenario's `AIFingerprint.simulation` string.
+    static func simulationExplanation(fingerprint: String) -> String {
+        let digest = SHA256.hash(data: Data(fingerprint.utf8))
+        let hex = digest.prefix(12).map { String(format: "%02x", $0) }.joined()
+        return "\(simulationPrefix)\(hex)"
     }
+
+    static let simulationPrefix = "simulation-explanation:"
 }
 
 enum AICacheCodec {

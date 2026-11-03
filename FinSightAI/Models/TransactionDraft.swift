@@ -6,11 +6,12 @@ struct TransactionDraft: Equatable {
     var category: SpendingCategory = .groceries
     var date = Date()
     var note = ""
+    var locale: Locale = .current
 
     init() {}
 
     init(record: TransactionRecord) {
-        amountText = CurrencyFormatter.plainNumberString(from: record.amount)
+        amountText = CurrencyFormatter.plainNumberString(from: record.amount, locale: locale)
         merchantName = record.merchantName
         category = record.category
         date = record.date
@@ -18,7 +19,7 @@ struct TransactionDraft: Equatable {
     }
 
     var amount: Double? {
-        Double(amountText.replacingOccurrences(of: ",", with: ""))
+        AmountParser.parse(amountText, locale: locale)
     }
 
     var validationError: String? {

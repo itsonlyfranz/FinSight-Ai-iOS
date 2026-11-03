@@ -14,6 +14,9 @@ enum SpendingCategory: String, CaseIterable, Codable, Identifiable {
 
     var id: String { rawValue }
 
+    /// Savings are money set aside, not money spent, so they never count toward spending totals.
+    var countsAsSpending: Bool { self != .savings }
+
     var title: String {
         switch self {
         case .groceries: "Groceries"

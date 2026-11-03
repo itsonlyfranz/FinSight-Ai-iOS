@@ -9,6 +9,12 @@ struct TransactionsView: View {
     var body: some View {
         NavigationStack {
             List {
+                if appContext.hasNoData {
+                    SampleDataCard()
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets())
+                }
+
                 Section("Recurring") {
                     NavigationLink {
                         RecurringTransactionsView()
@@ -22,7 +28,7 @@ struct TransactionsView: View {
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Recurring Charges")
                                     .font(.headline)
-                                Text("\(appContext.recurringSummary.itemCount) set - \(CurrencyFormatter.pesoString(from: appContext.recurringSummary.totalMonthlySpend))/mo")
+                                Text("\(appContext.recurringSummary.itemCount) set - \(CurrencyFormatter.string(from: appContext.recurringSummary.totalMonthlySpend))/mo")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -133,7 +139,7 @@ private struct TransactionListRow: View {
             Spacer()
 
             VStack(alignment: .trailing, spacing: 4) {
-                Text(CurrencyFormatter.pesoString(from: transaction.amount))
+                Text(CurrencyFormatter.string(from: transaction.amount))
                     .font(.headline)
                 Text(transaction.date, style: .date)
                     .font(.caption)
@@ -141,6 +147,7 @@ private struct TransactionListRow: View {
             }
         }
         .padding(.vertical, 6)
+        .accessibilityElement(children: .combine)
     }
 }
 
@@ -151,7 +158,7 @@ private struct RecurringTransactionsView: View {
 
     var body: some View {
         List {
-            if appContext.recurringSummary.items.isEmpty {
+            if !appContext.recurringSummary.hasAnyItems {
                 FinSightEmptyState(
                     title: "No recurring charges set",
                     systemImage: "repeat.circle",
@@ -159,28 +166,29 @@ private struct RecurringTransactionsView: View {
                 )
                 .listRowBackground(Color.clear)
             } else {
-                Section("Active") {
-                    ForEach(appContext.recurringSummary.items) { item in
-                        RecurringTransactionRow(item: item)
-                            .swipeActions(edge: .trailing) {
-                                Button("Delete", role: .destructive) {
-                                    do {
-                                        if let record = appContext.recurringExpenses.first(where: { $0.id == item.id }) {
-                                            try appContext.delete(record)
-                                        }
-                                    } catch {
-                                        errorMessage = error.localizedDescription
-                                    }
+                if !appContext.recurringSummary.items.isEmpty {
+                    Section("Active") {
+                        ForEach(appContext.recurringSummary.items) { item in
+                            RecurringTransactionRow(item: item)
+                                .swipeActions(edge: .trailing) {
+                                    recurringActions(for: item, activationTitle: "Pause", activate: false)
                                 }
+                        }
+                    }
+                }
 
-                                Button("Edit") {
-                                    if let record = appContext.recurringExpenses.first(where: { $0.id == item.id }) {
-                                        appContext.prepareEdit(for: record)
-                                        showingEditor = true
-                                    }
+                if !appContext.recurringSummary.inactiveItems.isEmpty {
+                    Section {
+                        ForEach(appContext.recurringSummary.inactiveItems) { item in
+                            RecurringTransactionRow(item: item)
+                                .swipeActions(edge: .trailing) {
+                                    recurringActions(for: item, activationTitle: "Resume", activate: true)
                                 }
-                                .tint(AppTheme.secondary)
-                            }
+                        }
+                    } header: {
+                        Text("Paused")
+                    } footer: {
+                        Text("Paused charges aren't counted in your totals. Swipe to resume or delete them.")
                     }
                 }
             }
@@ -223,6 +231,37 @@ private struct RecurringTransactionsView: View {
     }
 }
 
+extension RecurringTransactionsView {
+    @ViewBuilder
+    fileprivate func recurringActions(for item: RecurringTransaction, activationTitle: String, activate: Bool) -> some View {
+        Button("Delete", role: .destructive) {
+            run(on: item) { try appContext.delete($0) }
+        }
+
+        Button("Edit") {
+            if let record = appContext.recurringExpenses.first(where: { $0.id == item.id }) {
+                appContext.prepareEdit(for: record)
+                showingEditor = true
+            }
+        }
+        .tint(AppTheme.secondary)
+
+        Button(activationTitle) {
+            run(on: item) { try appContext.setRecurringExpense($0, active: activate) }
+        }
+        .tint(activate ? AppTheme.primary : .orange)
+    }
+
+    fileprivate func run(on item: RecurringTransaction, _ action: (RecurringExpenseRecord) throws -> Void) {
+        guard let record = appContext.recurringExpenses.first(where: { $0.id == item.id }) else { return }
+        do {
+            try action(record)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+}
+
 private struct RecurringTransactionRow: View {
     let item: RecurringTransaction
 
@@ -236,7 +275,7 @@ private struct RecurringTransactionRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.merchantName)
                     .font(.headline)
-                Text("\(item.status.title) - expected day \(item.expectedDay)")
+                Text("\(item.isActive ? item.status.title : "Paused") - expected day \(item.expectedDay)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -244,7 +283,7 @@ private struct RecurringTransactionRow: View {
             Spacer()
 
             VStack(alignment: .trailing, spacing: 4) {
-                Text(CurrencyFormatter.pesoString(from: item.monthlyAmount))
+                Text(CurrencyFormatter.string(from: item.monthlyAmount))
                     .font(.headline)
                     .monospacedDigit()
                 Text("per month")
@@ -253,6 +292,8 @@ private struct RecurringTransactionRow: View {
             }
         }
         .padding(.vertical, 6)
+        .opacity(item.isActive ? 1 : 0.6)
+        .accessibilityElement(children: .combine)
     }
 
     private var statusTint: Color {
