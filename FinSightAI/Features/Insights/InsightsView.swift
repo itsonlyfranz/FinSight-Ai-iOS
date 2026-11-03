@@ -31,7 +31,7 @@ struct InsightsView: View {
         }
         .task(id: scenePhase) {
             guard scenePhase == .active else { return }
-            try? appContext.reloadPlanning()
+            try? appContext.reloadTransactions()
         }
         .task(id: appContext.insightsFingerprint) {
             try? await Task.sleep(for: .milliseconds(400))
