@@ -163,8 +163,9 @@ extension AppContext {
     /// Adds a deposit (positive) or withdrawal (negative) to a goal.
     func contribute(to goal: SavingsGoal, amount: Decimal?, withdraw: Bool = false, note: String = "") throws {
         let magnitude = try ValidationError.validatedAmount(amount)
-        goal.contribute(withdraw ? -magnitude : magnitude, note: note)
-        if goal.savedAmountScaled < 0 { goal.savedAmountScaled = 0 }
+        let delta = withdraw ? -min(magnitude, goal.savedAmount) : magnitude
+        guard delta != 0 else { return }
+        goal.contribute(delta, note: note)
         try modelContext.save()
         try reloadPlanning()
     }

@@ -125,6 +125,13 @@ final class Phase2ParityTests: XCTestCase {
         XCTAssertEqual(progress[0].carriedOver, 120)
     }
 
+    func testRolloverCountsOnlyTheMostRecentTwelveMonths() {
+        let budget = Budget(category: .groceries, monthlyAmount: 100, rolloverEnabled: true, createdAt: date(2024, 1, 1))
+        let transactions = (1...5).map { month in expense("100", .groceries, date(2025, month, 10)) }
+        let progress = BudgetCalculator.progress(budgets: [budget], transactions: transactions, month: date(2025, 6, 15), calendar: calendar)
+        XCTAssertEqual(progress[0].carriedOver, 700, "Jun–Dec 2024 unspent; Jan–May 2025 fully spent; Jan–May 2024 outside the window")
+    }
+
     // MARK: - Income gauge
 
     func testIncomeGaugeCombinesSourcesAndLoggedIncome() {
@@ -539,6 +546,13 @@ final class Phase2ParityTests: XCTestCase {
 
         try context.contribute(to: goal, amount: 2000, withdraw: true)
         XCTAssertEqual(goal.savedAmount, 0, "withdrawals never push the total below zero")
+        XCTAssertEqual((goal.contributions ?? []).map(\.amount).sorted(), [-1000, 900])
+
+        try context.contribute(to: goal, amount: 500, withdraw: true)
+        XCTAssertEqual(goal.contributions?.count, 2, "withdrawing from an empty goal records nothing")
+        try context.contribute(to: goal, amount: 300)
+        XCTAssertEqual(goal.savedAmount, 300)
+        XCTAssertEqual(GoalCalculator.ownPace(for: goal), 200 / 3)
 
         XCTAssertThrowsError(try context.contribute(to: goal, amount: 0))
         XCTAssertThrowsError(try context.saveGoal(nil, name: "", targetAmount: 10, savedAmount: 0, targetDate: nil))

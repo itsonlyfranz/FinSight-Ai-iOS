@@ -175,7 +175,8 @@ enum BudgetCalculator {
             }
     }
 
-    /// Unspent budget from each full month between the budget's creation month and `monthStart`.
+    /// Unspent budget from each full month between the budget's creation month and `monthStart`,
+    /// limited to the most recent `maximumRolloverMonths` months.
     /// Overspending in a month never produces a negative carry-over.
     static func carryOver(
         for budget: Budget,
@@ -183,15 +184,17 @@ enum BudgetCalculator {
         before monthStart: Date,
         calendar: Calendar = .current
     ) -> Decimal {
-        guard var cursor = calendar.dateInterval(of: .month, for: budget.createdAt)?.start else { return 0 }
+        guard let createdMonth = calendar.dateInterval(of: .month, for: budget.createdAt)?.start,
+              let windowStart = calendar.date(byAdding: .month, value: -maximumRolloverMonths, to: monthStart)
+        else { return 0 }
+        var cursor = max(createdMonth, windowStart)
         var months: [DateInterval] = []
-        while cursor < monthStart, months.count < maximumRolloverMonths {
+        while cursor < monthStart {
             guard let interval = calendar.dateInterval(of: .month, for: cursor) else { break }
             months.append(interval)
             cursor = interval.end
         }
-        let recent = months.suffix(maximumRolloverMonths)
-        return recent.map { interval in
+        return months.map { interval in
             let spent = entries.filter { interval.containsExcludingEnd($0.date) }.map(\.amount).sum()
             return max(0, budget.monthlyAmount - spent)
         }.sum()
