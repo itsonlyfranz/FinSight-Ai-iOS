@@ -21,6 +21,7 @@ final class SwiftDataTransactionRepository: TransactionRepository {
 
         let record = TransactionRecord(
             amount: amount,
+            kind: draft.kind,
             merchantName: draft.merchantName.trimmingCharacters(in: .whitespacesAndNewlines),
             category: draft.category,
             date: draft.date,
@@ -34,6 +35,7 @@ final class SwiftDataTransactionRepository: TransactionRepository {
         let amount = try ValidationError.validatedAmount(draft.amount)
 
         record.amount = amount
+        record.kind = draft.kind
         record.merchantName = draft.merchantName.trimmingCharacters(in: .whitespacesAndNewlines)
         record.category = draft.category
         record.date = draft.date
@@ -68,9 +70,9 @@ enum ValidationError: LocalizedError {
         }
     }
 
-    /// Repository-level guard: the amount must be a finite number greater than zero.
-    static func validatedAmount(_ amount: Double?) throws -> Double {
-        guard let amount, amount.isFinite, amount > 0 else {
+    /// Repository-level guard: the amount must be a finite number greater than zero, within the storable range.
+    static func validatedAmount(_ amount: Decimal?) throws -> Decimal {
+        guard let amount, !amount.isNaN, amount > 0, amount <= Money.maximumMagnitude else {
             throw ValidationError.invalidAmount
         }
         return amount

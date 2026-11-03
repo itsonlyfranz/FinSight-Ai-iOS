@@ -14,18 +14,21 @@ struct DefaultSummaryService: SummaryService {
     ) -> MonthlySummary {
         let monthInterval = calendar.dateInterval(of: .month, for: now) ?? DateInterval(start: now, end: now)
         let monthlyTransactions = transactions
-            .filter { monthInterval.contains($0.date) && $0.category.countsAsSpending }
+            .filter { monthInterval.contains($0.date) && $0.countsAsSpending }
             .sorted(by: { $0.date > $1.date })
 
-        let totalSpent = monthlyTransactions.reduce(0) { $0 + $1.amount }
+        // Sum exactly in Decimal; only the presentation values below are Doubles.
+        let totalSpentExact = monthlyTransactions.map(\.amount).sum()
         let recurringActualSpend = monthlyTransactions
             .filter { recurringSummary.recurringTransactionIDs.contains($0.id) }
-            .reduce(0) { $0 + $1.amount }
-        let oneOffSpent = max(0, totalSpent - recurringActualSpend)
+            .map(\.amount)
+            .sum()
+        let totalSpent = totalSpentExact.doubleValue
+        let oneOffSpent = max(0, totalSpentExact - recurringActualSpend).doubleValue
         let grouped = Dictionary(grouping: monthlyTransactions, by: \.category)
         let categoryBreakdown = grouped
             .map { category, entries in
-                let amount = entries.reduce(0) { $0 + $1.amount }
+                let amount = entries.map(\.amount).sum().doubleValue
                 let share = totalSpent > 0 ? amount / totalSpent : 0
                 return CategorySpend(category: category, amount: amount, percentage: share)
             }
@@ -73,7 +76,7 @@ struct DefaultSummaryService: SummaryService {
     /// Compares the last 7 days with the 7 days before, across all transactions
     /// (not just the current month), so the comparison is meaningful on day 1 of a month.
     private func spendingTrendDescription(from transactions: [TransactionRecord], now: Date) -> String {
-        let spending = transactions.filter { $0.category.countsAsSpending }
+        let spending = transactions.filter(\.countsAsSpending)
         guard !spending.isEmpty else {
             return "Start logging a few expenses to unlock spending pattern analysis."
         }
@@ -87,10 +90,10 @@ struct DefaultSummaryService: SummaryService {
 
         let currentWeek = spending
             .filter { $0.date >= currentStart && $0.date < windowEnd }
-            .reduce(0) { $0 + $1.amount }
+            .map(\.amount).sum().doubleValue
         let previousWeek = spending
             .filter { $0.date >= previousStart && $0.date < currentStart }
-            .reduce(0) { $0 + $1.amount }
+            .map(\.amount).sum().doubleValue
 
         if previousWeek == 0 {
             return "Not enough spending in the previous 7 days yet to compare against."

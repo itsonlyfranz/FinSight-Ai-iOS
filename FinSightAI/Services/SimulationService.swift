@@ -53,13 +53,13 @@ enum MonthlyRunRate {
         }
 
         let inWindow = transactions.filter {
-            $0.category.countsAsSpending
+            $0.countsAsSpending
                 && !recurringSummary.recurringTransactionIDs.contains($0.id)
                 && $0.date >= windowStart && $0.date < windowEnd
         }
         guard let earliest = inWindow.map(\.date).min() else { return recurringSpend }
 
-        let total = inWindow.reduce(0) { $0 + $1.amount }
+        let total = inWindow.map(\.amount).sum().doubleValue
         let earliestDay = calendar.startOfDay(for: earliest)
         let observed = (calendar.dateComponents([.day], from: earliestDay, to: today).day ?? 0) + 1
         let observedDays = min(max(observed, minimumObservedDays), windowDays)

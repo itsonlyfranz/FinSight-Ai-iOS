@@ -2,8 +2,18 @@ import Foundation
 import SwiftData
 
 enum AppStoreSchema {
+    /// The current (latest) schema.
     static var schema: Schema {
-        Schema([TransactionRecord.self, RecurringExpenseRecord.self, AIResponseCacheRecord.self])
+        Schema(versionedSchema: FinSightSchemaV2.self)
+    }
+
+    /// Opens (and, when needed, migrates) the store at `configuration`.
+    static func makeContainer(configuration: ModelConfiguration) throws -> ModelContainer {
+        try ModelContainer(
+            for: schema,
+            migrationPlan: FinSightMigrationPlan.self,
+            configurations: configuration
+        )
     }
 }
 
