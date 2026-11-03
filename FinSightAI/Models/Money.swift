@@ -15,14 +15,6 @@ enum Money {
     /// but small enough that `Int` conversion can never overflow.
     static let maximumMagnitude = Decimal(900_000_000_000_000)
 
-    /// Rounds to the storage scale using conventional ("round half away from zero") rounding.
-    static func rounded(_ value: Decimal) -> Decimal {
-        var input = value
-        var output = Decimal()
-        NSDecimalRound(&output, &input, scale, .plain)
-        return output
-    }
-
     /// Persisted representation of `value`. Non-finite values store as 0; out-of-range values clamp.
     static func scaled(_ value: Decimal) -> Int {
         guard !value.isNaN else { return 0 }
