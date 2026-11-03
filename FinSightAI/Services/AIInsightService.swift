@@ -284,7 +284,10 @@ struct AppleFoundationModelsInsightService: AIInsightService {
     @available(macOS, introduced: 26.0, deprecated: 27.0)
     private static func isContextOverflow(_ error: Error) -> Bool {
         if case LanguageModelSession.GenerationError.exceededContextWindowSize = error { return true }
+        // LanguageModelError only exists in the iOS 27 SDK (Swift 6.4 toolchain); CI builds with the iOS 26 SDK.
+        #if compiler(>=6.4)
         if #available(iOS 27.0, macOS 27.0, *), case LanguageModelError.contextSizeExceeded = error { return true }
+        #endif
         return false
     }
 
