@@ -2,7 +2,7 @@ import SwiftData
 import XCTest
 @testable import FinSightAI
 
-/// The engine wired to SwiftData: month-bounded loading, persisted dismissals and snoozes, the
+/// The engine wired to SwiftData: the trailing-month history window, persisted dismissals and snoozes, the
 /// V2 → V3 migration, and the replacement trend string.
 @MainActor
 final class InsightPersistenceTests: XCTestCase {
@@ -36,11 +36,9 @@ final class InsightPersistenceTests: XCTestCase {
         return context
     }
 
-    // MARK: - Month-bounded loading
+    // MARK: - History window
 
-    func testLoaderReturnsOnlyTheRequestedMonthsAndRespectsBoundaries() throws {
-        let container = try makeContainer()
-        let modelContext = ModelContext(container)
+    func testHistoryReturnsOnlyTheRequestedMonthsAndRespectsBoundaries() {
         let dates = [
             F.date(2026, 7, 31, hour: 23, minute: 59, second: 59),   // last instant before a 4-month window
             F.date(2026, 8, 1, hour: 0),                              // first instant of a 4-month window
@@ -50,45 +48,40 @@ final class InsightPersistenceTests: XCTestCase {
             F.date(2026, 11, 30, hour: 23, minute: 59, second: 59),   // last instant of the window
             F.date(2026, 12, 1, hour: 0)                               // just after
         ]
-        for (index, date) in dates.enumerated() {
-            modelContext.insert(TransactionRecord(amount: Decimal(index + 1), merchantName: "M\(index)", category: .other, date: date))
+        let records = dates.enumerated().map { index, date in
+            TransactionRecord(amount: Decimal(index + 1), merchantName: "M\(index)", category: .other, date: date)
         }
-        try modelContext.save()
 
         // Three months back from November is September–November: 1 Aug 00:00 is outside.
-        let entries = try InsightDataLoader.entries(in: modelContext, now: F.date(2026, 11, 20), calendar: utc, months: 3)
+        let entries = LedgerEntry.history(from: records, now: F.date(2026, 11, 20), calendar: utc, months: 3)
         XCTAssertEqual(entries.map(\.amount).sorted(), [3, 4, 5, 6])
         // Four months reach back to exactly 1 Aug 00:00 but not to 31 Jul 23:59:59.
-        let four = try InsightDataLoader.entries(in: modelContext, now: F.date(2026, 11, 20), calendar: utc, months: 4)
+        let four = LedgerEntry.history(from: records, now: F.date(2026, 11, 20), calendar: utc, months: 4)
         XCTAssertEqual(four.map(\.amount).sorted(), [2, 3, 4, 5, 6])
 
-        let single = try InsightDataLoader.entries(in: modelContext, now: F.date(2026, 11, 20), calendar: utc, months: 1)
+        let single = LedgerEntry.history(from: records, now: F.date(2026, 11, 20), calendar: utc, months: 1)
         XCTAssertEqual(single.map(\.amount).sorted(), [5, 6])
     }
 
-    func testLoaderUsesLocalMonthBoundariesAcrossDST() throws {
+    func testHistoryUsesLocalMonthBoundariesAcrossDST() {
         let ny = F.newYork
-        let container = try makeContainer()
-        let modelContext = ModelContext(container)
-        modelContext.insert(TransactionRecord(amount: 1, merchantName: "A", category: .other, date: F.date(2026, 2, 28, hour: 23, minute: 59, second: 59, in: ny)))
-        modelContext.insert(TransactionRecord(amount: 2, merchantName: "B", category: .other, date: F.date(2026, 3, 1, hour: 0, in: ny)))
-        modelContext.insert(TransactionRecord(amount: 3, merchantName: "C", category: .other, date: F.date(2026, 3, 8, hour: 3, minute: 30, in: ny)))
-        modelContext.insert(TransactionRecord(amount: 4, merchantName: "D", category: .other, date: F.date(2026, 3, 31, hour: 23, minute: 59, second: 59, in: ny)))
-        modelContext.insert(TransactionRecord(amount: 5, merchantName: "E", category: .other, date: F.date(2026, 4, 1, hour: 0, in: ny)))
-        try modelContext.save()
+        let records = [
+            TransactionRecord(amount: 1, merchantName: "A", category: .other, date: F.date(2026, 2, 28, hour: 23, minute: 59, second: 59, in: ny)),
+            TransactionRecord(amount: 2, merchantName: "B", category: .other, date: F.date(2026, 3, 1, hour: 0, in: ny)),
+            TransactionRecord(amount: 3, merchantName: "C", category: .other, date: F.date(2026, 3, 8, hour: 3, minute: 30, in: ny)),
+            TransactionRecord(amount: 4, merchantName: "D", category: .other, date: F.date(2026, 3, 31, hour: 23, minute: 59, second: 59, in: ny)),
+            TransactionRecord(amount: 5, merchantName: "E", category: .other, date: F.date(2026, 4, 1, hour: 0, in: ny))
+        ]
 
-        let march = try InsightDataLoader.entries(in: modelContext, now: F.date(2026, 3, 15, in: ny), calendar: ny, months: 1)
+        let march = LedgerEntry.history(from: records, now: F.date(2026, 3, 15, in: ny), calendar: ny, months: 1)
         XCTAssertEqual(march.map(\.amount).sorted(), [2, 3, 4])
     }
 
-    func testLoaderConvertsRecordsFaithfully() throws {
-        let container = try makeContainer()
-        let modelContext = ModelContext(container)
-        modelContext.insert(TransactionRecord(
+    func testHistoryConvertsRecordsFaithfully() throws {
+        let record = TransactionRecord(
             amount: F.dec("123.4567"), kind: .income, merchantName: "Employer", category: .bills, date: F.date(2026, 11, 2)
-        ))
-        try modelContext.save()
-        let entry = try XCTUnwrap(InsightDataLoader.entries(in: modelContext, now: F.date(2026, 11, 20), calendar: utc, months: 1).first)
+        )
+        let entry = try XCTUnwrap(LedgerEntry.history(from: [record], now: F.date(2026, 11, 20), calendar: utc, months: 1).first)
         XCTAssertEqual(entry.amount, F.dec("123.4567"))
         XCTAssertEqual(entry.kind, .income)
         XCTAssertEqual(entry.merchant, "Employer")
@@ -97,16 +90,25 @@ final class InsightPersistenceTests: XCTestCase {
         XCTAssertFalse(entry.countsAsSpending)
     }
 
-    func testLoaderFetchesTwelveMonthsByDefault() throws {
-        let container = try makeContainer()
-        let modelContext = ModelContext(container)
-        for offset in 0..<14 {
-            let date = utc.date(byAdding: .month, value: -offset, to: F.date(2026, 11, 10))!
-            modelContext.insert(TransactionRecord(amount: 1, merchantName: "M", category: .other, date: date))
+    func testHistoryCoversTwelveMonthsByDefault() {
+        let records = (0..<14).map { offset in
+            TransactionRecord(amount: 1, merchantName: "M", category: .other, date: utc.date(byAdding: .month, value: -offset, to: F.date(2026, 11, 10))!)
         }
-        try modelContext.save()
-        let entries = try InsightDataLoader.entries(in: modelContext, now: F.date(2026, 11, 20), calendar: utc)
-        XCTAssertEqual(entries.count, InsightDataLoader.historyMonths)
+        let entries = LedgerEntry.history(from: records, now: F.date(2026, 11, 20), calendar: utc)
+        XCTAssertEqual(entries.count, LedgerEntry.historyMonths)
+    }
+
+    func testAppContextInsightsUseTheInMemoryLedger() throws {
+        let context = try makeContext(try makeContainer())
+        context.modelContext.insert(Budget(category: .groceries, monthlyAmount: 1000))
+        context.modelContext.insert(TransactionRecord(amount: 1400, merchantName: "", category: .groceries, date: F.date(2026, 11, 3)))
+        try context.modelContext.save()
+        try context.reloadPlanning(now: F.date(2026, 11, 15))
+        XCTAssertTrue(context.engineInsights.of(.budgetBreach).isEmpty, "unloaded transactions are not analysed")
+
+        try context.reloadTransactions()
+        try context.reloadEngineInsights(now: F.date(2026, 11, 15))
+        XCTAssertEqual(context.engineInsights.of(.budgetBreach).map(\.category), [.groceries])
     }
 
     // MARK: - AppContext wiring

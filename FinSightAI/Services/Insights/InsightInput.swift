@@ -41,6 +41,27 @@ struct LedgerEntry: Identifiable, Equatable, Sendable {
     var countsAsIncome: Bool { kind == .income }
 }
 
+extension LedgerEntry {
+    /// Months of history the engine looks at (the current month plus the 11 before it). Enough for
+    /// 6-month baselines and quarterly subscriptions to repeat three times.
+    static let historyMonths = 12
+
+    /// The records dated within the trailing `months` calendar months ending with `now`'s month.
+    static func history(
+        from records: [TransactionRecord],
+        now: Date,
+        calendar: Calendar,
+        months: Int = historyMonths
+    ) -> [LedgerEntry] {
+        guard let current = calendar.dateInterval(of: .month, for: now),
+              let firstMonth = calendar.date(byAdding: .month, value: -(max(1, months) - 1), to: now),
+              let start = calendar.dateInterval(of: .month, for: firstMonth)?.start else { return [] }
+        return records
+            .filter { $0.date >= start && $0.date < current.end }
+            .map(LedgerEntry.init)
+    }
+}
+
 /// A category's monthly limit for the month being analysed (rollover already included).
 struct BudgetLimit: Equatable, Sendable {
     let category: SpendingCategory

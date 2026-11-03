@@ -6,14 +6,14 @@ extension AppContext {
     /// Days a snooze lasts.
     static let insightSnoozeDays = 7
 
-    /// Recomputes insights from the last `InsightDataLoader.historyMonths` months (fetched month by
-    /// month, not the whole ledger) and applies the saved dismissals and snoozes.
+    /// Recomputes insights from the last `LedgerEntry.historyMonths` months of the in-memory
+    /// `transactions` (the same ledger the budget figures use) and applies the saved dismissals and snoozes.
     func reloadEngineInsights(now: Date = .now) throws {
         let calendar = settings?.calendar() ?? .current
         let input = InsightInput(
             now: now,
             calendar: calendar,
-            entries: try InsightDataLoader.entries(in: modelContext, now: now, calendar: calendar),
+            entries: LedgerEntry.history(from: transactions, now: now, calendar: calendar),
             budgets: budgetProgress.map { BudgetLimit(category: $0.category, limit: $0.limit) },
             recurringMonthlyIncome: monthlyRecurringIncome,
             reserveBalance: ReserveCalculator.reserve(from: savingsGoals.map { GoalBalance(name: $0.name, saved: $0.savedAmount) })
