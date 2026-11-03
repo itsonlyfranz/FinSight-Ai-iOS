@@ -149,6 +149,8 @@ struct AppleFoundationModelsInsightService: AIInsightService {
                 let payload = try await stream(
                     prompt: prompt.text + (correction.map { "\n\n" + $0 } ?? ""),
                     tools: tools,
+                    groundedIn: prompt.text,
+                    log: log,
                     onUpdate: onUpdate
                 )
                 let offenders = FigureGrounding.ungroundedAmounts(
@@ -181,14 +183,24 @@ struct AppleFoundationModelsInsightService: AIInsightService {
     private func stream(
         prompt: String,
         tools: [any Tool],
+        groundedIn facts: String,
+        log: ToolOutputLog,
         onUpdate: (@Sendable ([GeneratedInsightCard]) async -> Void)?
     ) async throws -> GeneratedInsightPayload {
         let session = LanguageModelSession(tools: tools, instructions: PromptFactory.narrationInstructions)
         var latest: [GeneratedInsightCard] = []
+        var isForwarding = onUpdate != nil
 
         for try await snapshot in session.streamResponse(to: prompt, generating: InsightNarration.self) {
             latest = snapshot.content.cards
-            await onUpdate?(latest)
+            guard isForwarding else { continue }
+            // Once a partial quotes an amount the data doesn't support, nothing more is shown from
+            // this attempt; the full answer is still checked, retried or hidden below.
+            isForwarding = FigureGrounding.ungroundedAmounts(
+                inPartial: latest.map(\.markdown).joined(separator: "\n"),
+                sources: [facts] + log.outputs
+            ).isEmpty
+            if isForwarding { await onUpdate?(latest) }
         }
 
         let cards = latest.map {

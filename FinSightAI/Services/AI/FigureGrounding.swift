@@ -23,6 +23,13 @@ enum FigureGrounding {
         return amounts(in: narration).filter { !known.contains($0) && seen.insert($0).inserted }
     }
 
+    /// Like `ungroundedAmounts(in:sources:)` for text that is still streaming: a number at the very
+    /// end may be cut short ("$1,07" of "$1,070"), so it waits for the next snapshot.
+    static func ungroundedAmounts(inPartial narration: String, sources: [String]) -> [Decimal] {
+        let settled = narration.reversed().drop { ($0.isASCII && $0.isNumber) || $0 == "," || $0 == "." }
+        return ungroundedAmounts(in: String(settled.reversed()), sources: sources)
+    }
+
     // MARK: - Tokenising
 
     private struct Token {

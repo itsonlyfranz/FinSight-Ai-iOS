@@ -39,13 +39,21 @@ struct QuickAddInterpretation: Equatable, Sendable {
 
 extension QuickAddResult {
     /// Applies the model's reading on top of the code-parsed result. The amount and date stay as
-    /// parsed; an empty or missing field keeps the parsed value.
+    /// parsed; an empty or missing field keeps the parsed value. A kind or category the code read
+    /// from the user's words wins: the model only fills in what the rules left at their defaults.
     func merging(_ interpretation: QuickAddInterpretation) -> QuickAddResult {
         var merged = self
         let merchant = MerchantNameCleaner.clean(interpretation.merchant)
         if !merchant.isEmpty { merged.merchant = merchant }
-        merged.kind = interpretation.kind
-        merged.category = interpretation.kind == .expense ? (interpretation.category ?? category) : nil
+        if kind == .expense { merged.kind = interpretation.kind }
+        switch merged.kind {
+        case .income:
+            merged.category = nil
+        case .expense:
+            merged.category = category ?? interpretation.category.map { CategorySuggestion(category: $0, source: .model) }
+        case .transfer:
+            break
+        }
         return merged
     }
 }

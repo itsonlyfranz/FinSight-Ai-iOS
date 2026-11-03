@@ -239,6 +239,14 @@ final class Phase4AITests: XCTestCase {
         XCTAssertTrue(FigureGrounding.ungroundedAmounts(in: "Over 14 days, 3 times, 25% more", sources: ["nothing"]).isEmpty)
     }
 
+    func testPartialGroundingWaitsForANumberStillBeingWritten() {
+        let facts = "Total: $1,070.00"
+
+        XCTAssertTrue(FigureGrounding.ungroundedAmounts(inPartial: "You spent $1,07", sources: [facts]).isEmpty)
+        XCTAssertTrue(FigureGrounding.ungroundedAmounts(inPartial: "You spent $1,070.", sources: [facts]).isEmpty)
+        XCTAssertEqual(FigureGrounding.ungroundedAmounts(inPartial: "You saved $180 and spent $1,07", sources: [facts]), [dec("180")])
+    }
+
     func testToolOutputLogCollectsWhatToolsReturn() {
         let log = ToolOutputLog()
         log.record("a")
@@ -474,7 +482,7 @@ final class Phase4AITests: XCTestCase {
         XCTAssertEqual(result.amount, 150)
         XCTAssertEqual(result.kind, .expense)
         XCTAssertEqual(result.merchant, "Coffee")
-        XCTAssertEqual(result.category, .dining)
+        XCTAssertEqual(result.category, CategorySuggestion(category: .dining, source: .rule))
         XCTAssertEqual(utc.startOfDay(for: result.date), utc.startOfDay(for: date(2024, 3, 12)))
         XCTAssertTrue(result.isComplete)
     }
@@ -530,7 +538,7 @@ final class Phase4AITests: XCTestCase {
         XCTAssertEqual(parse("spent 45 at whole foods").merchant, "Whole Foods")
         XCTAssertEqual(parse("paid $18 for netflix yesterday").merchant, "Netflix")
         XCTAssertEqual(parse("I bought 30 Uber").merchant, "Uber")
-        XCTAssertEqual(parse("spent 45 at whole foods").category, .groceries)
+        XCTAssertEqual(parse("spent 45 at whole foods").category?.category, .groceries)
     }
 
     func testQuickAddRecognisesIncomeAndTransfers() {
@@ -588,6 +596,61 @@ final class Phase4AITests: XCTestCase {
         XCTAssertEqual(expense.category, parsed.category)
     }
 
+    func testModelReadingKeepsTheKindAndCategoryTheCodeRead() {
+        let transfer = parse("transfer 200 to savings")
+        XCTAssertEqual(transfer.merging(QuickAddInterpretation(merchant: "Savings", kind: .expense, category: .other)).kind, .transfer)
+        XCTAssertEqual(transfer.merging(QuickAddInterpretation(merchant: "Savings", kind: .income, category: nil)).kind, .transfer)
+
+        let salary = parse("salary 3000 friday")
+        let salaryMerged = salary.merging(QuickAddInterpretation(merchant: "Acme", kind: .expense, category: .shopping))
+        XCTAssertEqual(salaryMerged.kind, .income)
+        XCTAssertNil(salaryMerged.category)
+
+        let coffee = parse("coffee 150 yesterday")
+        let coffeeMerged = coffee.merging(QuickAddInterpretation(merchant: "Coffee", kind: .expense, category: .other))
+        XCTAssertEqual(coffeeMerged.category, CategorySuggestion(category: .dining, source: .rule), "a keyword hit beats the model")
+
+        let unknown = parse("zorp 9").merging(QuickAddInterpretation(merchant: "Zorp", kind: .expense, category: .travel))
+        XCTAssertEqual(unknown.category, CategorySuggestion(category: .travel, source: .model))
+    }
+
+    func testQuickAddLabelsTheCategoryByWhoChoseIt() async throws {
+        let modelPick = QuickAddResult(amount: 9, kind: .expense, merchant: "Zorp", category: CategorySuggestion(category: .travel, source: .model), date: date(2024, 3, 12), remainder: "zorp")
+        let harness = try makeHarness(assistant: FixedAssistant(quickAdd: modelPick))
+        harness.context.prepareNewTransaction()
+
+        await harness.context.applyQuickAdd("zorp 9")
+        XCTAssertEqual(harness.context.categorySuggestion, CategorySuggestion(category: .travel, source: .model))
+        XCTAssertFalse(harness.context.activeDraft.categoryIsUserChosen, "a model guess can still be replaced by later suggestions")
+
+        let rules = try makeHarness()
+        rules.context.prepareNewTransaction()
+        await rules.context.applyQuickAdd("coffee 150", now: date(2024, 3, 13))
+        XCTAssertEqual(rules.context.categorySuggestion, CategorySuggestion(category: .dining, source: .rule))
+        XCTAssertTrue(rules.context.activeDraft.categoryIsUserChosen)
+    }
+
+    func testAnAutomaticCategoryIsUndoneWhenTheSuggestionGoesAway() async throws {
+        let harness = try makeHarness()
+        harness.context.prepareNewTransaction()
+        let original = harness.context.activeDraft.category
+
+        harness.context.activeDraft.merchantName = "Starbucks"
+        await harness.context.suggestCategoryForActiveDraft()
+        XCTAssertEqual(harness.context.activeDraft.category, .dining)
+
+        harness.context.activeDraft.merchantName = "Zorp Ltd"
+        await harness.context.suggestCategoryForActiveDraft()
+        XCTAssertNil(harness.context.categorySuggestion)
+        XCTAssertEqual(harness.context.activeDraft.category, original)
+
+        harness.context.activeDraft.merchantName = "Starbucks"
+        await harness.context.suggestCategoryForActiveDraft()
+        harness.context.activeDraft.merchantName = ""
+        await harness.context.suggestCategoryForActiveDraft()
+        XCTAssertEqual(harness.context.activeDraft.category, original)
+    }
+
     func testApplyingQuickAddFillsTheActiveDraft() async throws {
         let harness = try makeHarness()
         harness.context.prepareNewTransaction()
@@ -615,7 +678,7 @@ final class Phase4AITests: XCTestCase {
     }
 
     func testQuickAddThroughAMockAssistantFillsTheDraft() async throws {
-        let canned = QuickAddResult(amount: 150, kind: .expense, merchant: "Mock Cafe", category: .dining, date: date(2024, 3, 12), remainder: "")
+        let canned = QuickAddResult(amount: 150, kind: .expense, merchant: "Mock Cafe", category: CategorySuggestion(category: .dining, source: .model), date: date(2024, 3, 12), remainder: "")
         let harness = try makeHarness(assistant: FixedAssistant(quickAdd: canned))
         harness.context.prepareNewTransaction()
         harness.context.activeDraft.locale = Locale(identifier: "en_US")

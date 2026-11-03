@@ -9,7 +9,8 @@ struct QuickAddResult: Equatable, Sendable {
     var amount: Decimal?
     var kind: TransactionKind
     var merchant: String
-    var category: SpendingCategory?
+    /// The category and whether a keyword rule or the model chose it.
+    var category: CategorySuggestion?
     var date: Date
     /// The sentence with the amount and date phrases removed, which is what the model is shown.
     var remainder: String
@@ -30,7 +31,7 @@ extension TransactionDraft {
         amountText = result.amount.map { CurrencyFormatter.plainNumberString(from: $0, locale: locale) } ?? ""
         kind = result.kind
         merchantName = result.merchant
-        category = result.category ?? .other
+        category = result.category?.category ?? .other
         date = result.date
     }
 }
@@ -55,7 +56,9 @@ enum QuickAddParser {
 
         let remainder = cleaned(remaining)
         let merchant = MerchantNameCleaner.clean(strippedOfFiller(remainder))
-        let category = kind == .income ? nil : KeywordCategorizer.category(for: [merchant, text])
+        let category = kind == .income ? nil : KeywordCategorizer.category(for: [merchant, text]).map {
+            CategorySuggestion(category: $0, source: .rule)
+        }
         return QuickAddResult(
             amount: amount,
             kind: kind,
