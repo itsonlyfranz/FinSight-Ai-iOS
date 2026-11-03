@@ -237,6 +237,8 @@ Automated coverage currently includes:
 - budget progress and rollover, the income gauge, and savings-goal projections
 - category chips and merchant search filtering
 - RFC 4180 CSV export, including formula-injection neutralisation of free-text cells
+- the deterministic insight engine: budget breaches and overruns, month-over-month changes, anomalies, recurring-charge and price-creep detection, savings rate, emergency-fund runway and no-spend streaks
+- persisted insight dismiss/snooze and the V2 to V3 schema migration
 
 Manual smoke checks:
 
