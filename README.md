@@ -203,6 +203,9 @@ FinSightAI/
   Features/
     Dashboard/
     Insights/
+    Planning/
+    Settings/
+    Shared/
     Simulator/
     Transactions/
   Models/
@@ -225,6 +228,9 @@ Automated coverage currently includes:
 - budgets, income sources, savings goals, and app settings
 - app-level dedupe in place of `.unique` constraints
 - V1 to V2 schema migration from an unversioned V1 store fixture
+- budget progress and rollover, the income gauge, and savings-goal projections
+- category chips and merchant search filtering
+- RFC 4180 CSV export, including formula-injection neutralisation of free-text cells
 
 Manual smoke checks:
 
