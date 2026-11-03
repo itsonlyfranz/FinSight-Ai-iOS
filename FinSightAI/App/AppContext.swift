@@ -37,6 +37,11 @@ final class AppContext {
     var incomeGauge: IncomeGauge = .empty
     /// This month's progress for every budgeted category.
     var budgetProgress: [BudgetProgress] = []
+    /// Deterministic insights still showing: engine output minus dismissed and snoozed ones.
+    var engineInsights: [Insight] = []
+    /// Every insight the engine produced, including hidden ones.
+    var allEngineInsights: [Insight] = []
+    var insightSuppressions: [InsightSuppression] = []
     var insightState: InsightLoadState = .idle
     var simulatorExplanationState: LoadableTextState = .idle
     var activeDraft: TransactionDraft = .init()

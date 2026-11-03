@@ -52,7 +52,11 @@ struct DefaultSummaryService: SummaryService {
             averageTransactionValue: averageValue,
             topCategory: topCategory,
             topCategoryShare: topShare,
-            spendingTrendDescription: spendingTrendDescription(from: transactions, now: now)
+            spendingTrendDescription: SpendingTrend.description(
+                entries: transactions.map(LedgerEntry.init),
+                now: now,
+                calendar: calendar
+            )
         )
     }
 
@@ -71,41 +75,5 @@ struct DefaultSummaryService: SummaryService {
                 )
             }
             .sorted { lhs, rhs in lhs.id > rhs.id }
-    }
-
-    /// Compares the last 7 days with the 7 days before, across all transactions
-    /// (not just the current month), so the comparison is meaningful on day 1 of a month.
-    private func spendingTrendDescription(from transactions: [TransactionRecord], now: Date) -> String {
-        let spending = transactions.filter(\.countsAsSpending)
-        guard !spending.isEmpty else {
-            return "Start logging a few expenses to unlock spending pattern analysis."
-        }
-
-        let today = calendar.startOfDay(for: now)
-        guard let windowEnd = calendar.date(byAdding: .day, value: 1, to: today),
-              let currentStart = calendar.date(byAdding: .day, value: -6, to: today),
-              let previousStart = calendar.date(byAdding: .day, value: -13, to: today) else {
-            return "Your weekly spending pace is relatively stable right now."
-        }
-
-        let currentWeek = spending
-            .filter { $0.date >= currentStart && $0.date < windowEnd }
-            .map(\.amount).sum().doubleValue
-        let previousWeek = spending
-            .filter { $0.date >= previousStart && $0.date < currentStart }
-            .map(\.amount).sum().doubleValue
-
-        if previousWeek == 0 {
-            return "Not enough spending in the previous 7 days yet to compare against."
-        }
-
-        let change = (currentWeek - previousWeek) / previousWeek
-        if change > 0.15 {
-            return "Your last 7 days are trending higher than the 7 days before."
-        } else if change < -0.15 {
-            return "Your last 7 days are trending lower than the 7 days before."
-        } else {
-            return "Your weekly spending pace is relatively stable right now."
-        }
     }
 }

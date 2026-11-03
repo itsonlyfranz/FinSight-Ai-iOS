@@ -59,9 +59,15 @@ The current version is a fully local v1 MVP. It uses SwiftData for persistence a
 
 ### Insights
 
-- budgeting insight section
-- risk insight section
-- growth insight section
+A deterministic, on-device `InsightEngine` analyses the last 12 months and produces typed insights (kind, severity, impact amount, evidence, suggested action). It needs no AI and works on every device:
+
+- budget breach and projected overrun (run rate × days left)
+- month-over-month category change
+- category and merchant anomalies (robust z-score against the trailing 3-6 month median/MAD)
+- auto-detected recurring charges and subscriptions, with price-creep detection
+- savings rate, emergency-fund runway and no-spend streaks
+
+Insights show as cards with severity badges and impact numbers, and can be dismissed or snoozed (persisted). The Foundation Models budgeting, risk and growth cards remain as optional narration below them.
 
 ### Simulator
 
@@ -231,6 +237,8 @@ Automated coverage currently includes:
 - budget progress and rollover, the income gauge, and savings-goal projections
 - category chips and merchant search filtering
 - RFC 4180 CSV export, including formula-injection neutralisation of free-text cells
+- the deterministic insight engine: budget breaches and overruns, month-over-month changes, anomalies, recurring-charge and price-creep detection, savings rate, emergency-fund runway and no-spend streaks
+- persisted insight dismiss/snooze and the V2 to V3 schema migration
 
 Manual smoke checks:
 

@@ -234,7 +234,7 @@ final class Phase1DataModelTests: XCTestCase {
 
     func testSchemaHasNoUniqueConstraints() {
         let schema = AppStoreSchema.schema
-        XCTAssertEqual(schema.entities.count, 8)
+        XCTAssertEqual(schema.entities.count, 9)
         for entity in schema.entities {
             XCTAssertTrue(entity.uniquenessConstraints.isEmpty, "\(entity.name) must not declare .unique (CloudKit)")
             XCTAssertTrue(entity.properties.allSatisfy { !$0.isUnique }, "\(entity.name)")

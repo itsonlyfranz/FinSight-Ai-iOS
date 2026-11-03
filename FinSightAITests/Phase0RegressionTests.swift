@@ -136,19 +136,20 @@ final class Phase0RegressionTests: XCTestCase {
         }
     }
 
-    // MARK: - D4 trend uses last 7 vs prior 7 days across all transactions
+    // MARK: - D4 trend compares like with like, from real ledger numbers
 
-    func testD4_TrendComparesTrailingWeeksAcrossMonthBoundary() {
-        // 2 March: both comparison weeks (16-22 Feb and 23 Feb-1 Mar+) fall mostly in February.
+    func testD4_TrendComparesTheSameDaysOfLastMonthEvenOnDayTwo() {
+        // 2 March: the first two days of March against the first two days of February.
         let now = date(2024, 3, 2)
         let transactions = [
             TransactionRecord(amount: 900, merchantName: "A", category: .dining, date: date(2024, 3, 1)),
-            TransactionRecord(amount: 100, merchantName: "B", category: .dining, date: date(2024, 2, 20))
+            TransactionRecord(amount: 100, merchantName: "B", category: .dining, date: date(2024, 2, 1)),
+            TransactionRecord(amount: 5000, merchantName: "C", category: .dining, date: date(2024, 2, 20))  // outside the window
         ]
 
         let summary = DefaultSummaryService(calendar: calendar).makeMonthlySummary(from: transactions, now: now)
 
-        XCTAssertEqual(summary.spendingTrendDescription, "Your last 7 days are trending higher than the 7 days before.")
+        XCTAssertEqual(summary.spendingTrendDescription, "Spending is up 800% compared with the same days last month.")
     }
 
     func testD4_TrendDetectsLowerSpendingAndMissingBaseline() {
@@ -157,8 +158,8 @@ final class Phase0RegressionTests: XCTestCase {
 
         let lower = service.makeMonthlySummary(
             from: [
-                TransactionRecord(amount: 100, merchantName: "A", category: .dining, date: date(2024, 3, 19)),
-                TransactionRecord(amount: 900, merchantName: "B", category: .dining, date: date(2024, 3, 10))
+                TransactionRecord(amount: 100, merchantName: "A", category: .dining, date: date(2024, 3, 5)),
+                TransactionRecord(amount: 900, merchantName: "B", category: .dining, date: date(2024, 2, 10))
             ],
             now: now
         )
@@ -167,8 +168,8 @@ final class Phase0RegressionTests: XCTestCase {
             now: now
         )
 
-        XCTAssertEqual(lower.spendingTrendDescription, "Your last 7 days are trending lower than the 7 days before.")
-        XCTAssertEqual(noBaseline.spendingTrendDescription, "Not enough spending in the previous 7 days yet to compare against.")
+        XCTAssertEqual(lower.spendingTrendDescription, "Spending is down 89% compared with the same days last month.")
+        XCTAssertEqual(noBaseline.spendingTrendDescription, "No spending in the same days last month to compare against yet.")
     }
 
     // MARK: - D5 insights refresh when data changes

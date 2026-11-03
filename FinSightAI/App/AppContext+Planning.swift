@@ -25,6 +25,7 @@ extension AppContext {
         let calendar = settings?.calendar() ?? .current
         incomeGauge = IncomeCalculator.gauge(sources: incomeSources, transactions: transactions, month: now, calendar: calendar)
         budgetProgress = BudgetCalculator.progress(budgets: budgets, transactions: transactions, month: now, calendar: calendar)
+        try reloadEngineInsights(now: now)
     }
 
     // MARK: - Settings
