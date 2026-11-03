@@ -125,11 +125,30 @@ enum FigureGrounding {
     }
 }
 
-/// Collects what tools returned during a session, so the figures in them count as grounded.
+/// Collects what tools returned during a session, so the figures in them count as grounded, and caps
+/// how many lookups one session may make: every tool turn stays in the transcript, so an uncapped
+/// model can call tools until the context window overflows.
 final class ToolOutputLog: @unchecked Sendable {
+    static let defaultCallLimit = 4
+    static let limitReachedMessage = "No more lookups are available. Write the cards now using the facts and the results you already have."
+
+    let callLimit: Int
     private let lock = NSLock()
     private var entries: [String] = []
 
-    func record(_ output: String) { lock.withLock { entries.append(output) } }
+    init(callLimit: Int = ToolOutputLog.defaultCallLimit) {
+        self.callLimit = callLimit
+    }
+
+    /// Records `output` and returns it, or returns `limitReachedMessage` once the session has used up its lookups.
+    @discardableResult
+    func record(_ output: String) -> String {
+        lock.withLock {
+            guard entries.count < callLimit else { return Self.limitReachedMessage }
+            entries.append(output)
+            return output
+        }
+    }
+
     var outputs: [String] { lock.withLock { entries } }
 }

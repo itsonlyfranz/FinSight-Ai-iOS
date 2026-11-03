@@ -15,8 +15,7 @@ enum LedgerTools {
 
 private extension Tool {
     func recordOutput(_ output: String, in log: ToolOutputLog?) -> String {
-        log?.record(output)
-        return output
+        log?.record(output) ?? output
     }
 }
 

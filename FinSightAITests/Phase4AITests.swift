@@ -255,6 +255,34 @@ final class Phase4AITests: XCTestCase {
         XCTAssertEqual(log.outputs, ["a", "b"])
     }
 
+    func testToolOutputLogCapsLookupsPerSession() {
+        let log = ToolOutputLog(callLimit: 2)
+
+        XCTAssertEqual(log.record("a"), "a")
+        XCTAssertEqual(log.record("b"), "b")
+        XCTAssertEqual(log.record("c"), ToolOutputLog.limitReachedMessage, "past the cap the model is told to stop instead of getting more data")
+        XCTAssertEqual(log.outputs, ["a", "b"])
+    }
+
+    func testDeadlineReturnsAFastResult() async throws {
+        let value = try await withDeadline(.seconds(5)) { 42 }
+        XCTAssertEqual(value, 42)
+    }
+
+    func testDeadlineAbandonsASlowOperation() async {
+        let start = ContinuousClock.now
+        do {
+            _ = try await withDeadline(.milliseconds(50)) {
+                try await Task.sleep(for: .seconds(30))
+                return 1
+            }
+            XCTFail("should time out")
+        } catch {
+            XCTAssertTrue(error is DeadlineExceeded)
+        }
+        XCTAssertLessThan(ContinuousClock.now - start, .seconds(5), "the slow operation is cancelled, not awaited")
+    }
+
     // MARK: - Ledger queries behind the tools
 
     func testCategoryTotalsComeFromTheLedgerNotTheModel() {
@@ -334,6 +362,18 @@ final class Phase4AITests: XCTestCase {
 
         XCTAssertEqual(tools.map(\.name), ["categoryTotals", "transactions", "budgetStatus"])
         XCTAssertTrue(tools.allSatisfy { !$0.description.isEmpty })
+    }
+
+    func testToolsStopReturningDataOnceTheSessionUsedItsLookups() async throws {
+        let log = ToolOutputLog(callLimit: 1)
+        let tool = CategoryTotalsTool(ledger: makeLedger(), log: log)
+
+        let first = try await tool.call(arguments: .init(monthsAgo: 1, category: .dining))
+        let second = try await tool.call(arguments: .init(monthsAgo: 1, category: .dining))
+
+        XCTAssertTrue(first.contains(LedgerText.money(300)))
+        XCTAssertEqual(second, ToolOutputLog.limitReachedMessage)
+        XCTAssertEqual(log.outputs, [first])
     }
 
     func testToolCallsReturnLedgerText() async throws {

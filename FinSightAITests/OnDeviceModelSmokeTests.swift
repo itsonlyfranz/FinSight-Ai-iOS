@@ -1,3 +1,4 @@
+import SwiftData
 import XCTest
 @testable import FinSightAI
 
@@ -42,6 +43,38 @@ final class OnDeviceModelSmokeTests: XCTestCase {
         XCTAssertTrue(payload.cards.allSatisfy { $0.markdown.contains("## Key Takeaway") && $0.markdown.contains("## Next Step") })
         let streamed = await updates.count
         XCTAssertGreaterThan(streamed, 1, "partials should stream before the final result")
+    }
+
+    /// Regression: with the app's own sample data, tool-call turns used to grow the transcript past the
+    /// 4,096-token context after ~13 minutes, and the raw token error reached the Insights screen.
+    func testNarrationFinishesOverTheBuiltInSampleData() async throws {
+        let container = try ModelContainer(for: AppStoreSchema.schema, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let modelContext = ModelContext(container)
+        let service = AppleFoundationModelsInsightService()
+        let context = AppContext(
+            repository: SwiftDataTransactionRepository(modelContext: modelContext),
+            recurringExpenseRepository: SwiftDataRecurringExpenseRepository(modelContext: modelContext),
+            modelContext: modelContext,
+            summaryService: DefaultSummaryService(),
+            recurringSummaryService: DefaultRecurringSummaryService(),
+            aiInsightService: service,
+            simulationService: DefaultSimulationService(),
+            capabilityService: capability
+        )
+        try context.loadSampleData()
+        let narration = NarrationContext(summary: context.monthlySummary, insights: context.engineInsights, ledger: context.narrationLedger)
+
+        let start = ContinuousClock.now
+        do {
+            let payload = try await service.generateInsights(from: narration, onUpdate: nil)
+            print("[smoke] sample-data narration in \(ContinuousClock.now - start)")
+            XCTAssertEqual(payload.cards.map(\.kind), InsightKind.allCases)
+        } catch let error as AIInsightError {
+            // Hiding ungrounded figures is an accepted outcome; anything else is a failure to narrate.
+            print("[smoke] sample-data narration error after \(ContinuousClock.now - start): \(error)")
+            XCTAssertEqual(error, .ungroundedFigures)
+        }
+        XCTAssertLessThan(ContinuousClock.now - start, .seconds(300), "narration must not keep the spinner up for minutes")
     }
 
     func testRealModelCategorizesAnUnknownMerchant() async throws {

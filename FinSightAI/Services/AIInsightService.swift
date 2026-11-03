@@ -36,6 +36,31 @@ enum AIInsightError: LocalizedError, Equatable {
         case .ungroundedFigures: "The AI narration quoted amounts that don't match your data, so it was hidden. The insights above are unaffected."
         }
     }
+
+    /// Shown when the model failed or ran too long for a reason the user can't act on.
+    static let narrationFailed = AIInsightError.unavailable(
+        "The on-device AI couldn't finish the narration this time. The insights above are unaffected."
+    )
+}
+
+/// Thrown by `withDeadline` when the operation runs past its time limit.
+struct DeadlineExceeded: Error {}
+
+/// Runs `operation`, cancelling it and throwing `DeadlineExceeded` if it hasn't finished within `limit`.
+func withDeadline<T: Sendable>(
+    _ limit: Duration,
+    _ operation: @escaping @Sendable () async throws -> T
+) async throws -> T {
+    try await withThrowingTaskGroup(of: T.self) { group in
+        group.addTask { try await operation() }
+        group.addTask {
+            try await Task.sleep(for: limit)
+            throw DeadlineExceeded()
+        }
+        defer { group.cancelAll() }
+        guard let first = try await group.next() else { throw CancellationError() }
+        return first
+    }
 }
 
 struct UnsupportedAIInsightService: AIInsightService {
@@ -141,37 +166,51 @@ struct AppleFoundationModelsInsightService: AIInsightService {
         var budget = TokenBudget.promptBudget(contextSize: SystemLanguageModel.default.contextSize)
         var overflowRetries = 0
         var correction: String?
-        while true {
-            let log = ToolOutputLog()
-            let tools = LedgerTools.all(for: context.ledger, log: log)
-            let prompt = await fittedPrompt(for: context, tools: tools, startingBudget: &budget)
-            do {
-                let payload = try await stream(
-                    prompt: prompt.text + (correction.map { "\n\n" + $0 } ?? ""),
-                    tools: tools,
-                    groundedIn: prompt.text,
-                    log: log,
-                    onUpdate: onUpdate
-                )
-                let offenders = FigureGrounding.ungroundedAmounts(
-                    in: payload.cards.map(\.markdown).joined(separator: "\n"),
-                    sources: [prompt.text] + log.outputs
-                )
-                guard offenders.isEmpty else {
-                    // One retry that names the offending amounts; after that, hide the narration
-                    // rather than show figures the data doesn't support.
-                    guard correction == nil else { throw AIInsightError.ungroundedFigures }
-                    correction = Self.correction(for: offenders)
-                    continue
+        var useTools = true
+        do {
+            while true {
+                let log = ToolOutputLog()
+                let tools = useTools ? LedgerTools.all(for: context.ledger, log: log) : []
+                let prompt = await fittedPrompt(for: context, tools: tools, startingBudget: &budget)
+                let request = prompt.text + (correction.map { "\n\n" + $0 } ?? "")
+                do {
+                    let payload = try await withDeadline(Self.attemptTimeLimit) {
+                        try await stream(prompt: request, tools: tools, groundedIn: prompt.text, log: log, onUpdate: onUpdate)
+                    }
+                    let offenders = FigureGrounding.ungroundedAmounts(
+                        in: payload.cards.map(\.markdown).joined(separator: "\n"),
+                        sources: [prompt.text] + log.outputs
+                    )
+                    guard offenders.isEmpty else {
+                        // One retry that names the offending amounts; after that, hide the narration
+                        // rather than show figures the data doesn't support.
+                        guard correction == nil else { throw AIInsightError.ungroundedFigures }
+                        correction = Self.correction(for: offenders)
+                        continue
+                    }
+                    return payload
+                } catch where useTools && !Task.isCancelled && !(error is CancellationError) && !(error is AIInsightError) {
+                    // Tool turns accumulate in the transcript and can overflow the context (the model
+                    // reports this with error types that vary by OS) or run far too long. The facts
+                    // already carry the key figures, so try once more without tools.
+                    useTools = false
+                } catch where Self.isContextOverflow(error) && overflowRetries < 2 {
+                    // The estimate was too generous for this model: halve the budget and rebuild.
+                    overflowRetries += 1
+                    budget = max(TokenBudget.minimumPromptTokens, budget / 2)
                 }
-                return payload
-            } catch where Self.isContextOverflow(error) && overflowRetries < 2 {
-                // The estimate was too generous for this model: halve the budget and rebuild.
-                overflowRetries += 1
-                budget = max(TokenBudget.minimumPromptTokens, budget / 2)
             }
+        } catch let error as AIInsightError {
+            throw error
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            throw AIInsightError.narrationFailed
         }
     }
+
+    /// How long one narration attempt may run before it is abandoned.
+    static let attemptTimeLimit: Duration = .seconds(90)
 
     private static func correction(for offenders: [Decimal]) -> String {
         let listed = offenders.map { LedgerText.money($0) }.joined(separator: ", ")
