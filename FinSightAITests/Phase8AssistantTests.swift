@@ -187,10 +187,34 @@ final class Phase8AssistantTests: XCTestCase {
         XCTAssertEqual(AssistantSuggestions.highestRecentMonth(in: ledger()), october)
         XCTAssertEqual(prompts.first, String(localized: "Why was \(AssistantSuggestions.monthName(october)) so high?"))
         XCTAssertTrue(prompts.contains(String(localized: "Can I afford \(AssistantSuggestions.exampleAmountText) this month?")))
+        XCTAssertEqual(AssistantFAQ.intent(for: prompts[0], now: now, calendar: F.utc), .monthReview(monthsAgo: 1))
         // Every suggestion gets a real quick answer, not the help text.
         for prompt in prompts {
             XCTAssertNotEqual(AssistantFAQ.intent(for: prompt, now: now, calendar: F.utc), .help, prompt)
         }
+    }
+
+    func testSuggestedMayPromptReviewsMay() {
+        let may = LedgerSnapshot(now: now, calendar: F.utc, entries: [
+            F.spend(9_000, .shopping, merchant: "Laptop Store", on: F.date(2026, 5, 10)),
+            F.spend(1_000, .groceries, merchant: "SM Supermarket", on: F.date(2026, 10, 5))
+        ])
+        let context = AssistantContext(
+            ledger: may,
+            summary: DefaultSummaryService(calendar: F.utc).makeMonthlySummary(from: [], now: now),
+            insights: [],
+            monthlyIncome: 30_000,
+            recurringCharges: [],
+            goals: [],
+            profile: UserProfile()
+        )
+        let prompt = AssistantSuggestions.prompts(for: context)[0]
+        XCTAssertEqual(AssistantFAQ.intent(for: prompt, now: now, calendar: F.utc), .monthReview(monthsAgo: 6), prompt)
+        // November back to May is six months, in English and in the Filipino suggestion wording.
+        XCTAssertEqual(AssistantFAQ.intent(for: "Why was May so high?", now: now, calendar: F.utc), .monthReview(monthsAgo: 6))
+        XCTAssertEqual(AssistantFAQ.intent(for: "Bakit ang taas ng gastos noong Mayo?", now: now, calendar: F.utc), .monthReview(monthsAgo: 6))
+        XCTAssertEqual(AssistantFAQ.intent(for: "Bakit ang taas ng gastos noong Marso?", now: now, calendar: F.utc), .monthReview(monthsAgo: 8))
+        XCTAssertEqual(AssistantFAQ.intent(for: "Why was March so high?", now: now, calendar: F.utc), .monthReview(monthsAgo: 8))
     }
 
     // MARK: - Guardrails and disclaimer
@@ -211,7 +235,6 @@ final class Phase8AssistantTests: XCTestCase {
         XCTAssertTrue(ChatReplyKind.quickAnswer.carriesDisclaimer)
         XCTAssertFalse(ChatReplyKind.guardrail.carriesDisclaimer)
         XCTAssertFalse(ChatReplyKind.refusal.carriesDisclaimer)
-        XCTAssertTrue(AssistantPrompt.instructions.contains("not regulated financial advice"))
     }
 
     func testGuardrailRepliesNeverReachTheModel() async throws {

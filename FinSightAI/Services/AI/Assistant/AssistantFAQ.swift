@@ -341,7 +341,7 @@ enum AssistantMonthResolver {
         11: ["november", "nov", "nobyembre"],
         12: ["december", "dec", "disyembre"]
     ]
-    private static let mayPhrases = ["in may", "of may", "during may", "for may", "last may", "noong may", "nung may", "this may"]
+    private static let mayPhrases = ["in may", "was may", "of may", "during may", "for may", "last may", "noong may", "nung may", "this may"]
     private static let lastMonth = ["last month", "previous month", "nakaraang buwan", "noong isang buwan", "nung isang buwan", "last buwan"]
     private static let thisMonth = ["this month", "ngayong buwan", "this buwan"]
 
