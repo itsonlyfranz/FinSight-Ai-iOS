@@ -5,6 +5,9 @@ struct SettingsView: View {
     @Environment(AppContext.self) private var appContext
     @State private var errorMessage: String?
     @State private var confirmingSampleData = false
+    @AppStorage(ThemePalette.storageKey) private var paletteRawValue = ThemePalette.deckEmerald.rawValue
+    @AppStorage(UserProfile.nameKey) private var profileName = ""
+    @AppStorage(UserProfile.roleKey) private var profileRole = ""
 
     private var currencyCodes: [String] {
         var codes = Set(Locale.commonISOCurrencyCodes)
@@ -15,6 +18,36 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    TextField("Your name (optional)", text: $profileName, prompt: Text("e.g. Mark Santos"))
+                        .textContentType(.name)
+                    TextField("Role (optional)", text: $profileRole, prompt: Text("e.g. Junior SWE @ Apex Systems"))
+                        .textContentType(.jobTitle)
+                } header: {
+                    Text("Profile")
+                } footer: {
+                    Text("Shown in your dashboard greeting. Stays on this device.")
+                }
+
+                Section {
+                    Picker("Theme", selection: $paletteRawValue) {
+                        ForEach(ThemePalette.allCases) { palette in
+                            HStack {
+                                Image(systemName: "circle.fill")
+                                    .foregroundStyle(AppTheme.swatch(palette))
+                                    .accessibilityHidden(true)
+                                Text(palette.displayName)
+                            }
+                            .tag(palette.rawValue)
+                        }
+                    }
+                    .pickerStyle(.inline)
+                } header: {
+                    Text("Theme Options")
+                } footer: {
+                    Text("Follows your iPhone's light or dark appearance.")
+                }
+
                 Section {
                     Picker("Currency", selection: Binding(
                         get: { appContext.currencyCode },
@@ -44,30 +77,32 @@ struct SettingsView: View {
                     Button("Enable local reminders") {
                         Task {
                             do {
-                                _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])
-                                try await NudgeScheduler.refresh(snapshot: .make(context: appContext))
+                                if try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
+                                    try await NudgeScheduler.refresh(snapshot: .make(context: appContext))
+                                }
                             } catch { errorMessage = error.localizedDescription }
                         }
                     }
                     Link("Notification settings", destination: URL(string: UIApplication.openSettingsURLString)!)
                     Text("Recurring due dates, budget thresholds and a weekly digest. Scheduled on this device; delivery depends on system refresh.").font(.caption)
+                        .foregroundStyle(AppTheme.mutedInk)
                 }
 
                 Section("Money") {
                     NavigationLink {
                         IncomeSourcesView()
                     } label: {
-                        row("Income", detail: CurrencyFormatter.string(from: appContext.monthlyRecurringIncome) + "/mo", systemImage: "banknote.fill")
+                        row("Income", detail: String(localized: "\(CurrencyFormatter.string(from: appContext.monthlyRecurringIncome))/mo"), systemImage: "banknote.fill")
                     }
                     NavigationLink {
                         BudgetsView()
                     } label: {
-                        row("Budgets", detail: "\(appContext.budgets.count) set", systemImage: "target")
+                        row("Budgets", detail: String(localized: "\(appContext.budgets.count) set"), systemImage: "target")
                     }
                     NavigationLink {
                         SavingsGoalsView()
                     } label: {
-                        row("Savings goals", detail: "\(appContext.savingsGoals.count)", systemImage: "flag.checkered")
+                        row("Savings goals", detail: appContext.savingsGoals.count.formatted(), systemImage: "flag.checkered")
                     }
                 }
 
@@ -82,7 +117,7 @@ struct SettingsView: View {
                         Label("Export transactions (CSV)", systemImage: "square.and.arrow.up")
                     }
                     .disabled(appContext.transactions.isEmpty)
-                    .accessibilityHint("Shares all \(appContext.transactions.count) transactions as a CSV file")
+                    .accessibilityHint(Text("Shares all \(appContext.transactions.count) transactions as a CSV file"))
                 } header: {
                     Text("Export")
                 } footer: {
@@ -126,7 +161,7 @@ struct SettingsView: View {
         }
     }
 
-    private func row(_ title: String, detail: String, systemImage: String) -> some View {
+    private func row(_ title: LocalizedStringKey, detail: String, systemImage: String) -> some View {
         HStack {
             Label(title, systemImage: systemImage)
             Spacer()

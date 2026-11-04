@@ -84,7 +84,7 @@ enum PercentFormatter {
 enum MonthFormatter {
     private static let formatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "LLLL yyyy"
+        formatter.setLocalizedDateFormatFromTemplate("LLLLyyyy")
         return formatter
     }()
 

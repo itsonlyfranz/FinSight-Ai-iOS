@@ -63,10 +63,10 @@ struct SimulatorView: View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
             Text("Scenario Builder")
                 .font(.headline)
-                .foregroundStyle(AppTheme.surface.opacity(0.85))
+                .foregroundStyle(AppTheme.onElevated.opacity(0.85))
             Text(CurrencyFormatter.string(from: result.monthlySavings))
                 .font(AppTheme.Typography.heroValue)
-                .foregroundStyle(AppTheme.primary)
+                .foregroundStyle(AppTheme.accentOnElevated)
                 .monospacedDigit()
                 .minimumScaleFactor(0.5)
                 .lineLimit(1)
@@ -75,7 +75,7 @@ struct SimulatorView: View {
                 .contentTransition(.numericText())
                 .animation(.spring(duration: 0.3), value: result.monthlySavings)
             Text("freed each month. After 12 months at \(SimulationFacts.percent(scenario.annualYieldPercent)) a year that grows to \(CurrencyFormatter.string(from: result.twelveMonths)).")
-                .foregroundStyle(AppTheme.surface.opacity(0.88))
+                .foregroundStyle(AppTheme.onElevated.opacity(0.88))
         }
         .finSightCard(surface: AppTheme.surfaceElevated)
         .accessibilityElement(children: .contain)
@@ -321,7 +321,7 @@ struct SimulatorView: View {
                 }
             case .available(let content):
                 if content.isRefreshing {
-                    FinSightStatusLine(text: "Streaming latest explanation...")
+                    FinSightStatusLine("Streaming latest explanation…")
                 }
                 FinSightMarkdownView(markdown: content.value, style: .simulatorExplanation)
                 FinSightStatusLine(text: RelativeTimestampFormatter.updatedString(for: content.lastUpdated))

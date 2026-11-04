@@ -3,16 +3,28 @@ import SwiftUI
 
 struct DashboardView: View {
     @Environment(AppContext.self) private var appContext
+    /// Opens another tab; set by `RootTabView`.
+    var openSimulator: () -> Void = {}
+    var openInsights: () -> Void = {}
+    /// Start of the month the hero, category breakdown and recent activity show.
+    @State private var selectedMonth: Date?
+
+    private var month: Date { selectedMonth ?? appContext.monthlySummary.monthStart }
+    private var summary: MonthlySummary { appContext.monthlySummary(for: month) }
+    private var isCurrentMonth: Bool { Calendar.current.isDate(month, equalTo: .now, toGranularity: .month) }
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
+                    DashboardHeader()
                     if appContext.hasNoData {
                         SampleDataCard()
                     }
                     heroCard
                     IncomeGaugeCard()
+                    SimulatorQuickActionCard(action: openSimulator)
+                    trendCard
                     BudgetOverviewCard()
                     GoalsPreviewCard()
                     recurringSpendCard
@@ -23,8 +35,10 @@ struct DashboardView: View {
                 .padding(AppTheme.Spacing.lg)
             }
             .background(AppTheme.backgroundGradient.ignoresSafeArea())
-            .navigationTitle("FinSight AI")
+            .toolbar(.hidden, for: .navigationBar)
+            .navigationTitle("Dashboard")
         }
+        .sensoryFeedback(.selection, trigger: selectedMonth)
         .task(id: appContext.insightsFingerprint) {
             // Re-runs whenever the underlying data changes; the short delay coalesces rapid edits.
             try? await Task.sleep(for: .milliseconds(400))
@@ -33,37 +47,129 @@ struct DashboardView: View {
         }
     }
 
-    private var heroCard: some View {
-        VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
-            Text(appContext.monthlySummary.monthLabel)
+    // MARK: - Month
+
+    private var monthPicker: some View {
+        let months = appContext.availableSummaryMonths
+        let index = months.firstIndex { Calendar.current.isDate($0, equalTo: month, toGranularity: .month) }
+        return HStack(spacing: AppTheme.Spacing.xs) {
+            Button {
+                if let index, index + 1 < months.count { selectedMonth = months[index + 1] }
+            } label: {
+                Label("Previous month", systemImage: "chevron.left").labelStyle(.iconOnly)
+            }
+            .disabled(index.map { $0 + 1 >= months.count } ?? true)
+
+            Menu {
+                Picker("Month", selection: Binding(get: { month }, set: { selectedMonth = $0 })) {
+                    ForEach(months, id: \.self) { month in
+                        Text(MonthFormatter.label(for: month)).tag(month)
+                    }
+                }
+            } label: {
+                HStack(spacing: 4) {
+                    Text(isCurrentMonth ? String(localized: "This month's outflow") : summary.monthLabel)
+                        .textCase(.uppercase)
+                    Image(systemName: "chevron.up.chevron.down").imageScale(.small)
+                }
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(AppTheme.mutedInk)
+            }
+            .accessibilityLabel(Text("Month"))
+            .accessibilityValue(Text(summary.monthLabel))
 
-            Text(CurrencyFormatter.string(from: appContext.monthlySummary.totalSpent))
+            Button {
+                if let index, index > 0 { selectedMonth = months[index - 1] }
+            } label: {
+                Label("Next month", systemImage: "chevron.right").labelStyle(.iconOnly)
+            }
+            .disabled((index ?? 0) == 0)
+        }
+        .buttonStyle(.borderless)
+    }
+
+    private var heroCard: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
+            monthPicker
+
+            Text(CurrencyFormatter.string(from: summary.totalSpent))
                 .font(AppTheme.Typography.heroValue)
                 .foregroundStyle(AppTheme.ink)
                 .monospacedDigit()
                 .minimumScaleFactor(0.5)
                 .lineLimit(1)
-                .accessibilityLabel("Spent this month")
-                .accessibilityValue(CurrencyFormatter.string(from: appContext.monthlySummary.totalSpent))
+                .contentTransition(.numericText())
+                .accessibilityLabel(Text("Spent in \(summary.monthLabel)"))
+                .accessibilityValue(CurrencyFormatter.string(from: summary.totalSpent))
 
-            HStack(spacing: AppTheme.Spacing.sm) {
-                metricPill(title: "Transactions", value: "\(appContext.monthlySummary.transactionCount)")
-                metricPill(title: "Average", value: CurrencyFormatter.string(from: appContext.monthlySummary.averageTransactionValue))
-            }
-            HStack(spacing: AppTheme.Spacing.sm) {
-                metricPill(title: "Recurring", value: CurrencyFormatter.string(from: appContext.monthlySummary.recurringMonthlySpend))
-                metricPill(title: "One-off", value: CurrencyFormatter.string(from: appContext.monthlySummary.oneOffSpent))
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: AppTheme.Spacing.sm) { heroPills }
+                VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) { heroPills }
             }
 
-            Text(appContext.monthlySummary.spendingTrendDescription)
-                .font(AppTheme.Typography.caption)
-                .foregroundStyle(AppTheme.mutedInk)
+            if isCurrentMonth {
+                Text(summary.spendingTrendDescription)
+                    .font(AppTheme.Typography.caption)
+                    .foregroundStyle(AppTheme.mutedInk)
+            }
         }
         .finSightCard()
         .accessibilityElement(children: .contain)
     }
+
+    @ViewBuilder
+    private var heroPills: some View {
+        metricPill(title: "Transactions", value: "\(summary.transactionCount)")
+        metricPill(title: "Average", value: CurrencyFormatter.string(from: summary.averageTransactionValue))
+        metricPill(title: "One-off", value: CurrencyFormatter.string(from: summary.oneOffSpent))
+    }
+
+    // MARK: - Six-month trend
+
+    private var trendCard: some View {
+        let totals = appContext.sixMonthTrend(endingAt: month)
+        return VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+            Label("6-Month Trend", systemImage: "chart.bar.fill")
+                .font(AppTheme.Typography.headline)
+            if totals.allSatisfy({ $0.total == 0 }) {
+                FinSightEmptyState(
+                    title: "No history yet",
+                    systemImage: "chart.bar",
+                    message: "Monthly totals appear here as you log spending."
+                )
+            } else {
+                Chart(totals) { item in
+                    BarMark(
+                        x: .value("Month", item.monthStart, unit: .month),
+                        y: .value("Spent", item.total.doubleValue)
+                    )
+                    .foregroundStyle(Calendar.current.isDate(item.monthStart, equalTo: month, toGranularity: .month)
+                                     ? AppTheme.primary : AppTheme.primary.opacity(0.35))
+                    .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+                }
+                .chartXAxis {
+                    AxisMarks(values: .stride(by: .month)) { _ in
+                        AxisValueLabel(format: .dateTime.month(.abbreviated), centered: true)
+                    }
+                }
+                .chartYAxis {
+                    AxisMarks(values: .automatic(desiredCount: 3)) { value in
+                        AxisGridLine().foregroundStyle(AppTheme.divider)
+                        AxisValueLabel {
+                            if let amount = value.as(Double.self) {
+                                Text(amount, format: .currency(code: CurrencyFormatter.currencyCode).notation(.compactName))
+                            }
+                        }
+                    }
+                }
+                .frame(minHeight: chartHeight)
+                .accessibilityChartDescriptor(MonthlyTrendChartDescriptor(totals: totals))
+            }
+        }
+        .finSightCard()
+    }
+
+    @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 180
 
     private var recurringSpendCard: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
@@ -114,17 +220,23 @@ struct DashboardView: View {
 
     private var spendingChartCard: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
-            Text("Category Breakdown")
-                .font(AppTheme.Typography.headline)
+            HStack(alignment: .firstTextBaseline) {
+                Text("Category Breakdown")
+                    .font(AppTheme.Typography.headline)
+                Spacer()
+                Text("\(summary.categoryBreakdown.count) categories")
+                    .font(AppTheme.Typography.caption)
+                    .foregroundStyle(AppTheme.mutedInk)
+            }
 
-            if appContext.monthlySummary.categoryBreakdown.isEmpty {
+            if summary.categoryBreakdown.isEmpty {
                 FinSightEmptyState(
                     title: "No spend yet",
                     systemImage: "chart.bar.xaxis",
                     message: "Add transactions to see where your budget is going."
                 )
             } else {
-                Chart(appContext.monthlySummary.categoryBreakdown) { item in
+                Chart(summary.categoryBreakdown) { item in
                     BarMark(
                         x: .value("Amount", item.amount),
                         y: .value("Category", item.category.title)
@@ -149,33 +261,28 @@ struct DashboardView: View {
                     AxisMarks(position: .leading)
                 }
                 .chartXAxisLabel("Amount", position: .bottomTrailing)
-                .frame(height: 240)
-                .accessibilityLabel("Spending by category")
-                .accessibilityValue(chartAccessibilitySummary)
+                .frame(minHeight: categoryChartHeight)
+                .accessibilityChartDescriptor(CategoryChartDescriptor(breakdown: summary.categoryBreakdown))
             }
         }
         .finSightCard()
     }
 
-    private var chartAccessibilitySummary: String {
-        appContext.monthlySummary.categoryBreakdown
-            .map { "\($0.category.title), \(CurrencyFormatter.string(from: $0.amount)), \(PercentFormatter.string(from: $0.percentage))" }
-            .joined(separator: "; ")
-    }
+    @ScaledMetric(relativeTo: .body) private var categoryChartHeight: CGFloat = 240
 
     private var recentTransactionsCard: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
             Text("Recent Activity")
                 .font(AppTheme.Typography.headline)
 
-            if appContext.monthlySummary.recentTransactions.isEmpty {
+            if summary.recentTransactions.isEmpty {
                 FinSightEmptyState(
                     title: "No recent transactions",
                     systemImage: "list.bullet.rectangle",
                     message: "Once you log spending, the latest activity will show up here."
                 )
             } else {
-                ForEach(appContext.monthlySummary.recentTransactions) { transaction in
+                ForEach(summary.recentTransactions) { transaction in
                     TransactionRow(transaction: transaction)
                 }
             }
@@ -189,6 +296,9 @@ struct DashboardView: View {
                 Label("AI Insight of the Day", systemImage: "sparkles")
                     .font(AppTheme.Typography.headline)
                 Spacer()
+                Button("View All", action: openInsights)
+                    .font(.subheadline.weight(.semibold))
+                    .accessibilityHint(Text("Opens the Insights tab"))
             }
 
             switch appContext.insightState {
@@ -207,7 +317,7 @@ struct DashboardView: View {
                     FinSightMarkdownView(markdown: card.markdown, style: .dashboardPreview)
                         .font(AppTheme.Typography.body)
                     if content.isRefreshing {
-                        FinSightStatusLine(text: "Streaming latest insight...")
+                        FinSightStatusLine("Streaming latest insight…")
                     }
                     FinSightStatusLine(text: RelativeTimestampFormatter.updatedString(for: content.lastUpdated))
                     if let statusMessage = content.statusMessage {
@@ -245,7 +355,7 @@ struct DashboardView: View {
             .foregroundStyle(AppTheme.mutedInk)
     }
 
-    private func metricPill(title: String, value: String) -> some View {
+    private func metricPill(title: LocalizedStringKey, value: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title)
                 .font(.caption.weight(.medium))
@@ -275,7 +385,7 @@ private struct TransactionRow: View {
             VStack(alignment: .leading, spacing: 3) {
                 Text(transaction.merchantName.isEmpty ? transaction.category.title : transaction.merchantName)
                     .font(.subheadline.weight(.semibold))
-                Text(transaction.note.isEmpty ? "No note" : transaction.note)
+                Text(transaction.note.isEmpty ? String(localized: "No note") : transaction.note)
                     .font(.caption)
                     .foregroundStyle(AppTheme.mutedInk)
             }
