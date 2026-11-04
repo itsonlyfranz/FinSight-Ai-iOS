@@ -288,8 +288,8 @@ final class InsightPersistenceTests: XCTestCase {
     }
 
     func testMigrationPlanListsEverySchemaInOrder() {
-        XCTAssertEqual(FinSightMigrationPlan.schemas.count, 4)
-        XCTAssertEqual(FinSightMigrationPlan.stages.count, 3)
+        XCTAssertEqual(FinSightMigrationPlan.schemas.count, 5)
+        XCTAssertEqual(FinSightMigrationPlan.stages.count, 4)
         XCTAssertEqual(FinSightSchemaV3.models.count, FinSightSchemaV2.models.count + 1)
         XCTAssertEqual(FinSightSchemaV3.versionIdentifier, Schema.Version(3, 0, 0))
     }

@@ -111,6 +111,35 @@ final class OnDeviceModelSmokeTests: XCTestCase {
         XCTAssertEqual(InsightFixtures.utc.startOfDay(for: result.date), InsightFixtures.utc.startOfDay(for: InsightFixtures.date(2024, 3, 8)))
         XCTAssertTrue(result.isComplete)
     }
+
+    func testRealModelAnswersAChatQuestionFromTheLedger() async throws {
+        let now = InsightFixtures.date(2024, 4, 15)
+        let entries = [
+            InsightFixtures.spend(400, .groceries, merchant: "Lidl", on: InsightFixtures.date(2024, 2, 5)),
+            InsightFixtures.spend(150, .dining, merchant: "Bistro", on: InsightFixtures.date(2024, 2, 9)),
+            InsightFixtures.spend(420, .groceries, merchant: "Lidl", on: InsightFixtures.date(2024, 3, 5)),
+            InsightFixtures.spend(900, .dining, merchant: "Sushi Bar", on: InsightFixtures.date(2024, 3, 9)),
+            InsightFixtures.spend(300, .groceries, merchant: "Lidl", on: InsightFixtures.date(2024, 4, 5))
+        ]
+        let context = AssistantContext(
+            ledger: LedgerSnapshot(now: now, calendar: InsightFixtures.utc, entries: entries),
+            summary: DefaultSummaryService(calendar: InsightFixtures.utc).makeMonthlySummary(from: [], now: now),
+            insights: InsightFixtures.run(now: now, entries: entries),
+            monthlyIncome: 3_000
+        )
+        let service = OnDeviceAssistantService(engine: FoundationModelsAssistantEngine())
+        service.prewarm()
+        let partials = UpdateCounter()
+        let start = ContinuousClock.now
+        let reply = try await service.reply(to: "Why was March so high?", history: [], context: context) { _ in await partials.increment() }
+        print("[smoke] chat (\(reply.kind), \(ContinuousClock.now - start), \(await partials.count) partials): \(reply.text)")
+        // A grounded model answer is the goal; a quick answer means the model's figures didn't check out.
+        XCTAssertTrue([.answer, .quickAnswer].contains(reply.kind))
+        XCTAssertFalse(reply.text.isEmpty)
+
+        let declined = try await service.reply(to: "Which stocks should I buy?", history: [], context: context, onPartial: nil)
+        XCTAssertEqual(declined.kind, .guardrail)
+    }
 }
 
 private actor UpdateCounter {

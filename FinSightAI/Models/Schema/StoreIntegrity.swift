@@ -22,6 +22,7 @@ enum StoreIntegrity {
         removed += try dedupe(context, key: { (record: GoalContribution) in record.id }, updatedAt: \.date)
         removed += try dedupe(context, key: { (record: InsightStateRecord) in record.insightID }, updatedAt: \.updatedAt)
         removed += try dedupe(context, key: { (record: SavedScenarioRecord) in record.id }, updatedAt: \.updatedAt)
+        removed += try dedupe(context, key: { (record: ChatMessageRecord) in record.id }, updatedAt: \.createdAt)
         // Single-row model: every settings row shares one key.
         removed += try dedupe(context, key: { (_: AppSettings) in 0 }, updatedAt: \.updatedAt)
         if removed > 0 { try context.save() }

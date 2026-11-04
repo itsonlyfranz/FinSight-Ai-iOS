@@ -1,8 +1,9 @@
 import SwiftUI
 
 /// The Android greeting row: app name, "Welcome back" with the person's name and role, the
-/// theme switcher chip and an initials avatar.
+/// theme switcher chip and an initials avatar. The avatar opens Settings.
 struct DashboardHeader: View {
+    var openSettings: () -> Void = {}
     @AppStorage(UserProfile.nameKey) private var name = ""
     @AppStorage(UserProfile.roleKey) private var role = ""
     @ScaledMetric(relativeTo: .headline) private var avatarSize: CGFloat = 44
@@ -18,7 +19,7 @@ struct DashboardHeader: View {
                 greeting
                 HStack(spacing: AppTheme.Spacing.sm) {
                     ThemeSwitcherMenu()
-                    avatar
+                    settingsButton
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -27,9 +28,26 @@ struct DashboardHeader: View {
                 greeting
                 Spacer(minLength: AppTheme.Spacing.xs)
                 ThemeSwitcherMenu()
-                avatar
+                settingsButton
             }
         }
+    }
+
+    private var settingsButton: some View {
+        Button(action: openSettings) {
+            avatar
+                .overlay(alignment: .bottomTrailing) {
+                    Image(systemName: "gearshape.fill")
+                        .font(.caption2)
+                        .foregroundStyle(AppTheme.primary)
+                        .padding(3)
+                        .background(AppTheme.cardSurface, in: Circle())
+                        .offset(x: 4, y: 4)
+                }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text("Settings"))
+        .accessibilityHint(Text("Profile, income, budgets, goals, theme and data"))
     }
 
     private var greeting: some View {

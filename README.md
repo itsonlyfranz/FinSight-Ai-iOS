@@ -43,7 +43,7 @@ The current version is a fully local v1 MVP. It uses SwiftData for persistence a
 
 ### Dashboard
 
-- Android-style greeting: "Welcome back, *name*", the role, an initials avatar and the theme chip
+- Android-style greeting: "Welcome back, *name*", the role, an initials avatar (which opens Settings) and the theme chip
 - month picker for the spending total, category breakdown and recent activity
 - six-month spending trend (`BarMark`) with the selected month highlighted
 - Forward Simulator quick action and a "View All" link to Insights
@@ -76,7 +76,7 @@ The current version is a fully local v1 MVP. It uses SwiftData for persistence a
 - per-category monthly budgets with progress bars and a Swift Charts target line
 - savings goals with progress, months-to-reach and a "funded by" estimate
 - category filter chips and merchant search on Transactions
-- CSV export (RFC 4180) via the Settings tab, plus currency, first weekday and opt-in sample data
+- CSV export (RFC 4180) via Settings (opened from the dashboard avatar), plus currency, first weekday and opt-in sample data
 
 ### Insights
 
@@ -89,6 +89,19 @@ A deterministic, on-device `InsightEngine` analyses the last 12 months and produ
 - savings rate, emergency-fund runway and no-spend streaks
 
 Insights show as cards with severity badges and impact numbers, and can be dismissed or snoozed (persisted). The Foundation Models budgeting, risk and growth cards remain as optional narration below them.
+
+### Ask FinSight (Phase 8)
+
+A chat tab with a money coach that answers from your own data ("Why was October so high?", "Can I afford ₱8,000 this month?"):
+
+- the **FinSight AI** persona, adapted from the Android app's "intelligent financial decision-making for early-career earners" voice: short, constructive answers with an actionable next step, addressing you by your profile name
+- on devices with Apple Intelligence, one `LanguageModelSession` per question with the ledger tools (`categoryTotals`, `transactions`, `budgetStatus`) plus `monthReview` and `affordability`, grounded in the month summary, the engine's insights, income, recurring charges, goals and the last few chat messages
+- every amount in a model answer is checked against the facts and tool results; one corrected retry, then a quick answer worked out by code
+- suggested prompts, including the highest-spending recent month and an affordability check
+- guardrails in code before any model runs: no picks of stocks, funds or crypto, no tax or legal advice, nothing unlawful. Model refusals and Apple's safety blocks are shown as such
+- a "not financial advice" disclaimer on the chat and under every money answer
+- on devices without Apple Intelligence (or while the model downloads), the chat explains why and keeps working with deterministic **quick answers**: spending, top categories, month review, affordability, budgets, recurring charges, goals and insights, in English and Filipino
+- the transcript is stored with SwiftData on this device only (newest 200 messages), and can be cleared from the chat
 
 ### Simulator (Phase 5)
 
@@ -131,6 +144,7 @@ Core components:
 - `SimulationService` / `ForwardSimulator`: pure `Decimal` what-if maths (run-rate baseline, compounding, goal countdowns, uncertainty band, scenario comparison)
 - `AIInsightService`: AI abstraction for insights and simulator explanations
 - `CapabilityService`: checks whether Apple Intelligence support is available
+- `AssistantService`: Ask FinSight; `OnDeviceAssistantService` wraps a model engine with guardrails, tools and grounding, and `AssistantFAQ` provides the deterministic quick answers
 
 ```mermaid
 flowchart TD
@@ -185,6 +199,7 @@ Important note:
 - the model can call tools (`categoryTotals`, `transactions(matching:)`, `budgetStatus`) so the figures it quotes are computed by code; narration that quotes amounts not found in the facts or tool results is retried once and then hidden
 - the simulator's explanation uses the same structured session and availability fallback; every amount it quotes is checked against the scenario's facts, and the plan summary written by code is always shown beside it
 - the model is prewarmed on launch, and narration is cached by a data fingerprint so unchanged data doesn't call the model again
+- Ask FinSight uses the same availability check and figure grounding; when the model is unavailable, declines, or can't ground its numbers, the chat answers with a quick answer computed by code
 
 The AI layer sits behind the `AIInsightService` protocol so other providers can be added later.
 
@@ -236,6 +251,7 @@ FinSightAI/
   App/
   Design/
   Features/
+    Assistant/
     Dashboard/
     Insights/
     Onboarding/
@@ -271,6 +287,7 @@ Automated coverage currently includes:
 - the deterministic insight engine: budget breaches and overruns, month-over-month changes, anomalies, recurring-charge and price-creep detection, savings rate, emergency-fund runway and no-spend streaks
 - persisted insight dismiss/snooze and the V2 to V3 schema migration
 - saved what-if scenarios and the V3 to V4 schema migration
+- Ask FinSight: question matching and quick answers (affordability, month review, budgets, recurring, goals), guardrails and the disclaimer, refusal and safety-block handling, grounding retries and fallbacks, tool wiring through a scripted model engine, prompt trimming, the persisted transcript and the V4 to V5 schema migration
 - AI availability reasons and fallbacks, prompt grounding and token budgeting, figure grounding, the ledger tools, merchant-name cleaning, auto-categorization and quick-add parsing
 - widgets, intents and reminders: budget 80%/100% thresholds, recurring due dates and the weekly digest, amount-free notification text, the pending-request cap, App Group store migration, the shared snapshot, intent input validation and the Add Expense control
 - onboarding: draft validation (positive income, 1–3 named goals), a single atomic save, opt-in sample data, the profile, and skipping for existing users
@@ -289,6 +306,7 @@ Manual smoke checks:
 - verify dashboard totals update after changes
 - move simulator sliders and verify projections update instantly
 - confirm the insights screen handles AI availability cleanly
+- ask Ask FinSight a few questions with and without Apple Intelligence (debug builds: `-FinSightQuickAnswersOnly YES` shows the ineligible-device chat, `-FinSightInitialTab ask` opens on the chat, `-FinSightChatDemo "Question one|Question two"` asks questions on an empty transcript)
 
 ## Roadmap
 

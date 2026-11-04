@@ -6,6 +6,7 @@ extension AppContext {
     func prewarmAI() {
         aiInsightService.prewarm()
         transactionAssistant.prewarm()
+        assistantService.prewarm()
     }
 
     /// Reads a sentence like "coffee 150 yesterday" into the draft being edited. Returns whether it

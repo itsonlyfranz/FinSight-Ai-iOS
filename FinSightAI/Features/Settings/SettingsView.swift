@@ -3,6 +3,8 @@ import UserNotifications
 
 struct SettingsView: View {
     @Environment(AppContext.self) private var appContext
+    /// Shows a Done button that calls this, when Settings is presented over another screen.
+    var onDone: (() -> Void)?
     @State private var errorMessage: String?
     @State private var confirmingSampleData = false
     @AppStorage(ThemePalette.storageKey) private var paletteRawValue = ThemePalette.deckEmerald.rawValue
@@ -26,7 +28,7 @@ struct SettingsView: View {
                 } header: {
                     Text("Profile")
                 } footer: {
-                    Text("Shown in your dashboard greeting. Stays on this device.")
+                    Text("Shown in your dashboard greeting and used by Ask FinSight. Stays on this device.")
                 }
 
                 Section {
@@ -144,6 +146,13 @@ struct SettingsView: View {
             .scrollContentBackground(.hidden)
             .background(AppTheme.backgroundGradient.ignoresSafeArea())
             .navigationTitle("Settings")
+            .toolbar {
+                if let onDone {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Done", action: onDone)
+                    }
+                }
+            }
             .confirmationDialog("Load sample data?", isPresented: $confirmingSampleData, titleVisibility: .visible) {
                 Button("Load sample data") {
                     run { try appContext.loadSampleData() }

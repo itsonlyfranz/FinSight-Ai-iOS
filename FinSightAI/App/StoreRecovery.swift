@@ -4,7 +4,7 @@ import SwiftData
 enum AppStoreSchema {
     /// The current (latest) schema.
     static var schema: Schema {
-        Schema(versionedSchema: FinSightSchemaV4.self)
+        Schema(versionedSchema: FinSightSchemaV5.self)
     }
 
     /// Opens (and, when needed, migrates) the store at `configuration`.
