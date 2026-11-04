@@ -413,13 +413,17 @@ final class FinSightAITests: XCTestCase {
         XCTAssertEqual(decoded, cards)
     }
 
-    func testInsightPromptInstructionsStayStructuredForMarkdownRendering() {
-        let instructions = PromptFactory.bundleInstructions
+    func testStructuredNarrationRendersTheMarkdownSectionsTheUIExpects() {
+        let markdown = NarrationCardContent(
+            takeaway: "Dining is up.",
+            whyItMatters: "It is your biggest category.",
+            nextSteps: ["Cook twice more", "Set a dining budget"]
+        ).markdown
 
-        XCTAssertTrue(instructions.contains("## Key Takeaway"))
-        XCTAssertTrue(instructions.contains("## Why It Matters"))
-        XCTAssertTrue(instructions.contains("## Next Step"))
-        XCTAssertTrue(instructions.localizedCaseInsensitiveContains("bullet"))
+        XCTAssertTrue(markdown.contains("## Key Takeaway"))
+        XCTAssertTrue(markdown.contains("## Why It Matters"))
+        XCTAssertTrue(markdown.contains("## Next Step"))
+        XCTAssertTrue(markdown.contains("- Cook twice more"))
     }
 
     func testSimulationInstructionsStayStructuredForMarkdownRendering() {

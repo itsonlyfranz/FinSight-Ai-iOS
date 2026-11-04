@@ -220,12 +220,29 @@ struct DashboardView: View {
                         .foregroundStyle(AppTheme.ink)
                         .font(AppTheme.Typography.body)
                 }
+            case .modelUnavailable(let reason):
+                insightFallback(note: reason.message, systemImage: reason.systemImage)
             case .unavailable(let message), .failure(let message):
-                Label(message, systemImage: "exclamationmark.triangle")
-                    .foregroundStyle(AppTheme.mutedInk)
+                insightFallback(note: message, systemImage: "exclamationmark.triangle")
             }
         }
         .finSightCard(surface: AppTheme.cardTintBudget)
+    }
+
+    /// Without the model, the day's insight is the top deterministic one, with the reason AI is off.
+    @ViewBuilder
+    private func insightFallback(note: String, systemImage: String) -> some View {
+        if let insight = appContext.engineInsights.first {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
+                Text(insight.title)
+                    .font(AppTheme.Typography.headline)
+                Text(insight.summary)
+                    .font(AppTheme.Typography.body)
+            }
+        }
+        Label(note, systemImage: systemImage)
+            .font(AppTheme.Typography.caption)
+            .foregroundStyle(AppTheme.mutedInk)
     }
 
     private func metricPill(title: String, value: String) -> some View {

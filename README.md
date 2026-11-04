@@ -48,6 +48,9 @@ The current version is a fully local v1 MVP. It uses SwiftData for persistence a
 - edit transactions
 - delete transactions
 - grouped monthly history
+- natural-language quick add ("coffee 150 yesterday") that fills the new-transaction form; the amount and date are always read by code, never by the model
+- automatic category suggestions from the merchant or note (keyword rules first, then the on-device model), labelled by source and never overriding a category you picked
+- clean-up of bank-style merchant names ("SQ *BLUE BOTTLE COFFEE #1234" → "Blue Bottle Coffee")
 
 ### Planning (Phase 2)
 
@@ -139,9 +142,10 @@ flowchart TD
     Projection --> Simulator
 
     MonthlySummary --> AIInsightService["AIInsightService"]
+    InsightEngine["InsightEngine typed insights"] --> AIInsightService
     RecurringSummary --> AIInsightService
     Projection --> AIInsightService
-    AIInsightService --> InsightCards["Markdown Insight Cards"]
+    AIInsightService --> InsightCards["Insight Narration Cards"]
     InsightCards --> Dashboard
     InsightCards --> Insights
     InsightCards --> Simulator
@@ -155,7 +159,11 @@ Important note:
 
 - the app targets iOS 26+, and the model's real availability (`SystemLanguageModel.default.availability`) is checked on every request
 - when Apple Intelligence is unsupported, switched off, or still downloading, the app shows a specific, actionable message instead of fake AI output
-- the three insight cards are generated in a single model call
+- when the model is unavailable, the Dashboard and Insights screens fall back to the deterministic insights, and the Insights screen offers "Check Again" when the reason is recoverable
+- the budgeting, risk and growth narration cards come from one session with `@Generable` structured output, streamed as they are written
+- the prompt is grounded in the engine's typed insights and three months of history, trimmed to fit the model's context window
+- the model can call tools (`categoryTotals`, `transactions(matching:)`, `budgetStatus`) so the figures it quotes are computed by code; narration that quotes amounts not found in the facts or tool results is retried once and then hidden
+- the model is prewarmed on launch, and narration is cached by a data fingerprint so unchanged data doesn't call the model again
 
 The AI layer sits behind the `AIInsightService` protocol so other providers can be added later.
 
@@ -239,6 +247,8 @@ Automated coverage currently includes:
 - RFC 4180 CSV export, including formula-injection neutralisation of free-text cells
 - the deterministic insight engine: budget breaches and overruns, month-over-month changes, anomalies, recurring-charge and price-creep detection, savings rate, emergency-fund runway and no-spend streaks
 - persisted insight dismiss/snooze and the V2 to V3 schema migration
+- AI availability reasons and fallbacks, prompt grounding and token budgeting, figure grounding, the ledger tools, merchant-name cleaning, auto-categorization and quick-add parsing
+- on-device model smoke tests (`OnDeviceModelSmokeTests`) that run the real Foundation Models paths and skip, with the reason, where Apple Intelligence is unavailable
 
 Manual smoke checks:
 

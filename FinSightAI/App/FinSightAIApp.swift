@@ -22,6 +22,7 @@ struct FinSightAIApp: App {
                     .task {
                         do {
                             try environment.appContext.bootstrap()
+                            environment.appContext.prewarmAI()
                         } catch {
                             Self.logger.error("Bootstrap failed: \(error.localizedDescription, privacy: .public)")
                             launchState = .failed(error.localizedDescription)

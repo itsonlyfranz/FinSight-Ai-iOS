@@ -8,6 +8,9 @@ struct TransactionDraft: Equatable {
     var date = Date()
     var note = ""
     var locale: Locale = .current
+    /// True once the category was picked by the user (or read from their own words), so automatic
+    /// suggestions never overwrite it.
+    var categoryIsUserChosen = false
 
     init() {}
 
@@ -18,6 +21,7 @@ struct TransactionDraft: Equatable {
         category = record.category
         date = record.date
         note = record.note
+        categoryIsUserChosen = true
     }
 
     var amount: Decimal? {

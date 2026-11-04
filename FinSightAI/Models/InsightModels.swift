@@ -54,6 +54,8 @@ enum InsightLoadState: Equatable {
     /// Nothing logged yet, so there is nothing to analyse.
     case empty
     case available(CachedContent<[InsightCard]>)
+    /// The on-device model can't run, and why. The deterministic insights are still shown.
+    case modelUnavailable(AIUnavailableReason)
     case unavailable(String)
     case failure(String)
 }
@@ -92,6 +94,16 @@ struct GeneratedSimulationExplanation: Equatable {
 }
 
 enum AIFingerprint {
+    /// Fingerprint of everything the narration is generated from: the month's summary, the typed
+    /// insights shown and the history totals. Any change regenerates the narration.
+    static func monthlyInsights(summary: MonthlySummary, insights: [Insight], historyTotals: [Decimal]) -> String {
+        [
+            monthlyInsights(summary: summary),
+            "insights=\(insights.map(\.id).joined(separator: ","))",
+            "history=\(historyTotals.map { NSDecimalNumber(decimal: $0).stringValue }.joined(separator: ","))"
+        ].joined(separator: ";")
+    }
+
     static func monthlyInsights(summary: MonthlySummary) -> String {
         let categoryBreakdown = summary.categoryBreakdown
             .map {

@@ -454,19 +454,22 @@ final class Phase0RegressionTests: XCTestCase {
 
     func testD9_PromptsCarryTheDeviceCurrencyCode() {
         let summary = DefaultSummaryService(calendar: calendar).makeMonthlySummary(from: [], now: date(2024, 3, 15))
+        let context = NarrationContext(summary: summary, insights: [], ledger: .empty)
 
-        XCTAssertTrue(PromptFactory.bundlePrompt(summary: summary).contains("Currency: \(CurrencyFormatter.currencyCode)"))
+        XCTAssertTrue(context.prompt(maxTokens: 2_000).text.contains("Currency: \(CurrencyFormatter.currencyCode)"))
     }
 
     // MARK: - Also-noted items
 
-    func testBundleInstructionsBriefTheModelOnAllThreeCards() {
-        let instructions = PromptFactory.bundleInstructions
+    func testNarrationInstructionsBriefTheModelOnAllThreeCards() {
+        let instructions = PromptFactory.narrationInstructions
 
         for kind in InsightKind.allCases {
             XCTAssertTrue(instructions.contains(kind.rawValue))
         }
-        XCTAssertTrue(instructions.contains("## Key Takeaway"))
+        for tool in ["categoryTotals", "transactions", "budgetStatus"] {
+            XCTAssertTrue(instructions.contains(tool))
+        }
     }
 
     #if canImport(FoundationModels)
@@ -498,7 +501,7 @@ private final class CountingAIService: AIInsightService, @unchecked Sendable {
     }
 
     func generateInsights(
-        from summary: MonthlySummary,
+        from context: NarrationContext,
         onUpdate: (@Sendable ([GeneratedInsightCard]) async -> Void)?
     ) async throws -> GeneratedInsightPayload {
         lock.withLock { _insightCalls += 1 }
