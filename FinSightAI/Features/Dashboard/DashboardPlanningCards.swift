@@ -26,7 +26,7 @@ struct IncomeGaugeCard: View {
                     metric("Spent", CurrencyFormatter.string(from: gauge.spent))
                     Spacer()
                     metric(
-                        gauge.isOverspent ? "Over income" : "Buffer left",
+                        gauge.isOverspent ? LocalizedStringKey("Over income") : LocalizedStringKey("Buffer left"),
                         CurrencyFormatter.string(from: abs(gauge.buffer)),
                         tint: gauge.isOverspent ? .red : .green
                     )
@@ -50,7 +50,7 @@ struct IncomeGaugeCard: View {
         .accessibilityLabel(accessibilityText(gauge))
     }
 
-    private func metric(_ title: String, _ value: String, tint: Color = AppTheme.ink) -> some View {
+    private func metric(_ title: LocalizedStringKey, _ value: String, tint: Color = AppTheme.ink) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title).font(.caption).foregroundStyle(AppTheme.mutedInk)
             Text(value).font(.subheadline.weight(.semibold).monospacedDigit()).foregroundStyle(tint)

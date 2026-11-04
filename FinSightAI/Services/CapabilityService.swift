@@ -18,21 +18,21 @@ enum AIUnavailableReason: Equatable, Sendable {
 
     var title: String {
         switch self {
-        case .deviceNotEligible: "AI isn't supported on this device"
-        case .appleIntelligenceNotEnabled: "Apple Intelligence is turned off"
-        case .modelNotReady: "The on-device model is getting ready"
-        case .unsupportedSDK: "AI isn't supported by this build"
-        case .unknown: "AI isn't available right now"
+        case .deviceNotEligible: String(localized: "AI isn't supported on this device")
+        case .appleIntelligenceNotEnabled: String(localized: "Apple Intelligence is turned off")
+        case .modelNotReady: String(localized: "The on-device model is getting ready")
+        case .unsupportedSDK: String(localized: "AI isn't supported by this build")
+        case .unknown: String(localized: "AI isn't available right now")
         }
     }
 
     var message: String {
         switch self {
-        case .deviceNotEligible: "This device doesn't support Apple Intelligence."
-        case .appleIntelligenceNotEnabled: "Turn on Apple Intelligence in Settings to get AI insights."
-        case .modelNotReady: "The on-device model is still downloading. Try again in a little while."
-        case .unsupportedSDK: "Apple Intelligence requires a newer Apple SDK than the one used to build this app."
-        case .unknown: "The on-device AI model isn't available right now."
+        case .deviceNotEligible: String(localized: "This device doesn't support Apple Intelligence.")
+        case .appleIntelligenceNotEnabled: String(localized: "Turn on Apple Intelligence in Settings to get AI insights.")
+        case .modelNotReady: String(localized: "The on-device model is still downloading. Try again in a little while.")
+        case .unsupportedSDK: String(localized: "Apple Intelligence requires a newer Apple SDK than the one used to build this app.")
+        case .unknown: String(localized: "The on-device AI model isn't available right now.")
         }
     }
 
@@ -40,9 +40,9 @@ enum AIUnavailableReason: Equatable, Sendable {
     var actionHint: String? {
         switch self {
         case .deviceNotEligible, .unsupportedSDK: nil
-        case .appleIntelligenceNotEnabled: "Open Settings › Apple Intelligence & Siri, turn it on, then come back."
-        case .modelNotReady: "Keep the device on Wi-Fi and charging, then check again."
-        case .unknown: "Check again in a moment."
+        case .appleIntelligenceNotEnabled: String(localized: "Open Settings › Apple Intelligence & Siri, turn it on, then come back.")
+        case .modelNotReady: String(localized: "Keep the device on Wi-Fi and charging, then check again.")
+        case .unknown: String(localized: "Check again in a moment.")
         }
     }
 

@@ -35,12 +35,30 @@ The current version is a fully local v1 MVP. It uses SwiftData for persistence a
 
 ## Features
 
+### Onboarding (Phase 7)
+
+- first-run setup in six steps: name and role (optional), region, currency and first weekday, monthly income, one to three savings goals, opt-in sample data and local reminders (both off by default), and how the private on-device AI works
+- nothing is saved until **Start my plan**; the income, goals and settings are committed in one save
+- people who already have data skip onboarding
+
 ### Dashboard
 
-- monthly total spending
+- Android-style greeting: "Welcome back, *name*", the role, an initials avatar and the theme chip
+- month picker for the spending total, category breakdown and recent activity
+- six-month spending trend (`BarMark`) with the selected month highlighted
+- Forward Simulator quick action and a "View All" link to Insights
 - category breakdown chart
 - recent transaction snapshot
 - AI insight card state
+
+### Themes, accessibility and languages (Phase 7)
+
+- the Android app's three palettes, **Deck Emerald** (default), **Cyber Slate** and **Midnight Blue**, chosen from the dashboard chip or Settings. Each palette has a light and a dark variant that follow the iPhone's appearance, and a unit test checks WCAG contrast for each one
+- VoiceOver: cards are grouped into single elements, every chart has an `accessibilityChartDescriptor` (audio graphs), and icon-only buttons have labels
+- Dynamic Type: no fixed font sizes; chart heights and icon sizes use `@ScaledMetric`
+- Reduce Motion turns off loading shimmer, typing dots and number animations
+- haptics for tab and month changes, saves, onboarding completion and errors
+- English and Filipino (`fil`) via `FinSightAI/Localizable.xcstrings`. Insight-engine sentences, AI narration and prompts stay in English for now, so the figures they quote stay grounded
 
 ### Transactions
 
@@ -197,7 +215,7 @@ The current app is the foundation for a broader startup roadmap. Likely evolutio
 3. Choose an iPhone simulator such as `iPhone 17`
 4. Press `Cmd+R`
 
-The app starts with an empty ledger. Tap **Load sample data** on the Dashboard to explore with example transactions; sample data is never added automatically.
+A fresh install opens onboarding, and the ledger starts empty. To explore with example transactions, turn on **Load sample data** during onboarding or tap it on the Dashboard. Sample data is never added automatically.
 
 ### Build From Terminal
 
@@ -220,6 +238,7 @@ FinSightAI/
   Features/
     Dashboard/
     Insights/
+    Onboarding/
     Planning/
     Settings/
     Shared/
@@ -254,11 +273,18 @@ Automated coverage currently includes:
 - saved what-if scenarios and the V3 to V4 schema migration
 - AI availability reasons and fallbacks, prompt grounding and token budgeting, figure grounding, the ledger tools, merchant-name cleaning, auto-categorization and quick-add parsing
 - widgets, intents and reminders: budget 80%/100% thresholds, recurring due dates and the weekly digest, amount-free notification text, the pending-request cap, App Group store migration, the shared snapshot, intent input validation and the Add Expense control
+- onboarding: draft validation (positive income, 1–3 named goals), a single atomic save, opt-in sample data, the profile, and skipping for existing users
+- the three theme palettes: Android identifiers, fallback, and WCAG contrast in light and dark
+- six-month trend totals and the month picker's range
+- localization: every catalog key has a translated Filipino string with matching format specifiers, the app bundle ships `fil`, and English plurals read naturally
 - on-device model smoke tests (`OnDeviceModelSmokeTests`) that run the real Foundation Models paths and skip, with the reason, where Apple Intelligence is unavailable
 
 Manual smoke checks:
 
-- confirm the app starts empty and **Load sample data** populates it
+- on a fresh install, complete onboarding and confirm income, goals and settings appear; with **Load sample data** on, example transactions appear too
+- switch themes from the dashboard chip and check light and dark appearance
+- run with the device language set to Filipino, and with large Dynamic Type and VoiceOver
+- confirm **Load sample data** in Settings populates an empty ledger
 - add, edit, and delete transactions
 - verify dashboard totals update after changes
 - move simulator sliders and verify projections update instantly
@@ -273,7 +299,7 @@ Potential next steps:
 - richer Apple Intelligence prompt flows
 - server-backed AI orchestration
 - offline-first sync and reconciliation
-- onboarding and retention flows
+- retention flows
 - premium insight packaging
 
 ## Project Generation

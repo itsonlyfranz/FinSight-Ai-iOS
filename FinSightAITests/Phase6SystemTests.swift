@@ -24,6 +24,7 @@ final class Phase6SystemTests: XCTestCase {
         XCTAssertTrue(eighty[0].id.hasSuffix("-80"))
         XCTAssertEqual(eighty[0].id, NudgePlanner.plan(snapshot: snapshot(spent: 99), calendar: calendar).first { $0.id.hasPrefix("budget-") }?.id)
         XCTAssertTrue(NudgePlanner.plan(snapshot: snapshot(spent: 100), calendar: calendar).contains { $0.id.hasSuffix("-100") })
+        XCTAssertEqual(eighty[0].body, "Open FinSight AI to review this month's dining spending.")
     }
     func testRecurringDatesAndWeeklyDigest() {
         let due = [SystemSnapshot.Due(id: "past", merchant: "Past", date: date(3)),

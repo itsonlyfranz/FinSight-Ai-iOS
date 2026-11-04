@@ -35,7 +35,7 @@ struct SimulatorView: View {
                 .padding(AppTheme.Spacing.lg)
             }
             .background(AppTheme.backgroundGradient.ignoresSafeArea())
-            .navigationTitle("What If")
+            .navigationTitle("Forward Simulator")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Reset", systemImage: "arrow.counterclockwise") { appContext.resetWorkingScenario() }
@@ -61,21 +61,21 @@ struct SimulatorView: View {
 
     private func heroCard(scenario: SimulationScenario, result: SimulationResult) -> some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
-            Text("Scenario Builder")
+            Text("Monthly freed cashflow")
                 .font(.headline)
-                .foregroundStyle(AppTheme.surface.opacity(0.85))
+                .foregroundStyle(AppTheme.onElevated.opacity(0.85))
             Text(CurrencyFormatter.string(from: result.monthlySavings))
                 .font(AppTheme.Typography.heroValue)
-                .foregroundStyle(AppTheme.primary)
+                .foregroundStyle(AppTheme.accentOnElevated)
                 .monospacedDigit()
                 .minimumScaleFactor(0.5)
                 .lineLimit(1)
                 .accessibilityLabel("Projected monthly savings")
                 .accessibilityValue(CurrencyFormatter.string(from: result.monthlySavings))
                 .contentTransition(.numericText())
-                .animation(.spring(duration: 0.3), value: result.monthlySavings)
+                .motionSafeAnimation(.spring(duration: 0.3), value: result.monthlySavings)
             Text("freed each month. After 12 months at \(SimulationFacts.percent(scenario.annualYieldPercent)) a year that grows to \(CurrencyFormatter.string(from: result.twelveMonths)).")
-                .foregroundStyle(AppTheme.surface.opacity(0.88))
+                .foregroundStyle(AppTheme.onElevated.opacity(0.88))
         }
         .finSightCard(surface: AppTheme.surfaceElevated)
         .accessibilityElement(children: .contain)
@@ -94,7 +94,7 @@ struct SimulatorView: View {
                 .foregroundStyle(AppTheme.mutedInk)
             if !baseline.excludedOneOffs.isEmpty {
                 Label(
-                    "Left out as one-off: \(baseline.excludedOneOffs.map { "\($0.merchant.isEmpty ? $0.category.title : $0.merchant) \(CurrencyFormatter.string(from: $0.amount))" }.joined(separator: ", "))",
+                    "Left out as one-off: \(baseline.excludedOneOffs.map { "\($0.merchant.isEmpty ? $0.category.localizedTitle : $0.merchant) \(CurrencyFormatter.string(from: $0.amount))" }.joined(separator: ", "))",
                     systemImage: "minus.circle"
                 )
                 .font(AppTheme.Typography.caption)
@@ -116,7 +116,7 @@ struct SimulatorView: View {
     private func categoryCutsCard(result: SimulationResult) -> some View {
         let lines = appContext.runRateBaseline.cuttableLines
         return VStack(alignment: .leading, spacing: 18) {
-            Label("Cut by category", systemImage: "scissors")
+            Label("Lifestyle Inflation Levers", systemImage: "scissors")
                 .font(.headline)
             if lines.isEmpty {
                 Text("All of your spending is recurring. Pause charges below to see what they would save.")
@@ -128,7 +128,7 @@ struct SimulatorView: View {
                 let saved = result.categorySavings.first { $0.category == line.category }?.saved ?? 0
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Label(line.category.title, systemImage: line.category.symbolName)
+                        Label(line.category.localizedTitle, systemImage: line.category.symbolName)
                             .font(.subheadline.weight(.semibold))
                         Spacer()
                         Text("\(percent)%")
@@ -138,7 +138,7 @@ struct SimulatorView: View {
                         .font(AppTheme.Typography.caption.monospacedDigit())
                         .foregroundStyle(AppTheme.mutedInk)
                     Slider(value: cutBinding(for: line.category), in: 0...100, step: 5)
-                        .accessibilityLabel("\(line.category.title) cut")
+                        .accessibilityLabel("\(line.category.localizedTitle) cut")
                         .accessibilityValue("\(percent) percent, saves \(CurrencyFormatter.string(from: saved)) a month")
                 }
             }
@@ -153,7 +153,7 @@ struct SimulatorView: View {
                 Text(CurrencyFormatter.string(from: scenario.dailySavings))
                     .font(.title3.weight(.semibold)).monospacedDigit()
                     .contentTransition(.numericText())
-                    .animation(.spring(duration: 0.3), value: scenario.dailySavings)
+                    .motionSafeAnimation(.spring(duration: 0.3), value: scenario.dailySavings)
                 Slider(value: dailySavingsBinding, in: 0...500, step: 10)
                     .accessibilityLabel("Daily savings")
             }
@@ -264,7 +264,7 @@ struct SimulatorView: View {
 
     private func goalsCard(result: SimulationResult) -> some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
-            Label("Goals countdown", systemImage: "flag.checkered")
+            Label("Financial Goals Countdown", systemImage: "flag.checkered")
                 .font(.headline)
             if result.goals.isEmpty {
                 Text("Create a savings goal to see how much sooner this plan gets you there.")
@@ -299,7 +299,7 @@ struct SimulatorView: View {
     private func explanationCard(context: SimulationNarrationContext) -> some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
             HStack {
-                Label("AI Explanation", systemImage: "sparkles")
+                Label("AI Milestone Context", systemImage: "sparkles")
                     .font(.headline)
                 Spacer()
                 FinSightStreamingRefreshControl(
@@ -316,12 +316,12 @@ struct SimulatorView: View {
             case .idle, .loading:
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
                     FinSightTypingIndicator()
-                    Text("Preparing scenario explanation...")
+                    Text("Preparing scenario explanation…")
                         .foregroundStyle(AppTheme.mutedInk)
                 }
             case .available(let content):
                 if content.isRefreshing {
-                    FinSightStatusLine(text: "Streaming latest explanation...")
+                    FinSightStatusLine("Streaming latest explanation…")
                 }
                 FinSightMarkdownView(markdown: content.value, style: .simulatorExplanation)
                 FinSightStatusLine(text: RelativeTimestampFormatter.updatedString(for: content.lastUpdated))
@@ -353,7 +353,7 @@ struct SimulatorView: View {
         return false
     }
 
-    private func projectionRow(label: String, point: ProjectionPoint) -> some View {
+    private func projectionRow(label: LocalizedStringKey, point: ProjectionPoint) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text(label)
@@ -368,7 +368,7 @@ struct SimulatorView: View {
                 .fontWeight(.semibold)
                 .monospacedDigit()
                 .contentTransition(.numericText())
-                .animation(.spring(duration: 0.3), value: point.balance)
+                .motionSafeAnimation(.spring(duration: 0.3), value: point.balance)
         }
         .accessibilityElement(children: .combine)
     }
@@ -439,7 +439,7 @@ private struct GoalCountdownRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text(goal.name.isEmpty ? "Goal" : goal.name).font(.subheadline.weight(.semibold))
+                Text(goal.name.isEmpty ? String(localized: "Goal") : goal.name).font(.subheadline.weight(.semibold))
                 Spacer()
                 Label(statusTitle, systemImage: statusSymbol)
                     .font(.caption.weight(.semibold))
@@ -481,21 +481,21 @@ private struct GoalCountdownRow: View {
     private var detail: String {
         switch goal.status {
         case .reached:
-            return "Already funded."
+            return String(localized: "Already funded.")
         case .noPace:
-            return "\(CurrencyFormatter.string(from: goal.remaining)) to go. Nothing is saved toward it yet, so it won't be funded."
+            return String(localized: "\(CurrencyFormatter.string(from: goal.remaining)) to go. Nothing is saved toward it yet, so it won't be funded.")
         case .onTrack, .behind:
             let months = goal.planMonths ?? 0
-            var text = "\(months) \(months == 1 ? "month" : "months") to go"
-            if let fundedBy = goal.fundedBy { text += ", funded by \(MonthFormatter.label(for: fundedBy))" }
+            var parts = [String(localized: "\(months) months to go")]
+            if let fundedBy = goal.fundedBy { parts.append(String(localized: "Funded by \(MonthFormatter.label(for: fundedBy)).")) }
             if let sooner = goal.monthsSooner, sooner > 0 {
-                text += " (\(sooner) \(sooner == 1 ? "month" : "months") sooner)"
+                parts.append(String(localized: "\(sooner) months sooner."))
             }
-            text += ". \(CurrencyFormatter.string(from: goal.remaining)) remaining."
+            parts.append(String(localized: "\(CurrencyFormatter.string(from: goal.remaining)) remaining."))
             if goal.status == .behind, let targetDate = goal.targetDate {
-                text += " Misses its \(MonthFormatter.label(for: targetDate)) target."
+                parts.append(String(localized: "Misses its \(MonthFormatter.label(for: targetDate)) target."))
             }
-            return text
+            return parts.joined(separator: " ")
         }
     }
 }

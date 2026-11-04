@@ -75,6 +75,17 @@ struct Insight: Identifiable, Equatable, Sendable {
             case .critical: "Critical"
             }
         }
+
+        /// The name shown in the interface, in the person's language. `title` stays English because
+        /// it feeds insight text, AI prompts and exports.
+        var localizedTitle: String {
+            switch self {
+            case .info: String(localized: "Info")
+            case .notice: String(localized: "Notice")
+            case .warning: String(localized: "Warning")
+            case .critical: String(localized: "Critical")
+            }
+        }
     }
 
     /// One figure supporting an insight. Values stay typed so the UI formats them for the locale

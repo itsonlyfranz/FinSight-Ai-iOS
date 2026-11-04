@@ -52,7 +52,7 @@ struct DefaultSummaryService: SummaryService {
             averageTransactionValue: averageValue,
             topCategory: topCategory,
             topCategoryShare: topShare,
-            spendingTrendDescription: SpendingTrend.description(
+            spendingTrend: SpendingTrend.resource(
                 entries: transactions.map(LedgerEntry.init),
                 now: now,
                 calendar: calendar

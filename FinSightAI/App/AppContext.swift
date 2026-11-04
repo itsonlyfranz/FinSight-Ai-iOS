@@ -93,6 +93,7 @@ final class AppContext {
         settings = try AppSettings.fetchOrCreate(in: modelContext)
         applyCurrencySetting()
         try reloadTransactions()
+        try markExistingUserOnboarded()
     }
 
     func loadSampleData() throws {
@@ -103,6 +104,25 @@ final class AppContext {
 
     var hasNoData: Bool {
         transactions.isEmpty && recurringExpenses.isEmpty
+    }
+
+    // MARK: - Month history
+
+    /// The summary for any month; the current month is the cached `monthlySummary`.
+    func monthlySummary(for month: Date) -> MonthlySummary {
+        let calendar = settings?.calendar() ?? .current
+        if calendar.isDate(month, equalTo: .now, toGranularity: .month) { return monthlySummary }
+        return summaryService.makeMonthlySummary(from: transactions, recurringSummary: recurringSummary, now: month)
+    }
+
+    /// Months the dashboard picker offers, newest first.
+    var availableSummaryMonths: [Date] {
+        MonthlyTrend.availableMonths(entries: transactions.map(LedgerEntry.init), now: .now, calendar: settings?.calendar() ?? .current)
+    }
+
+    /// Six months of spending ending with `month`, oldest first.
+    func sixMonthTrend(endingAt month: Date) -> [MonthTotal] {
+        MonthlyTrend.totals(entries: transactions.map(LedgerEntry.init), endingAt: month, count: 6, calendar: settings?.calendar() ?? .current)
     }
 
     /// Identifies the data the insight cards are generated from. Views key their refresh

@@ -118,7 +118,7 @@ private struct GoalEditor: View {
                     Section { Text(errorMessage).font(.caption).foregroundStyle(.red) }
                 }
             }
-            .navigationTitle(goal == nil ? "New Goal" : "Edit Goal")
+            .navigationTitle(goal == nil ? Text("New Goal") : Text("Edit Goal"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {

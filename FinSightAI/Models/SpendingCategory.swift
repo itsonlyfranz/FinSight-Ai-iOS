@@ -32,6 +32,23 @@ enum SpendingCategory: String, CaseIterable, Codable, Identifiable {
         }
     }
 
+    /// The name shown in the interface, in the person's language. `title` stays English because
+    /// it feeds insight text, AI prompts and exports.
+    var localizedTitle: String {
+        switch self {
+        case .groceries: String(localized: "Groceries")
+        case .dining: String(localized: "Dining")
+        case .transport: String(localized: "Transport")
+        case .bills: String(localized: "Bills")
+        case .shopping: String(localized: "Shopping")
+        case .health: String(localized: "Health")
+        case .entertainment: String(localized: "Entertainment")
+        case .savings: String(localized: "Savings")
+        case .travel: String(localized: "Travel")
+        case .other: String(localized: "Other")
+        }
+    }
+
     var symbolName: String {
         switch self {
         case .groceries: "cart.fill"

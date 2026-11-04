@@ -33,14 +33,16 @@ struct ProjectionChart: View {
     }
 
     private var drawsBand: Bool { showsBand && result.hasUncertaintyBand }
+    @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 240
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
             chart
-                .frame(height: 240)
+                .frame(minHeight: chartHeight)
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel("Projected savings over \(timeline.last?.month ?? 12) months")
                 .accessibilityValue(accessibilitySummary)
+                .accessibilityChartDescriptor(ProjectionChartDescriptor(timeline: timeline))
             if !hiddenGoals.isEmpty {
                 Text(hiddenGoals.map { "\($0.name) (\(money($0.remaining)) to go)" }.joined(separator: ", ")
                     + " is above this chart's range.")

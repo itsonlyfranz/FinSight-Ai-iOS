@@ -84,7 +84,7 @@ enum PercentFormatter {
 enum MonthFormatter {
     private static let formatter: DateFormatter = {
         let formatter = DateFormatter()
-        formatter.dateFormat = "LLLL yyyy"
+        formatter.setLocalizedDateFormatFromTemplate("LLLLyyyy")
         return formatter
     }()
 
@@ -118,6 +118,6 @@ enum DayFormatter {
 enum RelativeTimestampFormatter {
     static func updatedString(for date: Date) -> String {
         let relative = date.formatted(.relative(presentation: .numeric, unitsStyle: .wide).locale(.current))
-        return "Updated \(relative)"
+        return String(localized: "Updated \(relative)")
     }
 }

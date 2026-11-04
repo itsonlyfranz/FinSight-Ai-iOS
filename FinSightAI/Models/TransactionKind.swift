@@ -28,6 +28,16 @@ enum TransactionKind: String, CaseIterable, Codable, Identifiable, Sendable {
         }
     }
 
+    /// The name shown in the interface, in the person's language. `title` stays English because
+    /// it feeds insight text, AI prompts and exports.
+    var localizedTitle: String {
+        switch self {
+        case .expense: String(localized: "Expense")
+        case .income: String(localized: "Income")
+        case .transfer: String(localized: "Transfer")
+        }
+    }
+
     /// Cash-flow effect of a (non-negative) magnitude.
     func signedAmount(for magnitude: Decimal) -> Decimal {
         switch self {

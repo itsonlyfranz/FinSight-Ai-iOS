@@ -92,7 +92,7 @@ struct ScenarioLibraryCard: View {
                     .foregroundStyle(isCompared ? AppTheme.primary : AppTheme.mutedInk)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(isCompared ? "Remove \(record.name) from comparison" : "Compare \(record.name)")
+            .accessibilityLabel(isCompared ? Text("Remove \(record.name) from comparison") : Text("Compare \(record.name)"))
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(record.name).font(.subheadline.weight(.semibold))
@@ -180,11 +180,12 @@ struct ScenarioComparisonView: View {
                 AxisValueLabel { if let month = value.as(Int.self) { Text("\(month)m") } }
             }
         }
-        .frame(height: 220)
+        .frame(minHeight: 220)
         .finSightCard()
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Projected savings by scenario")
-        .accessibilityValue(comparison.rows.map { "\($0.label): \(CurrencyFormatter.string(from: $0.entry.result.twelveMonths)) after 12 months" }.joined(separator: ". "))
+        .accessibilityValue(comparison.rows.map { String(localized: "\($0.label): \(CurrencyFormatter.string(from: $0.entry.result.twelveMonths)) after 12 months") }.joined(separator: ". "))
+        .accessibilityChartDescriptor(ScenarioComparisonChartDescriptor(comparison: comparison))
     }
 
     private func table(_ comparison: ScenarioComparison) -> some View {
@@ -205,7 +206,7 @@ struct ScenarioComparisonView: View {
                     }
                     if row.entry.id != comparison.rows.first?.entry.id {
                         let delta = row.twelveMonthDelta
-                        Text("\(delta >= 0 ? "+" : "−")\(CurrencyFormatter.string(from: abs(delta))) vs \(comparison.referenceLabel ?? "Current") after 12 months")
+                        Text("\(delta >= 0 ? "+" : "−")\(CurrencyFormatter.string(from: abs(delta))) vs \(comparison.referenceLabel ?? String(localized: "Current")) after 12 months")
                             .font(AppTheme.Typography.caption)
                             .foregroundStyle(delta >= 0 ? AppTheme.primary : .red)
                     }
@@ -217,7 +218,7 @@ struct ScenarioComparisonView: View {
         .finSightCard()
     }
 
-    private func figure(_ label: String, _ value: Decimal) -> some View {
+    private func figure(_ label: LocalizedStringKey, _ value: Decimal) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(label).font(.caption2).foregroundStyle(AppTheme.mutedInk)
             Text(CurrencyFormatter.string(from: value))

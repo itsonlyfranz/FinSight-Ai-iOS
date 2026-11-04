@@ -14,6 +14,16 @@ enum RecurringTransactionStatus: String, Equatable {
         }
     }
 
+    /// The name shown in the interface, in the person's language. `title` stays English because
+    /// it feeds insight text, AI prompts and exports.
+    var localizedTitle: String {
+        switch self {
+        case .upcoming: String(localized: "Upcoming")
+        case .missed: String(localized: "Missed")
+        case .due: String(localized: "Due")
+        }
+    }
+
     var systemImage: String {
         switch self {
         case .upcoming: "calendar.badge.clock"
@@ -57,11 +67,11 @@ struct RecurringExpenseDraft: Equatable {
 
     var validationError: String? {
         guard !merchantName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            return "Merchant is required."
+            return String(localized: "Merchant is required.")
         }
-        guard let amount else { return "Enter a valid amount." }
-        guard amount > 0 else { return "Amount must be greater than zero." }
-        guard (1...31).contains(expectedDay) else { return "Expected day must be between 1 and 31." }
+        guard let amount else { return String(localized: "Enter a valid amount.") }
+        guard amount > 0 else { return String(localized: "Amount must be greater than zero.") }
+        guard (1...31).contains(expectedDay) else { return String(localized: "Expected day must be between 1 and 31.") }
         return nil
     }
 }

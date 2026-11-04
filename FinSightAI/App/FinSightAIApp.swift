@@ -24,6 +24,9 @@ struct FinSightAIApp: App {
                     .task {
                         do {
                             try environment.appContext.bootstrap()
+                            #if DEBUG
+                            try environment.appContext.applyDebugDemoSeedIfRequested()
+                            #endif
                             environment.appContext.prewarmAI()
                             BackgroundRefresh.schedule()
                         } catch {
@@ -84,7 +87,8 @@ private struct StoreRecoveryView: View {
     var body: some View {
         VStack(spacing: AppTheme.Spacing.lg) {
             Image(systemName: "externaldrive.badge.exclamationmark")
-                .font(.system(size: 56))
+                .font(.largeTitle)
+                .imageScale(.large)
                 .foregroundStyle(AppTheme.primary)
                 .accessibilityHidden(true)
             Text("FinSight AI can't open your data")

@@ -7,8 +7,8 @@ enum PlanningError: LocalizedError, Equatable {
 
     var errorDescription: String? {
         switch self {
-        case .invalidAmount: "Enter an amount greater than zero."
-        case .missingName: "Enter a name."
+        case .invalidAmount: String(localized: "Enter an amount greater than zero.")
+        case .missingName: String(localized: "Enter a name.")
         }
     }
 }

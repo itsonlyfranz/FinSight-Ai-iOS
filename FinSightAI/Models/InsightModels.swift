@@ -17,6 +17,16 @@ enum InsightKind: String, CaseIterable, Identifiable, Codable {
         }
     }
 
+    /// The name shown in the interface, in the person's language. `title` stays English because
+    /// it feeds insight text, AI prompts and exports.
+    var localizedTitle: String {
+        switch self {
+        case .budgeting: String(localized: "Budgeting")
+        case .risk: String(localized: "Risk")
+        case .growth: String(localized: "Growth")
+        }
+    }
+
     /// What this card should concentrate on; used to brief the model in one pass.
     var focus: String {
         switch self {

@@ -47,6 +47,7 @@ app_target.build_configurations.each do |config|
   config.build_settings["ASSETCATALOG_COMPILER_APPICON_NAME"] = "AppIcon"
   config.build_settings["ENABLE_PREVIEWS"] = "YES"
   config.build_settings["SWIFT_EMIT_LOC_STRINGS"] = "YES"
+  config.build_settings["LOCALIZATION_PREFERS_STRING_CATALOGS"] = "YES"
 end
 
 test_target.build_configurations.each do |config|
@@ -90,6 +91,16 @@ if File.exist?(privacy_manifest)
   app_target.resources_build_phase.add_file_reference(file_ref, true)
 end
 
+# String Catalog: English source strings with Filipino (fil) translations.
+string_catalog = "#{APP_DIR}/Localizable.xcstrings"
+string_catalog_ref = nil
+if File.exist?(string_catalog)
+  string_catalog_ref = app_group.new_file(File.basename(string_catalog))
+  app_target.resources_build_phase.add_file_reference(string_catalog_ref, true)
+end
+project.root_object.development_region = "en"
+project.root_object.known_regions = ["en", "Base", "fil"]
+
 # Swift package: MarkdownUI (renders AI responses).
 markdown_package = project.new(Xcodeproj::Project::Object::XCRemoteSwiftPackageReference)
 markdown_package.repositoryURL = MARKDOWN_UI_URL
@@ -115,6 +126,7 @@ widget_target.build_configurations.each do |config|
     "GENERATE_INFOPLIST_FILE" => "YES", "INFOPLIST_FILE" => "FinSightWidgets/Info.plist",
     "CODE_SIGN_ENTITLEMENTS" => "FinSightWidgets/FinSightWidgets.entitlements",
     "SWIFT_VERSION" => SWIFT_VERSION, "TARGETED_DEVICE_FAMILY" => "1",
+    "SWIFT_EMIT_LOC_STRINGS" => "YES", "LOCALIZATION_PREFERS_STRING_CATALOGS" => "YES",
     "APPLICATION_EXTENSION_API_ONLY" => "YES", "SKIP_INSTALL" => "YES",
     "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "$(inherited) WIDGET_EXTENSION",
     "CODE_SIGN_STYLE" => "Automatic"
@@ -134,6 +146,7 @@ shared_files.each do |path|
 end
 privacy_ref = project.files.find { |file| file.real_path.to_s == File.expand_path(privacy_manifest) }
 widget_target.resources_build_phase.add_file_reference(privacy_ref, true) if privacy_ref
+widget_target.resources_build_phase.add_file_reference(string_catalog_ref, true) if string_catalog_ref
 app_target.add_dependency(widget_target)
 embed = app_target.new_copy_files_build_phase("Embed App Extensions")
 embed.dst_subfolder_spec = "13"

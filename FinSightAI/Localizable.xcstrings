@@ -1,0 +1,4806 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "%@ - expected day %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ - expected day %2$lld"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ - inaasahang araw: %lld"
+          }
+        }
+      }
+    },
+    "%@ Budget" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Badyet sa %@"
+          }
+        }
+      }
+    },
+    "%@ a month · saves %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ a month · saves %2$@"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ kada buwan · makakaipon ng %2$@"
+          }
+        }
+      }
+    },
+    "%@ budget" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Badyet sa %@"
+          }
+        }
+      }
+    },
+    "%@ budget at %lld%%" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ budget at %2$lld%%"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Badyet sa %1$@ ay nasa %2$lld%%"
+          }
+        }
+      }
+    },
+    "%@ cut" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bawas sa %@"
+          }
+        }
+      }
+    },
+    "%@ everyday spending, scaled from your last 30 days, plus %@ of recurring charges. Transfers and savings are not counted." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ everyday spending, scaled from your last 30 days, plus %2$@ of recurring charges. Transfers and savings are not counted."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ na pang-araw-araw na gastos, batay sa huling 30 araw mo, dagdag ang %2$@ na paulit-ulit na singil. Hindi kasama ang mga transfer at ipon."
+          }
+        }
+      }
+    },
+    "%@ filter" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filter na %@"
+          }
+        }
+      }
+    },
+    "%@ has %@ of %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ has %2$@ of %3$@."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "May %2$@ na ang %1$@ mula sa %3$@."
+          }
+        }
+      }
+    },
+    "%@ insight" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insight sa %@"
+          }
+        }
+      }
+    },
+    "%@ is expected today." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inaasahan ang %@ ngayong araw."
+          }
+        }
+      }
+    },
+    "%@ left" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ang natitira"
+          }
+        }
+      }
+    },
+    "%@ monthly budget" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buwanang badyet sa %@"
+          }
+        }
+      }
+    },
+    "%@ of %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ of %2$@"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ sa %2$@"
+          }
+        }
+      }
+    },
+    "%@ over" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lampas ng %@"
+          }
+        }
+      }
+    },
+    "%@ per month" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kada buwan"
+          }
+        }
+      }
+    },
+    "%@ reached · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ reached · %2$@"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naabot ang %1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "%@ remaining." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ ang natitira."
+          }
+        }
+      }
+    },
+    "%@ saves the most over 12 months." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ang %@ ang pinakamakakatipid sa loob ng 12 buwan."
+          }
+        }
+      }
+    },
+    "%@ to go. Nothing is saved toward it yet, so it won't be funded." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ pa ang kulang. Wala pang naiipon para dito, kaya hindi ito mapopondohan."
+          }
+        }
+      }
+    },
+    "%@%@ vs %@ after 12 months" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@%2$@ vs %3$@ after 12 months"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@%2$@ kumpara sa %3$@ pagkalipas ng 12 buwan"
+          }
+        }
+      }
+    },
+    "%@, %@ per month, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$@ per month, %3$@"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$@ kada buwan, %3$@"
+          }
+        }
+      }
+    },
+    "%@, no budget set" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, walang nakatakdang badyet"
+          }
+        }
+      }
+    },
+    "%@/mo" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@/buwan"
+          }
+        }
+      }
+    },
+    "%@/mo · %@ in 12 months" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/mo · %2$@ in 12 months"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@/buwan · %2$@ sa loob ng 12 buwan"
+          }
+        }
+      }
+    },
+    "%@: %@ after 12 months" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ after 12 months"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ pagkalipas ng 12 buwan"
+          }
+        }
+      }
+    },
+    "%lld" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        }
+      }
+    },
+    "%lld categories" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld category"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld categories"
+                }
+              }
+            }
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld kategorya"
+          }
+        }
+      }
+    },
+    "%lld insights are waiting in FinSight AI." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld insight is waiting in FinSight AI."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld insights are waiting in FinSight AI."
+                }
+              }
+            }
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "May %lld insight na naghihintay sa FinSight AI."
+          }
+        }
+      }
+    },
+    "%lld mo" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld buwan"
+          }
+        }
+      }
+    },
+    "%lld months" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld month"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld months"
+                }
+              }
+            }
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld buwan"
+          }
+        }
+      }
+    },
+    "%lld months sooner." : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld month sooner."
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld months sooner."
+                }
+              }
+            }
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mas maaga nang %lld buwan."
+          }
+        }
+      }
+    },
+    "%lld months to go" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld month to go"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld months to go"
+                }
+              }
+            }
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld buwan pa"
+          }
+        }
+      }
+    },
+    "%lld percent, saves %@ a month" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld percent, saves %2$@ a month"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld porsiyento, makakaipon ng %2$@ kada buwan"
+          }
+        }
+      }
+    },
+    "%lld recurring charges" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld recurring charge"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld recurring charges"
+                }
+              }
+            }
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld paulit-ulit na singil"
+          }
+        }
+      }
+    },
+    "%lld set" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld ang nakatakda"
+          }
+        }
+      }
+    },
+    "%lld set - %@/mo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld set - %2$@/mo"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld ang nakatakda - %2$@/buwan"
+          }
+        }
+      }
+    },
+    "%lld%%" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld%%"
+          }
+        }
+      }
+    },
+    "%lldm" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld buw."
+          }
+        }
+      }
+    },
+    "0.00" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0.00"
+          }
+        }
+      }
+    },
+    "12 mo" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "12 buwan"
+          }
+        }
+      }
+    },
+    "3 mo" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 buwan"
+          }
+        }
+      }
+    },
+    "5 yr" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5 taon"
+          }
+        }
+      }
+    },
+    "6 mo" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "6 buwan"
+          }
+        }
+      }
+    },
+    "6-Month Trend" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trend sa 6 na buwan"
+          }
+        }
+      }
+    },
+    "A likely range appears once you have three complete months of spending." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lalabas ang posibleng saklaw kapag may tatlong buong buwan ka na ng gastos."
+          }
+        }
+      }
+    },
+    "AI Financial Intelligence" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI na gabay sa pananalapi"
+          }
+        }
+      }
+    },
+    "AI Insight of the Day" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI insight ng araw"
+          }
+        }
+      }
+    },
+    "AI Milestone Context" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konteksto ng AI sa milestone"
+          }
+        }
+      }
+    },
+    "AI explanation is optional and isn't available here: %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opsyonal ang paliwanag ng AI at hindi ito available dito: %@"
+          }
+        }
+      }
+    },
+    "AI isn't available right now" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi available ang AI sa ngayon"
+          }
+        }
+      }
+    },
+    "AI isn't supported by this build" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi suportado ng build na ito ang AI"
+          }
+        }
+      }
+    },
+    "AI isn't supported on this device" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi suportado ang AI sa device na ito"
+          }
+        }
+      }
+    },
+    "AI narration" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pagsasalaysay ng AI"
+          }
+        }
+      }
+    },
+    "AI narration is optional and isn't available here: %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opsyonal ang pagsasalaysay ng AI at hindi ito available dito: %@"
+          }
+        }
+      }
+    },
+    "AI narration unavailable" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi available ang pagsasalaysay ng AI"
+          }
+        }
+      }
+    },
+    "Across %lld entries" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Across %lld entry"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Across %lld entries"
+                }
+              }
+            }
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mula sa %lld entry"
+          }
+        }
+      }
+    },
+    "Actions for %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga aksyon para sa %@"
+          }
+        }
+      }
+    },
+    "Active" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktibo"
+          }
+        }
+      }
+    },
+    "Active AI Insights" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga aktibong AI insight"
+          }
+        }
+      }
+    },
+    "Add Expense" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magdagdag ng gastos"
+          }
+        }
+      }
+    },
+    "Add FinSight Expense" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magdagdag ng gastos sa FinSight"
+          }
+        }
+      }
+    },
+    "Add Transaction" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magdagdag ng transaksyon"
+          }
+        }
+      }
+    },
+    "Add a few expenses to unlock AI insights." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magdagdag ng ilang gastos para ma-unlock ang mga AI insight."
+          }
+        }
+      }
+    },
+    "Add a few transactions and your categories appear here as sliders. You can still try a daily savings amount below." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magdagdag ng ilang transaksyon at lalabas dito ang iyong mga kategorya bilang mga slider. Puwede mo pa ring subukan ang halaga ng pang-araw-araw na ipon sa ibaba."
+          }
+        }
+      }
+    },
+    "Add a goal" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magdagdag ng layunin"
+          }
+        }
+      }
+    },
+    "Add goal" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magdagdag ng layunin"
+          }
+        }
+      }
+    },
+    "Add income" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magdagdag ng kita"
+          }
+        }
+      }
+    },
+    "Add money" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magdagdag ng pera"
+          }
+        }
+      }
+    },
+    "Add recurring expenses from Transactions to track fixed monthly spend." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magdagdag ng mga paulit-ulit na gastos mula sa Mga transaksyon para masubaybayan ang mga takdang buwanang gastos."
+          }
+        }
+      }
+    },
+    "Add rent, subscriptions, utilities, or bills you want FinSight AI to track." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idagdag ang upa, mga subscription, utility, o mga bayarin na gusto mong subaybayan ng FinSight AI."
+          }
+        }
+      }
+    },
+    "Add transactions to see where your budget is going." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magdagdag ng mga transaksyon para makita kung saan napupunta ang iyong badyet."
+          }
+        }
+      }
+    },
+    "Add your monthly income to see how much of it you've spent and how much buffer is left." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idagdag ang iyong buwanang kita para makita kung magkano na ang nagastos mo at kung magkano pa ang natitirang palugit."
+          }
+        }
+      }
+    },
+    "Add your salary or other regular income to see how much of it you spend each month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idagdag ang iyong sahod o iba pang regular na kita para makita kung magkano rito ang nagagastos mo bawat buwan."
+          }
+        }
+      }
+    },
+    "Adds example transactions so you can explore the app. Your income and goals stay exactly as you entered them." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagdadagdag ng mga halimbawang transaksyon para ma-explore mo ang app. Mananatili ang iyong kita at mga layunin gaya ng inilagay mo."
+          }
+        }
+      }
+    },
+    "Adds example transactions, income, budgets and a goal." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagdadagdag ng mga halimbawang transaksyon, kita, badyet, at isang layunin."
+          }
+        }
+      }
+    },
+    "All caught up" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala nang bago"
+          }
+        }
+      }
+    },
+    "All of your spending is recurring. Pause charges below to see what they would save." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paulit-ulit ang lahat ng iyong gastos. I-pause ang mga singil sa ibaba para makita kung magkano ang matitipid."
+          }
+        }
+      }
+    },
+    "Already funded." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Napondohan na."
+          }
+        }
+      }
+    },
+    "Already saved (optional)" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naipon na (opsyonal)"
+          }
+        }
+      }
+    },
+    "Amount" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halaga"
+          }
+        }
+      }
+    },
+    "Amount already saved" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halagang naipon na"
+          }
+        }
+      }
+    },
+    "Amount must be greater than zero." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dapat mas malaki sa zero ang halaga."
+          }
+        }
+      }
+    },
+    "Amounts use your device's number format. Changing the currency only changes how amounts are shown; it doesn't convert them." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ginagamit ng mga halaga ang format ng numero ng iyong device. Ang pagpapalit ng currency ay nagbabago lang kung paano ipinapakita ang mga halaga; hindi nito kino-convert ang mga ito."
+          }
+        }
+      }
+    },
+    "Annual percentage yield" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taunang porsiyento ng tubo"
+          }
+        }
+      }
+    },
+    "Apple Intelligence is ready on this iPhone." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Handa na ang Apple Intelligence sa iPhone na ito."
+          }
+        }
+      }
+    },
+    "Apple Intelligence is turned off" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naka-off ang Apple Intelligence"
+          }
+        }
+      }
+    },
+    "Apple Intelligence requires a newer Apple SDK than the one used to build this app." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kailangan ng Apple Intelligence ng mas bagong Apple SDK kaysa sa ginamit sa pag-build ng app na ito."
+          }
+        }
+      }
+    },
+    "Average" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Katamtaman"
+          }
+        }
+      }
+    },
+    "Back" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bumalik"
+          }
+        }
+      }
+    },
+    "Balance" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Balanse"
+          }
+        }
+      }
+    },
+    "Bars show spending this month; the dark tick marks each budget." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ipinapakita ng mga bar ang gastos ngayong buwan; ang madilim na marka ang bawat badyet."
+          }
+        }
+      }
+    },
+    "Bars show spending; the dark tick marks each budget." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ipinapakita ng mga bar ang gastos; ang madilim na marka ang bawat badyet."
+          }
+        }
+      }
+    },
+    "Best" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinakamainam"
+          }
+        }
+      }
+    },
+    "Bills" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bayarin"
+          }
+        }
+      }
+    },
+    "Both are optional and off until you turn them on." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parehong opsyonal ang mga ito at naka-off hangga't hindi mo ino-on."
+          }
+        }
+      }
+    },
+    "Budget" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Badyet"
+          }
+        }
+      }
+    },
+    "Budget end" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dulo ng badyet"
+          }
+        }
+      }
+    },
+    "Budget start" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simula ng badyet"
+          }
+        }
+      }
+    },
+    "Budgeting" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pagba-badyet"
+          }
+        }
+      }
+    },
+    "Budgets" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga badyet"
+          }
+        }
+      }
+    },
+    "Buffer left" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Natitirang palugit"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kanselahin"
+          }
+        }
+      }
+    },
+    "Category" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kategorya"
+          }
+        }
+      }
+    },
+    "Category Breakdown" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hati ayon sa kategorya"
+          }
+        }
+      }
+    },
+    "Category filters" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga filter ng kategorya"
+          }
+        }
+      }
+    },
+    "Charges are on by default. Turn one off to see what pausing it would save." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naka-on ang mga singil bilang default. I-off ang isa para makita kung magkano ang matitipid kapag in-pause ito."
+          }
+        }
+      }
+    },
+    "Check Again" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suriin muli"
+          }
+        }
+      }
+    },
+    "Check again in a moment." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suriin muli maya-maya."
+          }
+        }
+      }
+    },
+    "Choose 1–3 goals. The simulator counts down to each one." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pumili ng 1–3 layunin. Ipapakita ng simulator ang countdown sa bawat isa."
+          }
+        }
+      }
+    },
+    "Clear" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-clear"
+          }
+        }
+      }
+    },
+    "Clear all filters" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-clear ang lahat ng filter"
+          }
+        }
+      }
+    },
+    "Clear filters" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-clear ang mga filter"
+          }
+        }
+      }
+    },
+    "Compare" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikumpara"
+          }
+        }
+      }
+    },
+    "Compare %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikumpara ang %@"
+          }
+        }
+      }
+    },
+    "Compare with current" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikumpara sa kasalukuyan"
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magpatuloy"
+          }
+        }
+      }
+    },
+    "Core insights, budgets and the simulator still work without it." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gumagana pa rin ang mga pangunahing insight, badyet, at simulator kahit wala ito."
+          }
+        }
+      }
+    },
+    "Couldn't find an amount. Add one like \"coffee 150\", or fill in the fields below." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang nakitang halaga. Maglagay ng gaya ng \"kape 150\", o punan ang mga field sa ibaba."
+          }
+        }
+      }
+    },
+    "Counts toward income" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasama sa kita"
+          }
+        }
+      }
+    },
+    "Create a goal to track progress and see when it will be funded." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gumawa ng layunin para masubaybayan ang progreso at makita kung kailan ito mapopondohan."
+          }
+        }
+      }
+    },
+    "Create a goal to track your progress and see when it will be funded." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gumawa ng layunin para masubaybayan ang iyong progreso at makita kung kailan ito mapopondohan."
+          }
+        }
+      }
+    },
+    "Create a savings goal to see how much sooner this plan gets you there." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gumawa ng layunin sa ipon para makita kung gaano kaaga mo ito maaabot sa planong ito."
+          }
+        }
+      }
+    },
+    "Critical" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kritikal"
+          }
+        }
+      }
+    },
+    "Currency" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uri ng pera"
+          }
+        }
+      }
+    },
+    "Current" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasalukuyan"
+          }
+        }
+      }
+    },
+    "Cyber" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cyber"
+          }
+        }
+      }
+    },
+    "Cyber Slate" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cyber Slate"
+          }
+        }
+      }
+    },
+    "Daily savings" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pang-araw-araw na ipon"
+          }
+        }
+      }
+    },
+    "Dashboard" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dashboard"
+          }
+        }
+      }
+    },
+    "Date" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Petsa"
+          }
+        }
+      }
+    },
+    "Deck Emerald" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deck Emerald"
+          }
+        }
+      }
+    },
+    "Defaults to your device's region. Changing the currency only changes how amounts are shown; it doesn't convert them." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naka-default sa rehiyon ng iyong device. Ang pagpapalit ng currency ay nagbabago lang kung paano ipinapakita ang mga halaga; hindi nito kino-convert ang mga ito."
+          }
+        }
+      }
+    },
+    "Delete" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Burahin"
+          }
+        }
+      }
+    },
+    "Deposit" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deposito"
+          }
+        }
+      }
+    },
+    "Details" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga detalye"
+          }
+        }
+      }
+    },
+    "Dev Rig Setup" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pang-dev na setup"
+          }
+        }
+      }
+    },
+    "Dining" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kainan"
+          }
+        }
+      }
+    },
+    "Dismiss" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isara"
+          }
+        }
+      }
+    },
+    "Done" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tapos na"
+          }
+        }
+      }
+    },
+    "Double tap to edit" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-double tap para i-edit"
+          }
+        }
+      }
+    },
+    "Double tap to edit the budget" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-double tap para i-edit ang badyet"
+          }
+        }
+      }
+    },
+    "Due" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dapat bayaran"
+          }
+        }
+      }
+    },
+    "Each goal is measured on its own: its usual monthly pace plus what this plan frees." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hiwalay na sinusukat ang bawat layunin: ang karaniwang buwanang takbo nito dagdag ang halagang mapapalaya ng planong ito."
+          }
+        }
+      }
+    },
+    "Edit" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-edit"
+          }
+        }
+      }
+    },
+    "Edit Goal" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-edit ang layunin"
+          }
+        }
+      }
+    },
+    "Edit Income" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-edit ang kita"
+          }
+        }
+      }
+    },
+    "Edit Recurring" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-edit ang paulit-ulit na singil"
+          }
+        }
+      }
+    },
+    "Edit Transaction" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-edit ang transaksyon"
+          }
+        }
+      }
+    },
+    "Emerald" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emerald"
+          }
+        }
+      }
+    },
+    "Emergency Reserve" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pang-emergency na ipon"
+          }
+        }
+      }
+    },
+    "Enable local reminders" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-on ang mga lokal na paalala"
+          }
+        }
+      }
+    },
+    "Enter a monthly income greater than zero." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maglagay ng buwanang kita na higit sa zero."
+          }
+        }
+      }
+    },
+    "Enter a name." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maglagay ng pangalan."
+          }
+        }
+      }
+    },
+    "Enter a positive monthly income and 1–3 named goals with positive targets." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maglagay ng positibong buwanang kita at 1–3 layuning may pangalan at positibong target."
+          }
+        }
+      }
+    },
+    "Enter a valid amount greater than zero." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maglagay ng wastong halaga na higit sa zero."
+          }
+        }
+      }
+    },
+    "Enter a valid amount." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maglagay ng wastong halaga."
+          }
+        }
+      }
+    },
+    "Enter an amount greater than zero." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maglagay ng halagang higit sa zero."
+          }
+        }
+      }
+    },
+    "Entertainment" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libangan"
+          }
+        }
+      }
+    },
+    "Evidence" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ebidensya"
+          }
+        }
+      }
+    },
+    "Expected day %lld" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inaasahang araw %lld"
+          }
+        }
+      }
+    },
+    "Expected day must be between 1 and 31." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dapat nasa pagitan ng 1 at 31 ang inaasahang araw."
+          }
+        }
+      }
+    },
+    "Expense" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gastos"
+          }
+        }
+      }
+    },
+    "Expense saved in FinSight AI." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na-save ang gastos sa FinSight AI."
+          }
+        }
+      }
+    },
+    "Export" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-export"
+          }
+        }
+      }
+    },
+    "Export transactions (CSV)" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-export ang mga transaksyon (CSV)"
+          }
+        }
+      }
+    },
+    "Fill" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Punan"
+          }
+        }
+      }
+    },
+    "Fills the empty ledger with example transactions, income, budgets and a goal." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinupunan ang walang lamang ledger ng mga halimbawang transaksyon, kita, badyet at isang layunin."
+          }
+        }
+      }
+    },
+    "FinSight AI can't open your data" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi mabuksan ng FinSight AI ang iyong data"
+          }
+        }
+      }
+    },
+    "FinSight AI uses your device's region to format money and weeks." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ginagamit ng FinSight AI ang rehiyon ng iyong device sa pag-format ng pera at mga linggo."
+          }
+        }
+      }
+    },
+    "FinSight Screen" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Screen ng FinSight"
+          }
+        }
+      }
+    },
+    "FinSight Spending" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gastos sa FinSight"
+          }
+        }
+      }
+    },
+    "FinSight calculates every insight on this iPhone from your own transactions." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kinakalkula ng FinSight ang bawat insight sa iPhone na ito mula sa sarili mong mga transaksyon."
+          }
+        }
+      }
+    },
+    "Financial Goals Countdown" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Countdown ng mga pinansyal na layunin"
+          }
+        }
+      }
+    },
+    "Financial goals" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga pinansyal na layunin"
+          }
+        }
+      }
+    },
+    "First day of week" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unang araw ng linggo"
+          }
+        }
+      }
+    },
+    "Follows your iPhone's light or dark appearance." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sumusunod sa light o dark na hitsura ng iyong iPhone."
+          }
+        }
+      }
+    },
+    "For one-off income. Regular income, like a salary, is set up under Settings › Income." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para sa minsanang kita. Ang regular na kita, gaya ng sahod, ay sine-set up sa Settings › Kita."
+          }
+        }
+      }
+    },
+    "Forward Simulator" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forward simulator"
+          }
+        }
+      }
+    },
+    "Funded by %@." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mapopondohan pagsapit ng %@."
+          }
+        }
+      }
+    },
+    "Give each goal a name and a target greater than zero." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bigyan ang bawat layunin ng pangalan at target na higit sa zero."
+          }
+        }
+      }
+    },
+    "Goal" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layunin"
+          }
+        }
+      }
+    },
+    "Goal %lld" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layunin %lld"
+          }
+        }
+      }
+    },
+    "Goal name" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pangalan ng layunin"
+          }
+        }
+      }
+    },
+    "Goal suggestions" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga mungkahing layunin"
+          }
+        }
+      }
+    },
+    "Groceries" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grocery"
+          }
+        }
+      }
+    },
+    "Growth" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paglago"
+          }
+        }
+      }
+    },
+    "Health" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalusugan"
+          }
+        }
+      }
+    },
+    "High" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mataas"
+          }
+        }
+      }
+    },
+    "Includes %@ carried over" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasama ang %@ na inilipat mula noong nakaraan"
+          }
+        }
+      }
+    },
+    "Income" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kita"
+          }
+        }
+      }
+    },
+    "Income & Buffer" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kita at palugit"
+          }
+        }
+      }
+    },
+    "Income name" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pangalan ng kita"
+          }
+        }
+      }
+    },
+    "Income spent" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagastos na kita"
+          }
+        }
+      }
+    },
+    "Info" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impormasyon"
+          }
+        }
+      }
+    },
+    "Insights" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga insight"
+          }
+        }
+      }
+    },
+    "Intelligent financial decision-making for early-career earners." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Matalinong pagpapasya sa pera para sa mga nagsisimula pa lang kumita."
+          }
+        }
+      }
+    },
+    "Keep the device on Wi-Fi and charging, then check again." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panatilihing naka-Wi-Fi at nagcha-charge ang device, saka tingnan ulit."
+          }
+        }
+      }
+    },
+    "Largest recurring charge" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinakamalaking paulit-ulit na singil"
+          }
+        }
+      }
+    },
+    "Left out as one-off: %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi isinama bilang minsanan: %@"
+          }
+        }
+      }
+    },
+    "Lifestyle Inflation Levers" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga pambawas sa lumobong lifestyle"
+          }
+        }
+      }
+    },
+    "Load" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-load"
+          }
+        }
+      }
+    },
+    "Load sample data" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-load ang sample na data"
+          }
+        }
+      }
+    },
+    "Load sample data?" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-load ang sample na data?"
+          }
+        }
+      }
+    },
+    "Loading" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naglo-load"
+          }
+        }
+      }
+    },
+    "Log ${amount} at ${merchant}" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Itala ang ${amount} sa ${merchant}"
+          }
+        }
+      }
+    },
+    "Log Expense" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Itala ang gastos"
+          }
+        }
+      }
+    },
+    "Log a few weeks of expenses, and add income and budgets, to see budget, trend and subscription insights." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magtala ng ilang linggong gastos, at magdagdag ng kita at badyet, para makita ang mga insight sa badyet, trend at subscription."
+          }
+        }
+      }
+    },
+    "Low" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mababa"
+          }
+        }
+      }
+    },
+    "Make it yours" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gawin mo itong iyo"
+          }
+        }
+      }
+    },
+    "Make recurring" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gawing paulit-ulit"
+          }
+        }
+      }
+    },
+    "Merchant" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tindahan"
+          }
+        }
+      }
+    },
+    "Merchant is required." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kailangan ang merchant."
+          }
+        }
+      }
+    },
+    "Midnight" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Midnight"
+          }
+        }
+      }
+    },
+    "Midnight Blue" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Midnight Blue"
+          }
+        }
+      }
+    },
+    "Missed" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nalampasan"
+          }
+        }
+      }
+    },
+    "Misses its %@ target." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi aabot sa target nitong %@."
+          }
+        }
+      }
+    },
+    "Model compound savings from small habit changes" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-modelo ang lumalagong ipon mula sa maliliit na pagbabago sa gawi"
+          }
+        }
+      }
+    },
+    "Model compound savings from small habit changes." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-modelo ang lumalagong ipon mula sa maliliit na pagbabago sa gawi."
+          }
+        }
+      }
+    },
+    "Money" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pera"
+          }
+        }
+      }
+    },
+    "Money you've already set aside that the projection grows from." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Perang naitabi mo na, na pagmumulan ng paglago sa projection."
+          }
+        }
+      }
+    },
+    "Month" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buwan"
+          }
+        }
+      }
+    },
+    "Month %lld" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buwan %lld"
+          }
+        }
+      }
+    },
+    "Month Spending" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gastos sa buwan"
+          }
+        }
+      }
+    },
+    "Month spending" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gastos sa buwan"
+          }
+        }
+      }
+    },
+    "Month spending, budget progress and upcoming recurring expenses." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gastos sa buwan, progreso ng badyet at mga paparating na paulit-ulit na gastos."
+          }
+        }
+      }
+    },
+    "Month: %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buwan: %@"
+          }
+        }
+      }
+    },
+    "Monthly amount" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buwanang halaga"
+          }
+        }
+      }
+    },
+    "Monthly budgets" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga buwanang badyet"
+          }
+        }
+      }
+    },
+    "Monthly freed cashflow" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buwanang naluwagang cashflow"
+          }
+        }
+      }
+    },
+    "Monthly income" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buwanang kita"
+          }
+        }
+      }
+    },
+    "Monthly income amount" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halaga ng buwanang kita"
+          }
+        }
+      }
+    },
+    "Monthly limit for %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buwanang limit para sa %@"
+          }
+        }
+      }
+    },
+    "Monthly spending" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buwanang gastos"
+          }
+        }
+      }
+    },
+    "Monthly totals appear here as you log spending." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lalabas dito ang mga buwanang kabuuan habang nagtatala ka ng gastos."
+          }
+        }
+      }
+    },
+    "Move data to backup and start fresh" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ilipat ang data sa backup at magsimula ulit"
+          }
+        }
+      }
+    },
+    "Name" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pangalan"
+          }
+        }
+      }
+    },
+    "Name (e.g. Emergency fund)" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pangalan (hal. Emergency fund)"
+          }
+        }
+      }
+    },
+    "Near limit" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Malapit na sa limit"
+          }
+        }
+      }
+    },
+    "New Expense" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bagong gastos"
+          }
+        }
+      }
+    },
+    "New Goal" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bagong layunin"
+          }
+        }
+      }
+    },
+    "New Income" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bagong kita"
+          }
+        }
+      }
+    },
+    "New Recurring" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bagong paulit-ulit"
+          }
+        }
+      }
+    },
+    "Next month" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Susunod na buwan"
+          }
+        }
+      }
+    },
+    "Next recurring" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Susunod na paulit-ulit"
+          }
+        }
+      }
+    },
+    "Next: %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Susunod: %@"
+          }
+        }
+      }
+    },
+    "No account, no cloud AI and no ads. FinSight AI is free." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang account, walang cloud AI at walang ads. Libre ang FinSight AI."
+          }
+        }
+      }
+    },
+    "No bills upcoming" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang paparating na bayarin"
+          }
+        }
+      }
+    },
+    "No budget" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang badyet"
+          }
+        }
+      }
+    },
+    "No budget set" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang nakatakdang badyet"
+          }
+        }
+      }
+    },
+    "No goals yet" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala pang layunin"
+          }
+        }
+      }
+    },
+    "No history yet" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala pang history"
+          }
+        }
+      }
+    },
+    "No income yet" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala pang kita"
+          }
+        }
+      }
+    },
+    "No insight available." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang available na insight."
+          }
+        }
+      }
+    },
+    "No insights yet" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala pang insight"
+          }
+        }
+      }
+    },
+    "No matching transactions" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang tumutugmang transaksyon"
+          }
+        }
+      }
+    },
+    "No note" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang tala"
+          }
+        }
+      }
+    },
+    "No recent transactions" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang kamakailang transaksyon"
+          }
+        }
+      }
+    },
+    "No recurring charges" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang paulit-ulit na singil"
+          }
+        }
+      }
+    },
+    "No recurring charges set" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang nakatakdang paulit-ulit na singil"
+          }
+        }
+      }
+    },
+    "No spend yet" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala pang gastos"
+          }
+        }
+      }
+    },
+    "No spending in the same days last month to compare against yet." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala pang gastos sa parehong mga araw noong nakaraang buwan na maihahambing."
+          }
+        }
+      }
+    },
+    "No spending yet" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala pang gastos"
+          }
+        }
+      }
+    },
+    "None upcoming" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang paparating"
+          }
+        }
+      }
+    },
+    "Note" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tala"
+          }
+        }
+      }
+    },
+    "Notes (optional)" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga tala (opsyonal)"
+          }
+        }
+      }
+    },
+    "Nothing has been deleted. You can try again, or start with an empty ledger — your existing data is moved to a backup folder on this device, not erased." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang nabura. Puwede mong subukan ulit, o magsimula sa walang lamang ledger — ililipat ang iyong kasalukuyang data sa isang backup folder sa device na ito, hindi buburahin."
+          }
+        }
+      }
+    },
+    "Nothing spent yet this month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala ka pang nagagastos ngayong buwan."
+          }
+        }
+      }
+    },
+    "Notice" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pansinin"
+          }
+        }
+      }
+    },
+    "Notification settings" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga setting ng notification"
+          }
+        }
+      }
+    },
+    "OK" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "On supported devices, Apple Intelligence explains those insights in plain language — without sending your data anywhere." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sa mga sinusuportahang device, ipinapaliwanag ng Apple Intelligence ang mga insight na iyon sa simpleng salita — nang hindi ipinapadala kahit saan ang iyong data."
+          }
+        }
+      }
+    },
+    "On track" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nasa tamang landas"
+          }
+        }
+      }
+    },
+    "Once you log spending, the latest activity will show up here." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kapag nagtala ka ng gastos, lalabas dito ang pinakabagong aktibidad."
+          }
+        }
+      }
+    },
+    "One-off" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minsanan"
+          }
+        }
+      }
+    },
+    "Open FinSight AI to connect your ledger" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buksan ang FinSight AI para ikonekta ang iyong ledger"
+          }
+        }
+      }
+    },
+    "Open FinSight AI to prepare the shared ledger. App Group signing is required for extensions." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buksan ang FinSight AI para ihanda ang shared na ledger. Kailangan ang App Group signing para sa mga extension."
+          }
+        }
+      }
+    },
+    "Open FinSight AI to review this month's %@ spending." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buksan ang FinSight AI para suriin ang gastos sa %@ ngayong buwan."
+          }
+        }
+      }
+    },
+    "Open FinSight AI to see this week's spending." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buksan ang FinSight AI para makita ang gastos ngayong linggo."
+          }
+        }
+      }
+    },
+    "Open Settings › Apple Intelligence & Siri, turn it on, then come back." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buksan ang Settings › Apple Intelligence at Siri, i-on ito, saka bumalik dito."
+          }
+        }
+      }
+    },
+    "Open Simulator" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buksan ang simulator"
+          }
+        }
+      }
+    },
+    "Open the expense editor in FinSight AI." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buksan ang editor ng gastos sa FinSight AI."
+          }
+        }
+      }
+    },
+    "Opens the Insights tab" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binubuksan ang tab na Mga insight"
+          }
+        }
+      }
+    },
+    "Opens the Simulator tab" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Binubuksan ang tab na Simulator"
+          }
+        }
+      }
+    },
+    "Options for %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga opsyon para sa %@"
+          }
+        }
+      }
+    },
+    "Other" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iba pa"
+          }
+        }
+      }
+    },
+    "Over budget" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lampas sa badyet"
+          }
+        }
+      }
+    },
+    "Over income" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lampas sa kita"
+          }
+        }
+      }
+    },
+    "Paused" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naka-pause"
+          }
+        }
+      }
+    },
+    "Paused charges aren't counted in your totals. Swipe to resume or delete them." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi kasama sa iyong mga kabuuan ang mga naka-pause na singil. Mag-swipe para ituloy o burahin ang mga ito."
+          }
+        }
+      }
+    },
+    "Paused charges save %@ a month" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nakakatipid ka ng %@ kada buwan sa mga naka-pause na singil"
+          }
+        }
+      }
+    },
+    "Pick up to %lld saved scenarios to compare against the one you're editing." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pumili ng hanggang %lld naka-save na senaryo para ikumpara sa ine-edit mo."
+          }
+        }
+      }
+    },
+    "Plan summary" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buod ng plano"
+          }
+        }
+      }
+    },
+    "Preparing scenario explanation…" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inihahanda ang paliwanag ng senaryo…"
+          }
+        }
+      }
+    },
+    "Previous month" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nakaraang buwan"
+          }
+        }
+      }
+    },
+    "Private, on-device AI" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pribadong AI sa device"
+          }
+        }
+      }
+    },
+    "Profile" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profile"
+          }
+        }
+      }
+    },
+    "Projected" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inaasahan"
+          }
+        }
+      }
+    },
+    "Projected monthly savings" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inaasahang buwanang ipon"
+          }
+        }
+      }
+    },
+    "Projected savings" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inaasahang ipon"
+          }
+        }
+      }
+    },
+    "Projected savings by scenario" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inaasahang ipon ayon sa senaryo"
+          }
+        }
+      }
+    },
+    "Projected savings over %lld months" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Projected savings over %lld month"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Projected savings over %lld months"
+                }
+              }
+            }
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inaasahang ipon sa loob ng %lld buwan"
+          }
+        }
+      }
+    },
+    "Projection length" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haba ng pagtataya"
+          }
+        }
+      }
+    },
+    "Put in" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magdeposito"
+          }
+        }
+      }
+    },
+    "Quick add" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mabilisang pagdagdag"
+          }
+        }
+      }
+    },
+    "Quick expense log" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mabilisang pagtala ng gastos"
+          }
+        }
+      }
+    },
+    "Reach by" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maabot bago ang"
+          }
+        }
+      }
+    },
+    "Read your month-to-date spending from FinSight AI." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basahin ang iyong gastos ngayong buwan mula sa FinSight AI."
+          }
+        }
+      }
+    },
+    "Real-time behavioral nudges & wealth accelerators" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga real-time na paalala sa gawi at pampabilis ng yaman"
+          }
+        }
+      }
+    },
+    "Real-time behavioral nudges & wealth accelerators." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga real-time na paalala sa gawi at pampabilis ng yaman."
+          }
+        }
+      }
+    },
+    "Recent Activity" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kamakailang aktibidad"
+          }
+        }
+      }
+    },
+    "Recurring" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paulit-ulit"
+          }
+        }
+      }
+    },
+    "Recurring Charges" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga paulit-ulit na singil"
+          }
+        }
+      }
+    },
+    "Recurring Spend" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paulit-ulit na gastos"
+          }
+        }
+      }
+    },
+    "Recurring due dates, budget thresholds and a weekly digest. Scheduled on this device; delivery depends on system refresh." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga takdang petsa ng paulit-ulit na singil, limitasyon ng badyet, at lingguhang buod. Naka-iskedyul sa device na ito; nakadepende ang pagdating sa pag-refresh ng system."
+          }
+        }
+      }
+    },
+    "Recurring expense due" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dapat bayaran ngayon ang paulit-ulit na gastos"
+          }
+        }
+      }
+    },
+    "Recurring expenses" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga paulit-ulit na gastos"
+          }
+        }
+      }
+    },
+    "Region" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rehiyon"
+          }
+        }
+      }
+    },
+    "Reminders" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga paalala"
+          }
+        }
+      }
+    },
+    "Reminders for recurring charges, budget thresholds and a weekly digest, scheduled on this device. iOS asks for permission when you finish setup." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga paalala para sa paulit-ulit na singil, limitasyon ng badyet, at lingguhang buod, na naka-iskedyul sa device na ito. Hihingi ng pahintulot ang iOS kapag natapos mo ang setup."
+          }
+        }
+      }
+    },
+    "Remove %@ from comparison" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alisin ang %@ sa paghahambing"
+          }
+        }
+      }
+    },
+    "Remove budget" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alisin ang badyet"
+          }
+        }
+      }
+    },
+    "Remove goal" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alisin ang layunin"
+          }
+        }
+      }
+    },
+    "Reset" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-reset"
+          }
+        }
+      }
+    },
+    "Retry" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subukang muli"
+          }
+        }
+      }
+    },
+    "Risk" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panganib"
+          }
+        }
+      }
+    },
+    "Role (optional)" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Posisyon (opsyonal)"
+          }
+        }
+      }
+    },
+    "Roll over unspent budget" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idagdag ang hindi nagastos na badyet sa susunod na buwan"
+          }
+        }
+      }
+    },
+    "Salary" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sahod"
+          }
+        }
+      }
+    },
+    "Sample data" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sample na data"
+          }
+        }
+      }
+    },
+    "Sample data can only be loaded into an empty ledger, so it never mixes with your own." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mailo-load lang ang sample na data sa walang lamang ledger, kaya hindi ito kailanman mahahalo sa sarili mong data."
+          }
+        }
+      }
+    },
+    "Save" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-save"
+          }
+        }
+      }
+    },
+    "Save an expense in your on-device FinSight ledger." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mag-save ng gastos sa iyong FinSight ledger sa device."
+          }
+        }
+      }
+    },
+    "Save current" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-save ang kasalukuyan"
+          }
+        }
+      }
+    },
+    "Save scenario" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-save ang senaryo"
+          }
+        }
+      }
+    },
+    "Save the scenario you're building to come back to it, or to compare it with another plan." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-save ang senaryong binubuo mo para mabalikan ito, o maihambing sa ibang plano."
+          }
+        }
+      }
+    },
+    "Saved scenarios" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga naka-save na senaryo"
+          }
+        }
+      }
+    },
+    "Saving under a name you already used updates that scenario." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kapag nag-save ka gamit ang pangalang nagamit mo na, maa-update ang senaryong iyon."
+          }
+        }
+      }
+    },
+    "Saving your plan…" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sine-save ang iyong plano…"
+          }
+        }
+      }
+    },
+    "Savings" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ipon"
+          }
+        }
+      }
+    },
+    "Savings Goals" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga layunin sa ipon"
+          }
+        }
+      }
+    },
+    "Savings goals" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga layunin sa ipon"
+          }
+        }
+      }
+    },
+    "Savings transfers aren't counted as spending, so they don't have a budget." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi binibilang na gastos ang mga transfer sa ipon, kaya wala silang badyet."
+          }
+        }
+      }
+    },
+    "Scenario" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senaryo"
+          }
+        }
+      }
+    },
+    "Schedule" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iskedyul"
+          }
+        }
+      }
+    },
+    "Screen" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pahina"
+          }
+        }
+      }
+    },
+    "Search merchants and notes" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maghanap ng merchant at tala"
+          }
+        }
+      }
+    },
+    "See all" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tingnan lahat"
+          }
+        }
+      }
+    },
+    "Series" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Serye"
+          }
+        }
+      }
+    },
+    "Set a monthly limit for the categories you want to keep an eye on." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magtakda ng buwanang limitasyon para sa mga kategoryang gusto mong bantayan."
+          }
+        }
+      }
+    },
+    "Set budgets" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magtakda ng badyet"
+          }
+        }
+      }
+    },
+    "Set recurring expenses from Transactions to model long-term savings here." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magtakda ng mga paulit-ulit na gastos mula sa Mga transaksyon para makita rito ang pangmatagalang ipon."
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        }
+      }
+    },
+    "Setup is already complete." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tapos na ang setup."
+          }
+        }
+      }
+    },
+    "Setup progress" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Progreso ng setup"
+          }
+        }
+      }
+    },
+    "Severity: %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalubhaan: %@"
+          }
+        }
+      }
+    },
+    "Shares all %lld transactions as a CSV file" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Shares %lld transaction as a CSV file"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Shares all %lld transactions as a CSV file"
+                }
+              }
+            }
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ibinabahagi ang lahat ng %lld transaksyon bilang CSV file"
+          }
+        }
+      }
+    },
+    "Shopping" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pamimili"
+          }
+        }
+      }
+    },
+    "Show %lld hidden" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ipakita ang %lld nakatago"
+          }
+        }
+      }
+    },
+    "Show likely range" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ipakita ang malamang na saklaw"
+          }
+        }
+      }
+    },
+    "Shown in your dashboard greeting. Stays on this device." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ipinapakita sa pagbati sa iyong dashboard. Nananatili sa device na ito."
+          }
+        }
+      }
+    },
+    "Simulator" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulator"
+          }
+        }
+      }
+    },
+    "Snooze for %lld days" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Snooze for %lld day"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "Snooze for %lld days"
+                }
+              }
+            }
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-snooze nang %lld araw"
+          }
+        }
+      }
+    },
+    "Something went wrong" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagkaproblema"
+          }
+        }
+      }
+    },
+    "Source" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinagmulan"
+          }
+        }
+      }
+    },
+    "Source is required." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kailangan ang pinagmulan."
+          }
+        }
+      }
+    },
+    "Spend This Month" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gastos ngayong buwan"
+          }
+        }
+      }
+    },
+    "Spending against budget by category" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gastos kumpara sa badyet ayon sa kategorya"
+          }
+        }
+      }
+    },
+    "Spending by category" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gastos ayon sa kategorya"
+          }
+        }
+      }
+    },
+    "Spending is about the same as the same days last month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halos pareho ang gastos sa parehong mga araw noong nakaraang buwan."
+          }
+        }
+      }
+    },
+    "Spending is down %lld%% compared with the same days last month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bumaba ng %lld%% ang gastos kumpara sa parehong mga araw noong nakaraang buwan."
+          }
+        }
+      }
+    },
+    "Spending is up %lld%% compared with the same days last month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tumaas ng %lld%% ang gastos kumpara sa parehong mga araw noong nakaraang buwan."
+          }
+        }
+      }
+    },
+    "Spent" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagastos"
+          }
+        }
+      }
+    },
+    "Spent in %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagastos sa %@"
+          }
+        }
+      }
+    },
+    "Start Fresh (keep a backup)" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magsimula ulit (may backup)"
+          }
+        }
+      }
+    },
+    "Start logging a few expenses to unlock spending pattern analysis." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magtala ng ilang gastos para makita ang pagsusuri ng iyong paggastos."
+          }
+        }
+      }
+    },
+    "Start my plan" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simulan ang plano ko"
+          }
+        }
+      }
+    },
+    "Start with an empty ledger?" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magsimula sa walang lamang ledger?"
+          }
+        }
+      }
+    },
+    "Starting balance" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Panimulang balanse"
+          }
+        }
+      }
+    },
+    "Step %lld of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Step %1$lld of %2$lld"
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hakbang %lld sa %lld"
+          }
+        }
+      }
+    },
+    "Streaming latest explanation…" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inihahatid ang pinakabagong paliwanag…"
+          }
+        }
+      }
+    },
+    "Streaming latest insight…" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inihahatid ang pinakabagong insight…"
+          }
+        }
+      }
+    },
+    "Suggested by on-device AI" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iminungkahi ng AI sa device"
+          }
+        }
+      }
+    },
+    "Suggested from the merchant name" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iminungkahi batay sa pangalan ng merchant"
+          }
+        }
+      }
+    },
+    "Target amount" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Target na halaga"
+          }
+        }
+      }
+    },
+    "Target date" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Target na petsa"
+          }
+        }
+      }
+    },
+    "Target: %@ a month" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Target: %@ kada buwan"
+          }
+        }
+      }
+    },
+    "The AI model returned an empty response." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang laman ang tugon ng AI model."
+          }
+        }
+      }
+    },
+    "The AI quoted amounts that don't match your data, so its text was hidden." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagbanggit ang AI ng mga halagang hindi tugma sa iyong data, kaya itinago ang teksto nito."
+          }
+        }
+      }
+    },
+    "The on-device AI model isn't available right now." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi available ngayon ang AI model sa device."
+          }
+        }
+      }
+    },
+    "The on-device model is getting ready" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inihahanda pa ang model sa device"
+          }
+        }
+      }
+    },
+    "The on-device model is still downloading. Try again in a little while." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dina-download pa ang model sa device. Subukang muli maya-maya."
+          }
+        }
+      }
+    },
+    "The shaded range covers the middle 80% of outcomes, from how much your everyday spending has swung month to month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sakop ng may-kulay na bahagi ang mga resultang nasa gitnang 80%, batay sa kung gaano nagbabago ang pang-araw-araw mong gastos bawat buwan."
+          }
+        }
+      }
+    },
+    "Theme" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tema"
+          }
+        }
+      }
+    },
+    "Theme Options" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga opsyon sa tema"
+          }
+        }
+      }
+    },
+    "This device doesn't support Apple Intelligence." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi sinusuportahan ng device na ito ang Apple Intelligence."
+          }
+        }
+      }
+    },
+    "This month" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ngayong buwan"
+          }
+        }
+      }
+    },
+    "This month's outflow" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lumabas na pera ngayong buwan"
+          }
+        }
+      }
+    },
+    "This scenario can't be read." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi mabasa ang senaryong ito."
+          }
+        }
+      }
+    },
+    "Timeline" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tagal"
+          }
+        }
+      }
+    },
+    "Title / Merchant" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pamagat / Merchant"
+          }
+        }
+      }
+    },
+    "Top category" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nangungunang kategorya"
+          }
+        }
+      }
+    },
+    "Total" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kabuuan"
+          }
+        }
+      }
+    },
+    "Total spending for each of the last six months." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kabuuang gastos sa bawat isa sa nakaraang anim na buwan."
+          }
+        }
+      }
+    },
+    "Total: %@ per month. One-off income such as a bonus can be logged as an Income transaction and counts toward the month it's dated in." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kabuuan: %@ kada buwan. Ang minsanang kita gaya ng bonus ay puwedeng itala bilang transaksyong Kita at bibilangin ito sa buwan ng petsa nito."
+          }
+        }
+      }
+    },
+    "Track every peso, dollar or yen you spend, in your own currency." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subaybayan ang bawat piso, dolyar o yen na ginagastos mo, sa sarili mong currency."
+          }
+        }
+      }
+    },
+    "Transaction type" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uri ng transaksyon"
+          }
+        }
+      }
+    },
+    "Transactions" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga transaksyon"
+          }
+        }
+      }
+    },
+    "Transfer" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paglipat"
+          }
+        }
+      }
+    },
+    "Transport" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transportasyon"
+          }
+        }
+      }
+    },
+    "Travel" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biyahe"
+          }
+        }
+      }
+    },
+    "Try Again" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subukang muli"
+          }
+        }
+      }
+    },
+    "Try a different merchant name or clear the category filters." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sumubok ng ibang pangalan ng merchant o i-clear ang mga filter ng kategorya."
+          }
+        }
+      }
+    },
+    "Turn on Apple Intelligence in Settings to get AI insights." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-on ang Apple Intelligence sa Settings para makakuha ng mga AI insight."
+          }
+        }
+      }
+    },
+    "Type" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uri"
+          }
+        }
+      }
+    },
+    "Type what you spent in your own words. The amount and date are read exactly as typed; check the details below before saving." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-type ang ginastos mo sa sarili mong salita. Babasahin ang halaga at petsa nang eksakto kung paano mo ito tinype; suriin ang mga detalye sa ibaba bago mag-save."
+          }
+        }
+      }
+    },
+    "Unable to load sample data" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi ma-load ang sample na data"
+          }
+        }
+      }
+    },
+    "Unable to save" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi ma-save"
+          }
+        }
+      }
+    },
+    "Unspent budget from earlier months is added to this month's limit." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idinadagdag sa limitasyon ngayong buwan ang hindi nagastos na badyet mula sa mga nakaraang buwan."
+          }
+        }
+      }
+    },
+    "Upcoming" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paparating"
+          }
+        }
+      }
+    },
+    "Update %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-update ang %@"
+          }
+        }
+      }
+    },
+    "Updated %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na-update %@"
+          }
+        }
+      }
+    },
+    "Used for \"% of income spent\" and the buffer remaining on your dashboard. You can add more income sources later in Settings." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ginagamit para sa \"bahagdan (%) ng kitang nagastos\" at sa natitirang palugit sa iyong dashboard. Puwede kang magdagdag ng iba pang pinagkukunan ng kita mamaya sa Settings."
+          }
+        }
+      }
+    },
+    "View All" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tingnan lahat"
+          }
+        }
+      }
+    },
+    "Warning" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Babala"
+          }
+        }
+      }
+    },
+    "Welcome back" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maligayang pagbabalik"
+          }
+        }
+      }
+    },
+    "Welcome back, %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maligayang pagbabalik, %@"
+          }
+        }
+      }
+    },
+    "Welcome to FinSight AI" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maligayang pagdating sa FinSight AI"
+          }
+        }
+      }
+    },
+    "What should we call you?" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ano ang itatawag namin sa iyo?"
+          }
+        }
+      }
+    },
+    "Withdraw" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mag-withdraw"
+          }
+        }
+      }
+    },
+    "Writing" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagsusulat"
+          }
+        }
+      }
+    },
+    "Yield on savings (APY)" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tubo sa ipon (APY)"
+          }
+        }
+      }
+    },
+    "You've dismissed or snoozed every insight for now." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na-dismiss o na-snooze mo na ang lahat ng insight sa ngayon."
+          }
+        }
+      }
+    },
+    "You've spent %@ this month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nakagastos ka na ng %@ ngayong buwan."
+          }
+        }
+      }
+    },
+    "Your current data is moved to a backup folder, not deleted." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ililipat ang kasalukuyan mong data sa isang backup folder, hindi buburahin."
+          }
+        }
+      }
+    },
+    "Your data stays on this device." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nananatili ang iyong data sa device na ito."
+          }
+        }
+      }
+    },
+    "Your data stays on this device. The file is created only when you share it." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nananatili ang iyong data sa device na ito. Gagawin lang ang file kapag ibinahagi mo ito."
+          }
+        }
+      }
+    },
+    "Your ledger is empty. Add your first expense from the Transactions tab, or explore the app with example data." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang laman ang iyong ledger. Idagdag ang una mong gastos mula sa tab na Mga transaksyon, o subukan ang app gamit ang halimbawang data."
+          }
+        }
+      }
+    },
+    "Your name (optional)" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pangalan mo (opsyonal)"
+          }
+        }
+      }
+    },
+    "Your region" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Iyong rehiyon"
+          }
+        }
+      }
+    },
+    "Your take-home pay sets the target your spending is measured against." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ang iyong netong sahod (take-home pay) ang nagtatakda ng target na pinagbabatayan ng iyong gastos."
+          }
+        }
+      }
+    },
+    "Your typical month" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karaniwang buwan mo"
+          }
+        }
+      }
+    },
+    "Your weekly digest is ready" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Handa na ang iyong lingguhang buod"
+          }
+        }
+      }
+    },
+    "active" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aktibo"
+          }
+        }
+      }
+    },
+    "e.g. Emergency Reserve" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hal. Pang-emergency na ipon"
+          }
+        }
+      }
+    },
+    "e.g. Junior SWE @ Apex Systems" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hal. Junior SWE @ Apex Systems"
+          }
+        }
+      }
+    },
+    "e.g. Mark Santos" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hal. Mark Santos"
+          }
+        }
+      }
+    },
+    "e.g. coffee 150 yesterday" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "hal. kape 150 kahapon"
+          }
+        }
+      }
+    },
+    "freed each month. After 12 months at %@ a year that grows to %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "freed each month. After 12 months at %1$@ a year that grows to %2$@."
+          }
+        },
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "natitipid bawat buwan. Pagkalipas ng 12 buwan sa %@ kada taon, aabot ito sa %@."
+          }
+        }
+      }
+    },
+    "includes %@ interest" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kasama ang %@ na interes"
+          }
+        }
+      }
+    },
+    "of %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sa %@"
+          }
+        }
+      }
+    },
+    "paused" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "naka-pause"
+          }
+        }
+      }
+    },
+    "per month" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kada buwan"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
