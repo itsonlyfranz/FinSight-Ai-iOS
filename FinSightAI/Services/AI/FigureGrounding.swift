@@ -133,18 +133,21 @@ final class ToolOutputLog: @unchecked Sendable {
     static let limitReachedMessage = "No more lookups are available. Write the cards now using the facts and the results you already have."
 
     let callLimit: Int
+    /// What a tool returns once the lookups are used up.
+    let limitMessage: String
     private let lock = NSLock()
     private var entries: [String] = []
 
-    init(callLimit: Int = ToolOutputLog.defaultCallLimit) {
+    init(callLimit: Int = ToolOutputLog.defaultCallLimit, limitMessage: String = ToolOutputLog.limitReachedMessage) {
         self.callLimit = callLimit
+        self.limitMessage = limitMessage
     }
 
     /// Records `output` and returns it, or returns `limitReachedMessage` once the session has used up its lookups.
     @discardableResult
     func record(_ output: String) -> String {
         lock.withLock {
-            guard entries.count < callLimit else { return Self.limitReachedMessage }
+            guard entries.count < callLimit else { return limitMessage }
             entries.append(output)
             return output
         }

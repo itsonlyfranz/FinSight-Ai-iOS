@@ -27,6 +27,16 @@
         }
       }
     },
+    "%@ a month" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ kada buwan"
+          }
+        }
+      }
+    },
     "%@ a month · saves %@" : {
       "localizations" : {
         "en" : {
@@ -177,6 +187,22 @@
         }
       }
     },
+    "%@ of %@ (%@)" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ sa %2$@ (%3$@)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ of %2$@ (%3$@)"
+          }
+        }
+      }
+    },
     "%@ over" : {
       "localizations" : {
         "fil" : {
@@ -281,6 +307,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@, walang nakatakdang badyet"
+          }
+        }
+      }
+    },
+    "%@, none the month before" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@, wala noong nakaraang buwan"
           }
         }
       }
@@ -925,6 +961,22 @@
         }
       }
     },
+    "Add your monthly income in Settings and I can tell you whether %@ fits this month. So far this month you've spent %@." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idagdag ang iyong buwanang kita sa Settings para masabi ko kung kasya ang %1$@ ngayong buwan. Sa ngayon, nakagastos ka na ng %2$@ ngayong buwan."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add your monthly income in Settings and I can tell you whether %1$@ fits this month. So far this month you've spent %2$@."
+          }
+        }
+      }
+    },
     "Add your monthly income to see how much of it you've spent and how much buffer is left." : {
       "localizations" : {
         "fil" : {
@@ -1005,6 +1057,16 @@
         }
       }
     },
+    "Am I on track with my budgets?" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasok ba ako sa mga badyet ko?"
+          }
+        }
+      }
+    },
     "Amount" : {
       "localizations" : {
         "fil" : {
@@ -1081,6 +1143,66 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kailangan ng Apple Intelligence ng mas bagong Apple SDK kaysa sa ginamit sa pag-build ng app na ito."
+          }
+        }
+      }
+    },
+    "Apple's on-device safety checks stopped this request. Try asking about your spending, budgets or savings goals." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinigilan ng mga safety check ng Apple sa device ang kahilingang ito. Subukang magtanong tungkol sa iyong gastos, badyet o mga layunin sa ipon."
+          }
+        }
+      }
+    },
+    "Ask" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magtanong"
+          }
+        }
+      }
+    },
+    "Ask FinSight" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tanungin ang FinSight"
+          }
+        }
+      }
+    },
+    "Ask about your money" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magtanong tungkol sa iyong pera"
+          }
+        }
+      }
+    },
+    "Ask me about your spending, budgets, savings goals or recurring charges." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magtanong ka tungkol sa iyong gastos, badyet, mga layunin sa ipon o mga paulit-ulit na singil."
+          }
+        }
+      }
+    },
+    "Asks FinSight this question" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Itatanong ito sa FinSight"
           }
         }
       }
@@ -1225,12 +1347,38 @@
         }
       }
     },
+    "Can I afford %@ this month?" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaya ko bang gumastos ng %@ ngayong buwan?"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "localizations" : {
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kanselahin"
+          }
+        }
+      }
+    },
+    "Categories over budget this month: %lld of %lld." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga kategoryang lampas sa badyet ngayong buwan: %1$lld sa %2$lld."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Categories over budget this month: %1$lld of %2$lld."
           }
         }
       }
@@ -1325,12 +1473,32 @@
         }
       }
     },
+    "Clear chat" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-clear ang chat"
+          }
+        }
+      }
+    },
     "Clear filters" : {
       "localizations" : {
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "I-clear ang mga filter"
+          }
+        }
+      }
+    },
+    "Clear the chat?" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I-clear ang chat?"
           }
         }
       }
@@ -1361,6 +1529,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ikumpara sa kasalukuyan"
+          }
+        }
+      }
+    },
+    "Consider waiting until next month, or cutting back on %@ (%@ so far)." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Puwede kang maghintay hanggang sa susunod na buwan, o magbawas sa %1$@ (%2$@ sa ngayon)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consider waiting until next month, or cutting back on %1$@ (%2$@ so far)."
           }
         }
       }
@@ -1541,6 +1725,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Burahin"
+          }
+        }
+      }
+    },
+    "Deletes every message in this conversation from this device." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buburahin ang bawat mensahe sa usapang ito mula sa device na ito."
           }
         }
       }
@@ -1895,6 +2089,16 @@
         }
       }
     },
+    "FinSight AI gives general money guidance based on your data, not financial advice." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagbibigay ang FinSight AI ng pangkalahatang gabay sa pera batay sa iyong data, hindi payong pinansyal."
+          }
+        }
+      }
+    },
     "FinSight AI uses your device's region to format money and weeks." : {
       "localizations" : {
         "fil" : {
@@ -1931,6 +2135,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Kinakalkula ng FinSight ang bawat insight sa iPhone na ito mula sa sarili mong mga transaksyon."
+          }
+        }
+      }
+    },
+    "FinSight is writing" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nagsusulat ang FinSight"
           }
         }
       }
@@ -2085,12 +2299,246 @@
         }
       }
     },
+    "Here's how your savings goals are doing:" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ganito ang lagay ng iyong mga layunin sa ipon:"
+          }
+        }
+      }
+    },
+    "Here's what stands out in your money right now:" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ito ang kapansin-pansin sa pera mo ngayon:"
+          }
+        }
+      }
+    },
+    "Hi %@! I'm FinSight AI, your money coach." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kumusta, %@! Ako ang FinSight AI, ang iyong money coach."
+          }
+        }
+      }
+    },
+    "Hi %@! I'm FinSight AI, your money coach. Ask me anything about your spending, budgets, savings goals or recurring charges." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kumusta, %@! Ako ang FinSight AI, ang iyong money coach. Magtanong ka tungkol sa iyong gastos, badyet, mga layunin sa ipon o mga paulit-ulit na singil."
+          }
+        }
+      }
+    },
+    "Hi! I'm FinSight AI, your money coach." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kumusta! Ako ang FinSight AI, ang iyong money coach."
+          }
+        }
+      }
+    },
+    "Hi! I'm FinSight AI, your money coach. Ask me anything about your spending, budgets, savings goals or recurring charges." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kumusta! Ako ang FinSight AI, ang iyong money coach. Magtanong ka tungkol sa iyong gastos, badyet, mga layunin sa ipon o mga paulit-ulit na singil."
+          }
+        }
+      }
+    },
     "High" : {
       "localizations" : {
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mataas"
+          }
+        }
+      }
+    },
+    "How can I save more this month?" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paano ako makakaipon nang mas malaki ngayong buwan?"
+          }
+        }
+      }
+    },
+    "How much have I spent this month?" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magkano na ang nagastos ko ngayong buwan?"
+          }
+        }
+      }
+    },
+    "I can answer questions about your spending, budgets, savings goals and recurring charges. Try one of these:" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kaya kong sagutin ang mga tanong tungkol sa iyong gastos, badyet, mga layunin sa ipon at mga paulit-ulit na singil. Subukan ang isa sa mga ito:"
+          }
+        }
+      }
+    },
+    "I can't give tax or legal advice. For that, please talk to a licensed professional. I can help with your spending, budgets and savings goals." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi ako makapagbibigay ng payo tungkol sa buwis o batas. Para diyan, kumonsulta sa isang lisensyadong propesyonal. Matutulungan kita sa iyong gastos, badyet at mga layunin sa ipon."
+          }
+        }
+      }
+    },
+    "I can't help with that one. I can answer questions about your spending, budgets, savings goals and recurring charges." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi kita matutulungan sa isang iyan. Kaya kong sagutin ang mga tanong tungkol sa iyong gastos, badyet, mga layunin sa ipon at mga paulit-ulit na singil."
+          }
+        }
+      }
+    },
+    "I can't help with that. I can help with your spending, budgets, savings goals and recurring charges." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi kita matutulungan diyan. Matutulungan kita sa iyong gastos, badyet, mga layunin sa ipon at mga paulit-ulit na singil."
+          }
+        }
+      }
+    },
+    "I can't recommend specific stocks, funds or crypto. A licensed financial adviser can help with investment choices. What I can do is show how much you could set aside each month: try \"How can I save more this month?\"" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi ako makapagrerekomenda ng partikular na stock, fund o crypto. Matutulungan ka ng lisensyadong financial adviser sa pagpili ng investment. Ang kaya kong gawin ay ipakita kung magkano ang puwede mong itabi bawat buwan: subukan ang \"Paano ako makakaipon nang mas malaki ngayong buwan?\""
+          }
+        }
+      }
+    },
+    "I couldn't match the AI's numbers to your data, so here's a quick answer worked out from it instead." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi ko maitugma ang mga numero ng AI sa iyong data, kaya narito na lang ang mabilis na sagot na kinuwenta mula rito."
+          }
+        }
+      }
+    },
+    "I don't have any transactions to look at yet. Add a few expenses, or load sample data in Settings, and ask me again." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala pa akong transaksyong matitingnan. Magdagdag ng ilang gastos, o mag-load ng sample na data sa Settings, at magtanong ulit."
+          }
+        }
+      }
+    },
+    "I don't see any recurring charges yet. Add them on the Transactions tab, or keep logging and I'll spot repeats." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala pa akong nakikitang paulit-ulit na singil. Idagdag ang mga ito sa tab na Mga transaksyon, o patuloy na magtala at mapapansin ko ang mga umuulit."
+          }
+        }
+      }
+    },
+    "I don't see any spending in %@." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala akong nakikitang gastos noong %@."
+          }
+        }
+      }
+    },
+    "In %@ you spent %@, %@ less than in %@ (%@)." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noong %1$@, gumastos ka ng %2$@, mas maliit nang %3$@ kaysa noong %4$@ (%5$@)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %1$@ you spent %2$@, %3$@ less than in %4$@ (%5$@)."
+          }
+        }
+      }
+    },
+    "In %@ you spent %@, %@ more than in %@ (%@)." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noong %1$@, gumastos ka ng %2$@, mas malaki nang %3$@ kaysa noong %4$@ (%5$@)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %1$@ you spent %2$@, %3$@ more than in %4$@ (%5$@)."
+          }
+        }
+      }
+    },
+    "In %@ you spent %@, the same as in %@." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noong %1$@, gumastos ka ng %2$@, kapareho noong %3$@."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %1$@ you spent %2$@, the same as in %3$@."
+          }
+        }
+      }
+    },
+    "In %@ you spent %@. There's no spending logged in %@ to compare it with." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noong %1$@, gumastos ka ng %2$@. Walang naitalang gastos noong %3$@ na maihahambing dito."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %1$@ you spent %2$@. There's no spending logged in %3$@ to compare it with."
           }
         }
       }
@@ -2175,6 +2623,16 @@
         }
       }
     },
+    "It fits, but only just: you'd have %@ left for the rest of the month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kasya, pero halos sakto lang: %@ na lang ang matitira sa iyo para sa natitirang bahagi ng buwan."
+          }
+        }
+      }
+    },
     "Keep the device on Wi-Fi and charging, then check again." : {
       "localizations" : {
         "fil" : {
@@ -2185,12 +2643,32 @@
         }
       }
     },
+    "Largest purchases:" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pinakamalalaking binili:"
+          }
+        }
+      }
+    },
     "Largest recurring charge" : {
       "localizations" : {
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pinakamalaking paulit-ulit na singil"
+          }
+        }
+      }
+    },
+    "Last month you spent %@ in total." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noong nakaraang buwan, %@ ang kabuuang nagastos mo."
           }
         }
       }
@@ -2845,6 +3323,32 @@
         }
       }
     },
+    "Not financial advice" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi ito payong pinansyal"
+          }
+        }
+      }
+    },
+    "Not this month: %@ is %@ more than you have left." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi ngayong buwan: ang %1$@ ay mas malaki nang %2$@ kaysa sa natitira sa iyo."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not this month: %1$@ is %2$@ more than you have left."
+          }
+        }
+      }
+    },
     "Note" : {
       "localizations" : {
         "fil" : {
@@ -2881,6 +3385,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Wala ka pang nagagastos ngayong buwan."
+          }
+        }
+      }
+    },
+    "Nothing stands out right now. Keep logging expenses and I'll flag budget, trend and subscription changes." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Walang kapansin-pansin sa ngayon. Patuloy na magtala ng gastos at ipapaalam ko ang mga pagbabago sa badyet, trend at subscription."
           }
         }
       }
@@ -2931,6 +3445,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nasa tamang landas"
+          }
+        }
+      }
+    },
+    "On-device AI" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI sa device"
+          }
+        }
+      }
+    },
+    "On-device AI · your data stays on this iPhone" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI sa device · nananatili ang iyong data sa iPhone na ito"
           }
         }
       }
@@ -3065,6 +3599,16 @@
         }
       }
     },
+    "Outside what I can help with" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Labas sa kaya kong itulong"
+          }
+        }
+      }
+    },
     "Over budget" : {
       "localizations" : {
         "fil" : {
@@ -3175,6 +3719,16 @@
         }
       }
     },
+    "Profile, income, budgets, goals, theme and data" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profile, kita, badyet, layunin, tema at data"
+          }
+        }
+      }
+    },
     "Projected" : {
       "localizations" : {
         "fil" : {
@@ -3269,6 +3823,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mabilisang pagdagdag"
+          }
+        }
+      }
+    },
+    "Quick answer" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mabilis na sagot"
+          }
+        }
+      }
+    },
+    "Quick answers still work: they're worked out from your data on this device, without AI." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gumagana pa rin ang mabibilis na sagot: kinukuwenta ang mga ito mula sa iyong data sa device na ito, nang walang AI."
           }
         }
       }
@@ -3703,6 +4277,16 @@
         }
       }
     },
+    "Send" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ipadala"
+          }
+        }
+      }
+    },
     "Series" : {
       "localizations" : {
         "fil" : {
@@ -3841,6 +4425,16 @@
         }
       }
     },
+    "Shown in your dashboard greeting and used by Ask FinSight. Stays on this device." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ipinapakita sa pagbati sa iyong dashboard at ginagamit ng Tanungin ang FinSight. Nananatili sa device na ito."
+          }
+        }
+      }
+    },
     "Shown in your dashboard greeting. Stays on this device." : {
       "localizations" : {
         "fil" : {
@@ -3885,6 +4479,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "I-snooze nang %lld araw"
+          }
+        }
+      }
+    },
+    "So far this month you've spent %@." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sa ngayon, nakagastos ka na ng %@ ngayong buwan."
           }
         }
       }
@@ -4105,6 +4709,16 @@
         }
       }
     },
+    "Suggested questions" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mga mungkahing tanong"
+          }
+        }
+      }
+    },
     "Target amount" : {
       "localizations" : {
         "fil" : {
@@ -4135,6 +4749,16 @@
         }
       }
     },
+    "Tell me the amount and I'll check it against what's left this month, for example: \"Can I afford %@ this month?\"" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sabihin mo ang halaga at titingnan ko kung kasya ito sa natitira ngayong buwan, halimbawa: \"Kaya ko bang gumastos ng %@ ngayong buwan?\""
+          }
+        }
+      }
+    },
     "The AI model returned an empty response." : {
       "localizations" : {
         "fil" : {
@@ -4151,6 +4775,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nagbanggit ang AI ng mga halagang hindi tugma sa iyong data, kaya itinago ang teksto nito."
+          }
+        }
+      }
+    },
+    "The biggest increases:" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ang pinakamalalaking itinaas:"
+          }
+        }
+      }
+    },
+    "The on-device AI couldn't answer this time, so here's a quick answer from your data." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi nakasagot ang AI sa device ngayon, kaya narito ang mabilis na sagot mula sa iyong data."
+          }
+        }
+      }
+    },
+    "The on-device AI doesn't support this language yet, so here's a quick answer from your data." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hindi pa sinusuportahan ng AI sa device ang wikang ito, kaya narito ang mabilis na sagot mula sa iyong data."
           }
         }
       }
@@ -4231,6 +4885,48 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ngayong buwan"
+          }
+        }
+      }
+    },
+    "This month most of your money is going to:" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ngayong buwan, dito napupunta ang karamihan ng pera mo:"
+          }
+        }
+      }
+    },
+    "This month's income is %@. You've spent %@ so far and %@ in recurring charges is still due, which leaves %@." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ang kita mo ngayong buwan ay %1$@. Nakagastos ka na ng %2$@ at may %3$@ pang paulit-ulit na singil na babayaran, kaya may natitirang %4$@."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This month's income is %1$@. You've spent %2$@ so far and %3$@ in recurring charges is still due, which leaves %4$@."
+          }
+        }
+      }
+    },
+    "This month's income is %@. You've spent %@ so far, which leaves %@." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ang kita mo ngayong buwan ay %1$@. Nakagastos ka na ng %2$@, kaya may natitirang %3$@."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This month's income is %1$@. You've spent %2$@ so far, which leaves %3$@."
           }
         }
       }
@@ -4395,6 +5091,16 @@
         }
       }
     },
+    "Try asking:" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subukang itanong:"
+          }
+        }
+      }
+    },
     "Turn on Apple Intelligence in Settings to get AI insights." : {
       "localizations" : {
         "fil" : {
@@ -4555,6 +5261,36 @@
         }
       }
     },
+    "What subscriptions am I paying for?" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anong mga subscription ang binabayaran ko?"
+          }
+        }
+      }
+    },
+    "Where is most of my money going?" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saan napupunta ang karamihan ng pera ko?"
+          }
+        }
+      }
+    },
+    "Why was %@ so high?" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bakit ang taas ng gastos noong %@?"
+          }
+        }
+      }
+    },
     "Withdraw" : {
       "localizations" : {
         "fil" : {
@@ -4575,12 +5311,78 @@
         }
       }
     },
+    "Yes, %@ fits: you'd still have %@ for the rest of the month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oo, kasya ang %1$@: may matitira ka pang %2$@ para sa natitirang bahagi ng buwan."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes, %1$@ fits: you'd still have %2$@ for the rest of the month."
+          }
+        }
+      }
+    },
     "Yield on savings (APY)" : {
       "localizations" : {
         "fil" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tubo sa ipon (APY)"
+          }
+        }
+      }
+    },
+    "You haven't logged any spending this month yet." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala ka pang naitalang gastos ngayong buwan."
+          }
+        }
+      }
+    },
+    "You haven't set a savings goal yet. Add one in Settings to track your progress." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala ka pang layunin sa ipon. Magdagdag ng isa sa Settings para masubaybayan ang iyong progreso."
+          }
+        }
+      }
+    },
+    "You haven't set any budgets yet. Add them in Settings to track each category." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala ka pang itinakdang badyet. Idagdag ang mga ito sa Settings para masubaybayan ang bawat kategorya."
+          }
+        }
+      }
+    },
+    "You haven't set up recurring charges, but I spotted some repeats in your spending:" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala ka pang naka-set up na paulit-ulit na singil, pero may napansin akong umuulit sa iyong gastos:"
+          }
+        }
+      }
+    },
+    "You're within every budget this month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pasok ka sa lahat ng badyet ngayong buwan."
           }
         }
       }
@@ -4601,6 +5403,32 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nakagastos ka na ng %@ ngayong buwan."
+          }
+        }
+      }
+    },
+    "You: %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ikaw: %@"
+          }
+        }
+      }
+    },
+    "Your biggest category is %@ at %@ (%@ of spending)." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ang pinakamalaki mong kategorya ay %1$@ na may %2$@ (%3$@ ng gastos)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your biggest category is %1$@ at %2$@ (%3$@ of spending)."
           }
         }
       }
@@ -4651,6 +5479,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pangalan mo (opsyonal)"
+          }
+        }
+      }
+    },
+    "Your on-device money coach" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ang iyong money coach sa device"
+          }
+        }
+      }
+    },
+    "Your recurring charges add up to %@ a month:" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Umaabot sa %@ kada buwan ang iyong mga paulit-ulit na singil:"
           }
         }
       }
@@ -4781,6 +5629,16 @@
         }
       }
     },
+    "over by %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "lampas nang %@"
+          }
+        }
+      }
+    },
     "paused" : {
       "localizations" : {
         "fil" : {
@@ -4797,6 +5655,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "kada buwan"
+          }
+        }
+      }
+    },
+    "up %@ to %@" : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "tumaas nang %1$@ hanggang %2$@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "up %1$@ to %2$@"
           }
         }
       }

@@ -6,6 +6,7 @@ struct DashboardView: View {
     /// Opens another tab; set by `RootTabView`.
     var openSimulator: () -> Void = {}
     var openInsights: () -> Void = {}
+    var openSettings: () -> Void = {}
     /// Start of the month the hero, category breakdown and recent activity show.
     @State private var selectedMonth: Date?
 
@@ -17,7 +18,7 @@ struct DashboardView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
-                    DashboardHeader()
+                    DashboardHeader(openSettings: openSettings)
                     if appContext.hasNoData {
                         SampleDataCard()
                     }

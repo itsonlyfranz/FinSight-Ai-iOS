@@ -753,7 +753,7 @@ final class Phase5SimulationTests: XCTestCase {
     func testSchemaV4AddsOnlyTheScenarioModel() {
         XCTAssertEqual(FinSightSchemaV4.models.count, FinSightSchemaV3.models.count + 1)
         XCTAssertEqual(FinSightSchemaV4.versionIdentifier, Schema.Version(4, 0, 0))
-        XCTAssertEqual(FinSightMigrationPlan.schemas.count, 4)
+        XCTAssertTrue(FinSightMigrationPlan.schemas.contains { ObjectIdentifier($0) == ObjectIdentifier(FinSightSchemaV4.self) })
     }
 }
 

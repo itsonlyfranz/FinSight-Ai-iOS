@@ -29,6 +29,9 @@ struct FinSightAIApp: App {
                             #endif
                             environment.appContext.prewarmAI()
                             BackgroundRefresh.schedule()
+                            #if DEBUG
+                            await environment.appContext.askDebugChatQuestionsIfRequested()
+                            #endif
                         } catch {
                             Self.logger.error("Bootstrap failed: \(error.localizedDescription, privacy: .public)")
                             launchState = .failed(error.localizedDescription)

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C544D5469CCC85D8B7ED451A"
+               BlueprintIdentifier = "DF1E1BA36B80627E4357DB17"
                BuildableName = "FinSightAI.app"
                BlueprintName = "FinSightAI"
                ReferencedContainer = "container:FinSightAI.xcodeproj">
@@ -30,7 +30,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C544D5469CCC85D8B7ED451A"
+            BlueprintIdentifier = "DF1E1BA36B80627E4357DB17"
             BuildableName = "FinSightAI.app"
             BlueprintName = "FinSightAI"
             ReferencedContainer = "container:FinSightAI.xcodeproj">
@@ -41,7 +41,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EC4AAAB0C9E6E95B44526642"
+               BlueprintIdentifier = "6C6E530BB7498C191694588B"
                BuildableName = "FinSightAITests.xctest"
                BlueprintName = "FinSightAITests"
                ReferencedContainer = "container:FinSightAI.xcodeproj">
@@ -63,7 +63,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C544D5469CCC85D8B7ED451A"
+            BlueprintIdentifier = "DF1E1BA36B80627E4357DB17"
             BuildableName = "FinSightAI.app"
             BlueprintName = "FinSightAI"
             ReferencedContainer = "container:FinSightAI.xcodeproj">
@@ -80,7 +80,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C544D5469CCC85D8B7ED451A"
+            BlueprintIdentifier = "DF1E1BA36B80627E4357DB17"
             BuildableName = "FinSightAI.app"
             BlueprintName = "FinSightAI"
             ReferencedContainer = "container:FinSightAI.xcodeproj">

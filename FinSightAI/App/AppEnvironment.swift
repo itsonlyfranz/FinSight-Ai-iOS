@@ -23,8 +23,24 @@ struct AppEnvironment {
             aiInsightService: AppleFoundationModelsInsightService(capabilityService: capabilityService),
             simulationService: DefaultSimulationService(),
             capabilityService: capabilityService,
-            transactionAssistant: FoundationModelsTransactionAssistant(capabilityService: capabilityService)
+            transactionAssistant: FoundationModelsTransactionAssistant(capabilityService: capabilityService),
+            assistantService: Self.makeAssistantService(capabilityService: capabilityService)
         )
         return AppEnvironment(modelContainer: modelContainer, appContext: appContext)
+    }
+
+    private static func makeAssistantService(capabilityService: CapabilityService) -> AssistantService {
+        #if DEBUG
+        // Debug launch hook (`-FinSightQuickAnswersOnly YES`) that shows the chat as an ineligible
+        // device sees it, for screenshots and checks on Apple Intelligence-capable Macs.
+        if UserDefaults.standard.bool(forKey: "FinSightQuickAnswersOnly") {
+            return QuickAnswerAssistantService(reason: .deviceNotEligible)
+        }
+        #endif
+        #if canImport(FoundationModels)
+        return OnDeviceAssistantService(engine: FoundationModelsAssistantEngine(), capabilityService: capabilityService)
+        #else
+        return QuickAnswerAssistantService(reason: .unsupportedSDK)
+        #endif
     }
 }

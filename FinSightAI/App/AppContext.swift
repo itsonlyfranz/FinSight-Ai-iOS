@@ -15,6 +15,7 @@ final class AppContext {
     let simulationService: SimulationService
     let capabilityService: CapabilityService
     let transactionAssistant: TransactionAssistant
+    let assistantService: AssistantService
     private static let logger = Logger(subsystem: "com.finsightai.app", category: "AppContext")
     /// Most recent simulator scenarios whose explanations stay cached.
     static let simulationCacheLimit = 10
@@ -59,6 +60,11 @@ final class AppContext {
     var editingTransaction: TransactionRecord?
     var isTransactionEditorOpen = false
     var editingRecurringExpense: RecurringExpenseRecord?
+    /// The Ask FinSight transcript, oldest first.
+    var chatMessages: [ChatMessage] = []
+    /// The reply streaming in, while the assistant answers.
+    var assistantPartialReply: String?
+    var isAssistantResponding = false
 
     var isInsightRefreshInFlight: Bool { isLoadingInsights }
     var isSimulationRefreshInFlight: Bool { isLoadingSimulationExplanation }
@@ -72,7 +78,8 @@ final class AppContext {
         aiInsightService: AIInsightService,
         simulationService: SimulationService,
         capabilityService: CapabilityService,
-        transactionAssistant: TransactionAssistant = RuleBasedTransactionAssistant()
+        transactionAssistant: TransactionAssistant = RuleBasedTransactionAssistant(),
+        assistantService: AssistantService = QuickAnswerAssistantService()
     ) {
         self.repository = repository
         self.recurringExpenseRepository = recurringExpenseRepository
@@ -83,6 +90,7 @@ final class AppContext {
         self.simulationService = simulationService
         self.capabilityService = capabilityService
         self.transactionAssistant = transactionAssistant
+        self.assistantService = assistantService
         self.monthlySummary = summaryService.makeMonthlySummary(from: [], recurringSummary: .empty, now: .now)
     }
 
@@ -94,6 +102,7 @@ final class AppContext {
         applyCurrencySetting()
         try reloadTransactions()
         try markExistingUserOnboarded()
+        try reloadChat()
     }
 
     func loadSampleData() throws {

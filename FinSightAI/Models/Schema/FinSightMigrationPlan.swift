@@ -5,12 +5,20 @@ import SwiftData
 /// Ordered history of schema versions and how to move between them.
 enum FinSightMigrationPlan: SchemaMigrationPlan {
     static var schemas: [any VersionedSchema.Type] {
-        [FinSightSchemaV1.self, FinSightSchemaV2.self, FinSightSchemaV3.self, FinSightSchemaV4.self]
+        [FinSightSchemaV1.self, FinSightSchemaV2.self, FinSightSchemaV3.self, FinSightSchemaV4.self, FinSightSchemaV5.self]
     }
 
     static var stages: [MigrationStage] {
-        [migrateV1toV2, migrateV2toV3, migrateV3toV4]
+        [migrateV1toV2, migrateV2toV3, migrateV3toV4, migrateV4toV5]
     }
+
+    // MARK: V4 → V5
+
+    /// V5 only adds the chat-transcript table, which SwiftData can create without any data work.
+    static let migrateV4toV5 = MigrationStage.lightweight(
+        fromVersion: FinSightSchemaV4.self,
+        toVersion: FinSightSchemaV5.self
+    )
 
     // MARK: V3 → V4
 
