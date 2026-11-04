@@ -1,3 +1,4 @@
+import FoundationModels
 import SwiftData
 import XCTest
 @testable import FinSightAI
@@ -8,10 +9,26 @@ import XCTest
 final class OnDeviceModelSmokeTests: XCTestCase {
     private let capability = DefaultCapabilityService()
 
-    override func setUpWithError() throws {
+    /// Whether one real generation succeeded, probed once per run. Some simulators (e.g. CI runners)
+    /// report the model as available while its assets are missing, so every request fails.
+    private static var modelRuns: Result<Void, Error>?
+
+    override func setUp() async throws {
         if case .unavailable(let reason) = capability.aiAvailability {
             print("[smoke] on-device model unavailable: \(reason)")
             throw XCTSkip("On-device model unavailable: \(reason.message)")
+        }
+        if Self.modelRuns == nil {
+            do {
+                _ = try await LanguageModelSession().respond(to: "Reply with the word OK.")
+                Self.modelRuns = .success(())
+            } catch {
+                Self.modelRuns = .failure(error)
+            }
+        }
+        if case .failure(let error) = Self.modelRuns {
+            print("[smoke] on-device model reported available but cannot generate: \(error)")
+            throw XCTSkip("On-device model reported available but cannot generate: \(error)")
         }
         print("[smoke] on-device model AVAILABLE")
     }
