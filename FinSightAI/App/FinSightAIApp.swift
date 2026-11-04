@@ -1,3 +1,4 @@
+import BackgroundTasks
 import OSLog
 import SwiftData
 import SwiftUI
@@ -6,6 +7,7 @@ import SwiftUI
 struct FinSightAIApp: App {
     private static let logger = Logger(subsystem: "com.finsightai.app", category: "Launch")
 
+    @Environment(\.scenePhase) private var scenePhase
     @State private var launchState: LaunchState
 
     init() {
@@ -23,10 +25,15 @@ struct FinSightAIApp: App {
                         do {
                             try environment.appContext.bootstrap()
                             environment.appContext.prewarmAI()
+                            BackgroundRefresh.schedule()
                         } catch {
                             Self.logger.error("Bootstrap failed: \(error.localizedDescription, privacy: .public)")
                             launchState = .failed(error.localizedDescription)
                         }
+                    }
+                    .onChange(of: scenePhase) { _, phase in
+                        if phase == .active { try? environment.appContext.reloadTransactions() }
+                        if phase == .background { BackgroundRefresh.schedule() }
                     }
             case .failed(let message):
                 StoreRecoveryView(
@@ -35,6 +42,9 @@ struct FinSightAIApp: App {
                     onStartFresh: { startFresh() }
                 )
             }
+        }
+        .backgroundTask(.appRefresh(BackgroundRefresh.identifier)) {
+            await BackgroundRefresh.run()
         }
     }
 
@@ -50,7 +60,7 @@ struct FinSightAIApp: App {
     /// Moves the unreadable store aside (kept on disk, not deleted) and opens a new, empty one.
     private func startFresh() {
         do {
-            let backup = try StoreBackup.moveStoreAside(storeURL: ModelConfiguration().url)
+            let backup = try StoreBackup.moveStoreAside(storeURL: SharedStore.storeURL)
             Self.logger.notice("Moved unreadable store to \(backup.path, privacy: .public)")
             launchState = Self.makeLaunchState()
         } catch {

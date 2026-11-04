@@ -32,6 +32,8 @@ test_target.add_dependency(app_target)
 
 app_target.build_configurations.each do |config|
   config.build_settings["PRODUCT_BUNDLE_IDENTIFIER"] = "com.finsightai.app"
+  config.build_settings["CURRENT_PROJECT_VERSION"] = "1"
+  config.build_settings["MARKETING_VERSION"] = "1.0"
   config.build_settings["INFOPLIST_KEY_UIApplicationSceneManifest_Generation"] = "YES"
   config.build_settings["INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents"] = "YES"
   config.build_settings["INFOPLIST_KEY_UILaunchScreen_Generation"] = "YES"
@@ -102,6 +104,44 @@ app_target.package_product_dependencies << markdown_product
 markdown_build_file = project.new(Xcodeproj::Project::Object::PBXBuildFile)
 markdown_build_file.product_ref = markdown_product
 app_target.frameworks_build_phase.files << markdown_build_file
+
+# Widget extension shares the persistence and deterministic calculation sources.
+widget_group = main_group.new_group("FinSightWidgets", "FinSightWidgets")
+widget_target = project.new_target(:app_extension, "FinSightWidgets", :ios, DEPLOYMENT_TARGET)
+widget_target.build_configurations.each do |config|
+  config.build_settings.merge!({
+    "PRODUCT_BUNDLE_IDENTIFIER" => "com.finsightai.app.widgets",
+    "CURRENT_PROJECT_VERSION" => "1", "MARKETING_VERSION" => "1.0",
+    "GENERATE_INFOPLIST_FILE" => "YES", "INFOPLIST_FILE" => "FinSightWidgets/Info.plist",
+    "CODE_SIGN_ENTITLEMENTS" => "FinSightWidgets/FinSightWidgets.entitlements",
+    "SWIFT_VERSION" => SWIFT_VERSION, "TARGETED_DEVICE_FAMILY" => "1",
+    "APPLICATION_EXTENSION_API_ONLY" => "YES", "SKIP_INSTALL" => "YES",
+    "SWIFT_ACTIVE_COMPILATION_CONDITIONS" => "$(inherited) WIDGET_EXTENSION",
+    "CODE_SIGN_STYLE" => "Automatic"
+  })
+end
+Dir.glob("FinSightWidgets/*.swift").sort.each { |path| widget_target.add_file_references([widget_group.new_file(File.basename(path))]) }
+shared_files = swift_files.select do |path|
+  path.start_with?("#{APP_DIR}/Models/", "#{APP_DIR}/Utils/", "#{APP_DIR}/Services/Insights/") ||
+    ["Services/Simulation/ForwardSimulator.swift", "Services/Simulation/RunRateBaseline.swift", "Services/Simulation/ScenarioComparison.swift", "Services/SimulationService.swift", "Services/CapabilityService.swift", "Services/PlanningCalculators.swift", "Services/RecurringExpenseRepository.swift",
+     "Services/SwiftDataTransactionRepository.swift", "Services/TransactionRepository.swift",
+     "Services/AI/LedgerSnapshot.swift", "Services/AI/NarrationContext.swift", "App/StoreRecovery.swift"].any? { |suffix| path == "#{APP_DIR}/#{suffix}" } ||
+    ["SharedStore.swift", "SystemSnapshot.swift", "ExpenseControlIntent.swift"].any? { |name| path == "#{APP_DIR}/Services/System/#{name}" }
+end
+shared_files.each do |path|
+  ref = project.files.find { |file| file.real_path.to_s == File.expand_path(path) }
+  widget_target.add_file_references([ref])
+end
+privacy_ref = project.files.find { |file| file.real_path.to_s == File.expand_path(privacy_manifest) }
+widget_target.resources_build_phase.add_file_reference(privacy_ref, true) if privacy_ref
+app_target.add_dependency(widget_target)
+embed = app_target.new_copy_files_build_phase("Embed App Extensions")
+embed.dst_subfolder_spec = "13"
+embed.add_file_reference(widget_target.product_reference, true).settings = { "ATTRIBUTES" => ["RemoveHeadersOnCopy"] }
+app_target.build_configurations.each do |config|
+  config.build_settings["INFOPLIST_FILE"] = "FinSightAI/Info.plist"
+  config.build_settings["CODE_SIGN_ENTITLEMENTS"] = "FinSightAI/FinSightAI.entitlements"
+end
 
 project.save
 

@@ -1,4 +1,5 @@
 import SwiftUI
+import UserNotifications
 
 struct SettingsView: View {
     @Environment(AppContext.self) private var appContext
@@ -37,6 +38,19 @@ struct SettingsView: View {
                     Text("Region")
                 } footer: {
                     Text("Defaults to your device's region. Changing the currency only changes how amounts are shown; it doesn't convert them.")
+                }
+
+                Section("Reminders") {
+                    Button("Enable local reminders") {
+                        Task {
+                            do {
+                                _ = try await UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge])
+                                try await NudgeScheduler.refresh(snapshot: .make(context: appContext))
+                            } catch { errorMessage = error.localizedDescription }
+                        }
+                    }
+                    Link("Notification settings", destination: URL(string: UIApplication.openSettingsURLString)!)
+                    Text("Recurring due dates, budget thresholds and a weekly digest. Scheduled on this device; delivery depends on system refresh.").font(.caption)
                 }
 
                 Section("Money") {

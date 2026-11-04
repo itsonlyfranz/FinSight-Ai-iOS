@@ -57,6 +57,7 @@ final class AppContext {
     var categorySuggestion: CategorySuggestion?
     var activeRecurringDraft: RecurringExpenseDraft = .init()
     var editingTransaction: TransactionRecord?
+    var isTransactionEditorOpen = false
     var editingRecurringExpense: RecurringExpenseRecord?
 
     var isInsightRefreshInFlight: Bool { isLoadingInsights }

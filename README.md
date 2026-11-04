@@ -229,6 +229,7 @@ FinSightAI/
   Services/
   Utils/
 FinSightAITests/
+FinSightWidgets/
 Tools/
 ```
 
@@ -252,6 +253,7 @@ Automated coverage currently includes:
 - persisted insight dismiss/snooze and the V2 to V3 schema migration
 - saved what-if scenarios and the V3 to V4 schema migration
 - AI availability reasons and fallbacks, prompt grounding and token budgeting, figure grounding, the ledger tools, merchant-name cleaning, auto-categorization and quick-add parsing
+- widgets, intents and reminders: budget 80%/100% thresholds, recurring due dates and the weekly digest, amount-free notification text, the pending-request cap, App Group store migration, the shared snapshot, intent input validation and the Add Expense control
 - on-device model smoke tests (`OnDeviceModelSmokeTests`) that run the real Foundation Models paths and skip, with the reason, where Apple Intelligence is unavailable
 
 Manual smoke checks:
@@ -285,6 +287,32 @@ To regenerate:
 ```bash
 ruby Tools/generate_project.rb
 ```
+
+## Widgets and local reminders
+
+The `FinSightWidgets` extension includes small/medium spending widgets, Lock Screen accessories,
+and an Add Expense control for Control Center and the Action button. `LogExpenseIntent` and
+`SpendThisMonthIntent` are exposed as App Shortcuts for Siri, Shortcuts and Spotlight. Reads and
+writes require device authentication. The control opens the expense editor for confirmation.
+
+Both targets declare `group.com.finsightai.app`. Once a signing team is available, register that
+App Group for both bundle IDs (`com.finsightai.app` and `com.finsightai.app.widgets`) and enable it
+in both provisioning profiles. The app copies its original SwiftData store and SQLite sidecars to
+an App Group store before extensions can read it; it preserves the original. CloudKit remains
+disabled. An unsigned simulator build uses the app's own store if the shared container is
+unavailable. An extension without App Group access shows an unavailable state instead of opening
+an independent ledger; real sharing and Siri/Control Center device behavior need signed-device QA.
+
+Enable reminders explicitly in Settings. Recurring definitions and P3 recurring detection supply
+due dates, budget progress supplies 80% and 100% alerts, and P3 insights supply the weekly digest.
+Notification titles and bodies never include amounts or spending totals, so Lock Screen previews
+stay private; the figures appear only after opening the app. Paused manual bills override detected
+subscriptions. All scheduling is local. The app refreshes on activation and after edits;
+`BGAppRefreshTask` requests periodic refresh, subject to iOS scheduling. The weekly digest's insight
+count reflects the last refresh, not a guaranteed Monday background execution. Notification
+permission can be revoked in iOS Settings. There is no server or push registration.
+
+The unsigned [terminal build and test commands](#build-from-terminal) cover both targets.
 
 ## Status
 
