@@ -92,8 +92,6 @@ final class AppContext {
         try StoreIntegrity.dedupe(in: modelContext)
         settings = try AppSettings.fetchOrCreate(in: modelContext)
         applyCurrencySetting()
-        // Income, budgets and goals feed the gauge and insights computed by `reloadTransactions`.
-        try reloadPlanning()
         try reloadTransactions()
         try markExistingUserOnboarded()
     }

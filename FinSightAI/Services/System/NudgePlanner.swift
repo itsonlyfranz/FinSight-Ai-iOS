@@ -17,7 +17,7 @@ enum NudgePlanner {
             let threshold = budget.spent >= budget.limit ? 100 : 80
             result.append(PlannedNudge(id: "budget-\(month)-\(budget.category.rawValue)-\(threshold)",
                 title: String(localized: "\(budget.category.localizedTitle) budget at \(threshold)%"),
-                body: String(localized: "Open FinSight AI to review this month's \(budget.category.localizedTitle) spending."),
+                body: String(localized: "Open FinSight AI to review this month's \(budget.category.localizedTitle.localizedLowercase) spending."),
                 date: now.addingTimeInterval(5)))
         }
         for due in snapshot.due {

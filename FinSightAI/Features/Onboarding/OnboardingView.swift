@@ -1,3 +1,4 @@
+import os
 import SwiftUI
 import UserNotifications
 
@@ -424,7 +425,7 @@ struct OnboardingView: View {
                 try await NudgeScheduler.refresh(snapshot: .make(context: appContext))
             }
         } catch {
-            errorMessage = error.localizedDescription
+            Logger(subsystem: "com.finsightai.app", category: "Reminders").error("Reminder setup failed: \(error.localizedDescription)")
         }
     }
 }

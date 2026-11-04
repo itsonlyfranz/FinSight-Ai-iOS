@@ -1,4 +1,5 @@
 import Foundation
+import os
 import SwiftData
 
 enum OnboardingError: LocalizedError {
@@ -61,8 +62,11 @@ extension AppContext {
         }
         UserProfile(name: draft.name, role: draft.role).save(to: profileDefaults)
         applyCurrencySetting()
-        try reloadPlanning(now: now)
-        try reloadTransactions()
+        do {
+            try reloadTransactions()
+        } catch {
+            Logger(subsystem: "com.finsightai.app", category: "Onboarding").error("Reload after setup failed: \(error.localizedDescription)")
+        }
     }
 }
 
