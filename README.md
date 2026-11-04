@@ -229,6 +229,7 @@ FinSightAI/
   Services/
   Utils/
 FinSightAITests/
+FinSightWidgets/
 Tools/
 ```
 
@@ -252,6 +253,7 @@ Automated coverage currently includes:
 - persisted insight dismiss/snooze and the V2 to V3 schema migration
 - saved what-if scenarios and the V3 to V4 schema migration
 - AI availability reasons and fallbacks, prompt grounding and token budgeting, figure grounding, the ledger tools, merchant-name cleaning, auto-categorization and quick-add parsing
+- widgets, intents and reminders: budget 80%/100% thresholds, recurring due dates and the weekly digest, amount-free notification text, the pending-request cap, App Group store migration, the shared snapshot, intent input validation and the Add Expense control
 - on-device model smoke tests (`OnDeviceModelSmokeTests`) that run the real Foundation Models paths and skip, with the reason, where Apple Intelligence is unavailable
 
 Manual smoke checks:
@@ -286,11 +288,6 @@ To regenerate:
 ruby Tools/generate_project.rb
 ```
 
-## Status
-
-This repository represents an MVP for a startup-style product direction. It is meant to demonstrate product thinking, architecture, UX direction, and technical feasibility rather than full production readiness.
-
-
 ## Widgets and local reminders
 
 The `FinSightWidgets` extension includes small/medium spending widgets, Lock Screen accessories,
@@ -312,14 +309,11 @@ Notification titles and bodies never include amounts or spending totals, so Lock
 stay private; the figures appear only after opening the app. Paused manual bills override detected
 subscriptions. All scheduling is local. The app refreshes on activation and after edits;
 `BGAppRefreshTask` requests periodic refresh, subject to iOS scheduling. The weekly digest's insight
-count reflects the last refresh, not a guaranteed Monday background execution. Notification permission can be revoked in iOS Settings. There is no
-server or push registration.
+count reflects the last refresh, not a guaranteed Monday background execution. Notification
+permission can be revoked in iOS Settings. There is no server or push registration.
 
-For unsigned simulator verification:
+The unsigned [terminal build and test commands](#build-from-terminal) cover both targets.
 
-```bash
-xcodebuild -project FinSightAI.xcodeproj -scheme FinSightAI \
-  -destination 'platform=iOS Simulator,name=iPhone 18 Pro' CODE_SIGNING_ALLOWED=NO build
-xcodebuild -project FinSightAI.xcodeproj -scheme FinSightAI \
-  -destination 'platform=iOS Simulator,name=iPhone 18 Pro' CODE_SIGNING_ALLOWED=NO test
-```
+## Status
+
+This repository represents an MVP for a startup-style product direction. It is meant to demonstrate product thinking, architecture, UX direction, and technical feasibility rather than full production readiness.
