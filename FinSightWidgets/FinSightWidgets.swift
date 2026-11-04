@@ -70,7 +70,6 @@ struct SpendingWidgetView: View {
             }
         }
         .containerBackground(.background, for: .widget)
-        .widgetURL(URL(string: "finsight://dashboard"))
         .privacySensitive()
     }
 }

@@ -15,10 +15,9 @@ enum NudgePlanner {
         var result: [PlannedNudge] = []
         for budget in snapshot.budgets where budget.limit > 0 && budget.spent >= budget.limit * Decimal(string: "0.8")! {
             let threshold = budget.spent >= budget.limit ? 100 : 80
-            let finding = snapshot.insights.first { $0.category == budget.category && $0.kind == .budgetBreach }
             result.append(PlannedNudge(id: "budget-\(month)-\(budget.category.rawValue)-\(threshold)",
                 title: "\(budget.category.title) budget at \(threshold)%",
-                body: finding?.summary ?? "You've spent \(budget.spent.formatted(.currency(code: snapshot.currency))) of \(budget.limit.formatted(.currency(code: snapshot.currency))).",
+                body: "Open FinSight AI to review this month's \(budget.category.title.lowercased()) spending.",
                 date: now.addingTimeInterval(5)))
         }
         for due in snapshot.due {
@@ -32,9 +31,11 @@ enum NudgePlanner {
         monday.hour = 9
         monday.minute = 0
         if let digest = calendar.nextDate(after: now, matching: monday, matchingPolicy: .nextTime) {
-            let detail = snapshot.insights.first.map { " \($0.title): \($0.summary)" } ?? ""
-            result.append(PlannedNudge(id: "digest-\(digest.timeIntervalSince1970)", title: "Your weekly FinSight digest",
-                body: "This month so far: \(snapshot.spendText).\(detail)", date: digest))
+            let count = snapshot.insights.count
+            let body = count == 0 ? "Open FinSight AI to see this week's spending."
+                : "\(count) \(count == 1 ? "insight is" : "insights are") waiting in FinSight AI."
+            result.append(PlannedNudge(id: "digest-\(digest.timeIntervalSince1970)", title: "Your weekly digest is ready",
+                body: body, date: digest))
         }
         return Array(result.sorted { $0.date < $1.date }.prefix(60))
     }

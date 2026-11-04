@@ -6,17 +6,6 @@
 	<array>
 		<string>com.finsightai.refresh</string>
 	</array>
-	<key>CFBundleURLTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleURLName</key>
-			<string>com.finsightai.app</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>finsight</string>
-			</array>
-		</dict>
-	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>

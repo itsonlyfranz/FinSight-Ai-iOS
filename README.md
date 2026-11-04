@@ -307,11 +307,12 @@ unavailable. An extension without App Group access shows an unavailable state in
 an independent ledger; real sharing and Siri/Control Center device behavior need signed-device QA.
 
 Enable reminders explicitly in Settings. Recurring definitions and P3 recurring detection supply
-due dates, budget progress supplies 80% and 100% alerts (with P3 breach evidence), and P3 insights
-supply the weekly digest. Paused manual bills override detected subscriptions. All scheduling is
-local. The app refreshes on activation and after edits; `BGAppRefreshTask` requests periodic
-refresh, subject to iOS scheduling. Weekly digest figures reflect the last refresh, not a guaranteed
-Monday background execution. Notification permission can be revoked in iOS Settings. There is no
+due dates, budget progress supplies 80% and 100% alerts, and P3 insights supply the weekly digest.
+Notification titles and bodies never include amounts or spending totals, so Lock Screen previews
+stay private; the figures appear only after opening the app. Paused manual bills override detected
+subscriptions. All scheduling is local. The app refreshes on activation and after edits;
+`BGAppRefreshTask` requests periodic refresh, subject to iOS scheduling. The weekly digest's insight
+count reflects the last refresh, not a guaranteed Monday background execution. Notification permission can be revoked in iOS Settings. There is no
 server or push registration.
 
 For unsigned simulator verification:

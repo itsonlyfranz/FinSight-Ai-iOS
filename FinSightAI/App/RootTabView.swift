@@ -44,15 +44,11 @@ struct RootTabView: View {
         .tint(AppTheme.primary)
         .onChange(of: navigation.requested, initial: true) { _, requested in
             if requested {
-                appContext.prepareNewTransaction()
-                showingExpense = true
+                if !appContext.isTransactionEditorOpen {
+                    appContext.prepareNewTransaction()
+                    showingExpense = true
+                }
                 navigation.requested = false
-            }
-        }
-        .onOpenURL { url in
-            if url.scheme == "finsight", url.host == "expense" {
-                appContext.prepareNewTransaction()
-                showingExpense = true
             }
         }
         .sheet(isPresented: $showingExpense) {

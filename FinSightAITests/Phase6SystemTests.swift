@@ -49,6 +49,22 @@ final class Phase6SystemTests: XCTestCase {
         XCTAssertThrowsError(try ExpenseIntentService.validate(amount: 1, merchant: " \n"))
         XCTAssertEqual(try ExpenseIntentService.validate(amount: 12.34, merchant: "Cafe"), Decimal(string: "12.34"))
     }
+    func testNotificationTextNeverDisclosesAmounts() {
+        let insight = Insight(id: "dining-breach", kind: .budgetBreach, severity: .warning,
+            title: "Dining over budget", summary: "You've spent $123.45 of $100.00 on dining.", impactAmount: Decimal(string: "23.45")!,
+            evidence: [], suggestedAction: "Review dining.", category: .dining)
+        let value = SystemSnapshot(date: date(4), currency: "USD", spent: Decimal(string: "123.45")!, budget: 100,
+            topCategory: "Dining", due: [SystemSnapshot.Due(id: "rent", merchant: "Rent", date: date(6))],
+            budgets: [BudgetStatusLine(category: .dining, limit: 100, spent: Decimal(string: "123.45")!)], insights: [insight])
+        let plan = NudgePlanner.plan(snapshot: value, calendar: calendar)
+        XCTAssertEqual(Set(plan.map { $0.id.split(separator: "-").first! }), ["budget", "due", "digest"])
+        for nudge in plan {
+            let text = nudge.title + " " + nudge.body
+            XCTAssertFalse(text.contains("$"), text)
+            XCTAssertFalse(text.contains("123"), text)
+        }
+        XCTAssertEqual(plan.first { $0.id.hasPrefix("digest-") }?.body, "1 insight is waiting in FinSight AI.")
+    }
     func testNotificationPlanCapsRequestsBelowSystemLimit() {
         let due = (0..<100).map { SystemSnapshot.Due(id: String($0), merchant: "Bill", date: date(6)) }
         XCTAssertEqual(NudgePlanner.plan(snapshot: snapshot(due: due), calendar: calendar).count, 60)

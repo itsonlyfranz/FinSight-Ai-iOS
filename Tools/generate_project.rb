@@ -126,7 +126,7 @@ shared_files = swift_files.select do |path|
     ["Services/Simulation/ForwardSimulator.swift", "Services/Simulation/RunRateBaseline.swift", "Services/Simulation/ScenarioComparison.swift", "Services/SimulationService.swift", "Services/CapabilityService.swift", "Services/PlanningCalculators.swift", "Services/RecurringExpenseRepository.swift",
      "Services/SwiftDataTransactionRepository.swift", "Services/TransactionRepository.swift",
      "Services/AI/LedgerSnapshot.swift", "Services/AI/NarrationContext.swift", "App/StoreRecovery.swift"].any? { |suffix| path == "#{APP_DIR}/#{suffix}" } ||
-    (path.start_with?("#{APP_DIR}/Services/System/") && !path.end_with?("BackgroundRefresh.swift"))
+    ["SharedStore.swift", "SystemSnapshot.swift", "ExpenseControlIntent.swift"].any? { |name| path == "#{APP_DIR}/Services/System/#{name}" }
 end
 shared_files.each do |path|
   ref = project.files.find { |file| file.real_path.to_s == File.expand_path(path) }

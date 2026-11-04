@@ -89,6 +89,8 @@ struct TransactionEditorView: View {
                 }
             }
         }
+        .onAppear { appContext.isTransactionEditorOpen = true }
+        .onDisappear { appContext.isTransactionEditorOpen = false }
     }
 
     /// Choosing a category by hand stops automatic suggestions from changing it.
