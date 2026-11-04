@@ -89,13 +89,8 @@ struct ProjectionChart: View {
                 PointMark(x: .value("Month", point.month), y: .value("Projected", point.balance.doubleValue))
                     .foregroundStyle(AppTheme.primary)
                     .symbolSize(70)
-                    // The milestone at the chart's right edge hangs leftward so its label isn't clipped.
-                    .annotation(
-                        position: .top,
-                        alignment: point.month == timeline.last?.month ? .trailing : .center,
-                        spacing: 4
-                    ) {
-                        VStack(alignment: point.month == timeline.last?.month ? .trailing : .center, spacing: 0) {
+                    .annotation(position: .top, spacing: 4) {
+                        VStack(spacing: 0) {
                             Text("\(point.month) mo")
                                 .font(.caption2)
                                 .foregroundStyle(AppTheme.mutedInk)
@@ -135,6 +130,8 @@ struct ProjectionChart: View {
                 }
             }
         }
+        // Room past the last month so a milestone label centred on the right edge isn't clipped.
+        .chartXScale(domain: 0...horizon, range: .plotDimension(endPadding: 36))
         .chartScrollableAxes(.horizontal)
         .chartXVisibleDomain(length: min(horizon, 24))
     }
