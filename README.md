@@ -289,3 +289,36 @@ ruby Tools/generate_project.rb
 ## Status
 
 This repository represents an MVP for a startup-style product direction. It is meant to demonstrate product thinking, architecture, UX direction, and technical feasibility rather than full production readiness.
+
+
+## Widgets and local reminders
+
+The `FinSightWidgets` extension includes small/medium spending widgets, Lock Screen accessories,
+and an Add Expense control for Control Center and the Action button. `LogExpenseIntent` and
+`SpendThisMonthIntent` are exposed as App Shortcuts for Siri, Shortcuts and Spotlight. Reads and
+writes require device authentication. The control opens the expense editor for confirmation.
+
+Both targets declare `group.com.finsightai.app`. Once a signing team is available, register that
+App Group for both bundle IDs (`com.finsightai.app` and `com.finsightai.app.widgets`) and enable it
+in both provisioning profiles. The app copies its original SwiftData store and SQLite sidecars to
+an App Group store before extensions can read it; it preserves the original. CloudKit remains
+disabled. An unsigned simulator build uses the app's own store if the shared container is
+unavailable. An extension without App Group access shows an unavailable state instead of opening
+an independent ledger; real sharing and Siri/Control Center device behavior need signed-device QA.
+
+Enable reminders explicitly in Settings. Recurring definitions and P3 recurring detection supply
+due dates, budget progress supplies 80% and 100% alerts (with P3 breach evidence), and P3 insights
+supply the weekly digest. Paused manual bills override detected subscriptions. All scheduling is
+local. The app refreshes on activation and after edits; `BGAppRefreshTask` requests periodic
+refresh, subject to iOS scheduling. Weekly digest figures reflect the last refresh, not a guaranteed
+Monday background execution. Notification permission can be revoked in iOS Settings. There is no
+server or push registration.
+
+For unsigned simulator verification:
+
+```bash
+xcodebuild -project FinSightAI.xcodeproj -scheme FinSightAI \
+  -destination 'platform=iOS Simulator,name=iPhone 18 Pro' CODE_SIGNING_ALLOWED=NO build
+xcodebuild -project FinSightAI.xcodeproj -scheme FinSightAI \
+  -destination 'platform=iOS Simulator,name=iPhone 18 Pro' CODE_SIGNING_ALLOWED=NO test
+```
