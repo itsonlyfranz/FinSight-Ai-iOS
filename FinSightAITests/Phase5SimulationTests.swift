@@ -475,6 +475,18 @@ final class Phase5SimulationTests: XCTestCase {
         XCTAssertNil(ScenarioComparison.make([only]).best)
     }
 
+    func testComparisonLabelsKeepDuplicateNamesDistinctInTheTableAndWinner() {
+        let base = baseline([(.dining, 1_000)])
+        let working = ScenarioComparison.Entry(id: UUID(), name: "Current", result: simulate(base, scenario(cuts: [(.dining, 10)])))
+        let saved = ScenarioComparison.Entry(id: UUID(), name: "Current", result: simulate(base, scenario(cuts: [(.dining, 40)])))
+        let other = ScenarioComparison.Entry(id: UUID(), name: "Lean", result: simulate(base, scenario(cuts: [(.dining, 20)])))
+        let comparison = ScenarioComparison.make([working, saved, other])
+
+        XCTAssertEqual(comparison.rows.map(\.label), ["Current", "Current (2)", "Lean"])
+        XCTAssertEqual(comparison.referenceLabel, "Current")
+        XCTAssertEqual(comparison.bestLabel, "Current (2)")
+    }
+
     // MARK: - Explanation text
 
     private func sampleResult() -> (SimulationScenario, RunRateBaseline, SimulationResult) {

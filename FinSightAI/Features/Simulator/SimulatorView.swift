@@ -4,6 +4,10 @@ struct SimulatorView: View {
     @Environment(AppContext.self) private var appContext
     @State private var explanationContext: SimulationNarrationContext?
     @State private var showsBand = true
+    /// Typed text for the starting balance, committed to the scenario when editing ends so the
+    /// field isn't reformatted (and the cursor moved) on every keystroke.
+    @State private var startingBalanceText = ""
+    @FocusState private var startingBalanceFocused: Bool
 
     var body: some View {
         let scenario = appContext.workingScenario.normalized
@@ -35,6 +39,10 @@ struct SimulatorView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Reset", systemImage: "arrow.counterclockwise") { appContext.resetWorkingScenario() }
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") { startingBalanceFocused = false }
                 }
             }
         }
@@ -161,13 +169,17 @@ struct SimulatorView: View {
 
             VStack(alignment: .leading, spacing: AppTheme.Spacing.xs) {
                 Text("Starting balance").font(.headline)
-                TextField(
-                    "Starting balance",
-                    value: startingBalanceBinding,
-                    format: .currency(code: CurrencyFormatter.currencyCode)
-                )
-                .keyboardType(.decimalPad)
-                .textFieldStyle(.roundedBorder)
+                TextField("Starting balance", text: $startingBalanceText)
+                    .keyboardType(.decimalPad)
+                    .textFieldStyle(.roundedBorder)
+                    .focused($startingBalanceFocused)
+                    .onSubmit(commitStartingBalance)
+                    .onChange(of: startingBalanceFocused) { _, focused in
+                        if !focused { commitStartingBalance() }
+                    }
+                    .onChange(of: scenario.startingBalance, initial: true) { _, value in
+                        if !startingBalanceFocused { startingBalanceText = startingBalanceDisplay(value) }
+                    }
                 Text("Money you've already set aside that the projection grows from.")
                     .font(AppTheme.Typography.caption)
                     .foregroundStyle(AppTheme.mutedInk)
@@ -388,12 +400,19 @@ struct SimulatorView: View {
         }
     }
 
-    private var startingBalanceBinding: Binding<Decimal> {
-        Binding {
-            appContext.workingScenario.startingBalance
-        } set: { value in
+    private func startingBalanceDisplay(_ value: Decimal) -> String {
+        value == 0 ? "" : CurrencyFormatter.plainNumberString(from: value)
+    }
+
+    /// Stores the typed amount (empty means zero); text that isn't a number reverts to the stored balance.
+    private func commitStartingBalance() {
+        let trimmed = startingBalanceText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            appContext.workingScenario.startingBalance = 0
+        } else if let value = trimmed.parsedAmount {
             appContext.workingScenario.startingBalance = max(0, value)
         }
+        startingBalanceText = startingBalanceDisplay(appContext.workingScenario.startingBalance)
     }
 
     private var horizonBinding: Binding<Int> {

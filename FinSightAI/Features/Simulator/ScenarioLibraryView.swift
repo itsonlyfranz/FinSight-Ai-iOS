@@ -142,8 +142,8 @@ struct ScenarioComparisonView: View {
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.lg) {
                     chart(comparison)
                     table(comparison)
-                    if let best = comparison.best {
-                        Label("\(best.name) saves the most over 12 months.", systemImage: "trophy.fill")
+                    if let best = comparison.bestLabel {
+                        Label("\(best) saves the most over 12 months.", systemImage: "trophy.fill")
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(AppTheme.primary)
                     }
@@ -159,23 +159,10 @@ struct ScenarioComparisonView: View {
         }
     }
 
-    /// A distinct legend label per row, so two scenarios with the same name stay separate lines.
-    private func seriesLabels(_ comparison: ScenarioComparison) -> [UUID: String] {
-        var counts: [String: Int] = [:]
-        var labels: [UUID: String] = [:]
-        for row in comparison.rows {
-            let count = (counts[row.entry.name] ?? 0) + 1
-            counts[row.entry.name] = count
-            labels[row.id] = count == 1 ? row.entry.name : "\(row.entry.name) (\(count))"
-        }
-        return labels
-    }
-
     private func chart(_ comparison: ScenarioComparison) -> some View {
-        let labels = seriesLabels(comparison)
-        return Chart {
+        Chart {
             ForEach(comparison.rows) { row in
-                let label = labels[row.id] ?? row.entry.name
+                let label = row.label
                 ForEach(row.entry.result.timeline.filter { $0.month <= 12 }) { point in
                     LineMark(
                         x: .value("Month", point.month),
@@ -197,7 +184,7 @@ struct ScenarioComparisonView: View {
         .finSightCard()
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Projected savings by scenario")
-        .accessibilityValue(comparison.rows.map { "\($0.entry.name): \(CurrencyFormatter.string(from: $0.entry.result.twelveMonths)) after 12 months" }.joined(separator: ". "))
+        .accessibilityValue(comparison.rows.map { "\($0.label): \(CurrencyFormatter.string(from: $0.entry.result.twelveMonths)) after 12 months" }.joined(separator: ". "))
     }
 
     private func table(_ comparison: ScenarioComparison) -> some View {
@@ -205,7 +192,7 @@ struct ScenarioComparisonView: View {
             ForEach(comparison.rows) { row in
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text(row.entry.name).font(.headline)
+                        Text(row.label).font(.headline)
                         if row.isBest { Image(systemName: "trophy.fill").foregroundStyle(AppTheme.primary).accessibilityLabel("Best") }
                         Spacer()
                         Text("\(CurrencyFormatter.string(from: row.entry.result.monthlySavings))/mo")
@@ -218,7 +205,7 @@ struct ScenarioComparisonView: View {
                     }
                     if row.entry.id != comparison.rows.first?.entry.id {
                         let delta = row.twelveMonthDelta
-                        Text("\(delta >= 0 ? "+" : "−")\(CurrencyFormatter.string(from: abs(delta))) vs Current after 12 months")
+                        Text("\(delta >= 0 ? "+" : "−")\(CurrencyFormatter.string(from: abs(delta))) vs \(comparison.referenceLabel ?? "Current") after 12 months")
                             .font(AppTheme.Typography.caption)
                             .foregroundStyle(delta >= 0 ? AppTheme.primary : .red)
                     }
