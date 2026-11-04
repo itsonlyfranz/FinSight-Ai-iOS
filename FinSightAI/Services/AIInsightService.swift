@@ -32,13 +32,13 @@ enum AIInsightError: LocalizedError, Equatable {
         case .unavailable(let message): message
         case .modelUnavailable(let reason): reason.message
         case .emptyResponse: "The AI model returned an empty response."
-        case .ungroundedFigures: "The AI narration quoted amounts that don't match your data, so it was hidden. The insights above are unaffected."
+        case .ungroundedFigures: "The AI quoted amounts that don't match your data, so its text was hidden."
         }
     }
 
     /// Shown when the model failed or ran too long for a reason the user can't act on.
     static let narrationFailed = AIInsightError.unavailable(
-        "The on-device AI couldn't finish the narration this time. The insights above are unaffected."
+        "The on-device AI couldn't finish this time."
     )
 }
 

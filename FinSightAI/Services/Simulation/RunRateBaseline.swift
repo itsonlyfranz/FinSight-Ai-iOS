@@ -89,8 +89,12 @@ struct RunRateBaseline: Equatable, Sendable {
 
     // MARK: - Building
 
+    /// Spending is scaled up only when the ledger itself starts inside the window: the observed
+    /// days run from the later of the window start and the earliest entry of any kind.
+    ///
     /// - Parameters:
-    ///   - entries: the ledger. Only expenses count; transfers and income are ignored.
+    ///   - entries: the ledger. Only expenses count towards spending; transfers and income are
+    ///     ignored apart from marking when the ledger starts.
     ///   - recurring: the active recurring charges, each added once at its monthly amount.
     ///   - recurringTransactionIDs: transactions already matched to a recurring charge, so they
     ///     are not counted a second time.
@@ -114,9 +118,9 @@ struct RunRateBaseline: Equatable, Sendable {
         let kept = recent.filter { !oneOffIDs.contains($0.id) }
 
         var perCategory: [SpendingCategory: Decimal] = [:]
-        if let earliest = recent.map(\.date).min() {
-            let earliestDay = calendar.startOfDay(for: earliest)
-            let observed = (calendar.dateComponents([.day], from: earliestDay, to: today).day ?? 0) + 1
+        if !recent.isEmpty, let ledgerStart = entries.map(\.date).min() {
+            let observedStart = max(windowStart, calendar.startOfDay(for: ledgerStart))
+            let observed = (calendar.dateComponents([.day], from: observedStart, to: today).day ?? 0) + 1
             let observedDays = Decimal(min(max(observed, minimumObservedDays), windowDays))
             let perDay = Dictionary(grouping: kept, by: \.category).mapValues { $0.map(\.amount).sum() }
             for (category, total) in perDay {

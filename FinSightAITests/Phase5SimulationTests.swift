@@ -303,8 +303,20 @@ final class Phase5SimulationTests: XCTestCase {
         ]
         let baseline = makeBaseline(entries)
         XCTAssertEqual(baseline.lines.map(\.category), [.dining])
-        XCTAssertEqual(baseline.monthlyTotal, 100 * 30 / 15, "15 observed days")
+        XCTAssertEqual(baseline.monthlyTotal, 100, "the ledger predates the window, so all 30 days were observed")
         XCTAssertTrue(baseline.excludedOneOffs.isEmpty)
+    }
+
+    func testBaselineIsNotScaledUpWhenTheLedgerPredatesTheWindow() {
+        // The first purchase in the window is on Mar 1, but the ledger began in December with an
+        // income entry, so the quiet first half of the window is real and not missing history.
+        let purchase = spend(100, .dining, on: F.date(2024, 3, 1))
+        let established = makeBaseline([spend(3_000, .other, on: F.date(2023, 12, 1), kind: .income), purchase])
+        XCTAssertEqual(established.monthlyTotal, 100)
+
+        // A ledger that genuinely starts inside the window is still scaled: Mar 1 … Mar 15 is 15 days.
+        let newcomer = makeBaseline([spend(3_000, .other, on: F.date(2024, 3, 1), kind: .income), purchase])
+        XCTAssertEqual(newcomer.monthlyTotal, 100 * 30 / 15)
     }
 
     func testBaselineLeavesOutOneOffPurchases() {
@@ -345,8 +357,9 @@ final class Phase5SimulationTests: XCTestCase {
 
         XCTAssertEqual(baseline.recurringTotal, 10_000)
         XCTAssertEqual(baseline.line(for: .bills)?.discretionary, 0)
-        XCTAssertEqual(baseline.line(for: .dining)?.discretionary, Decimal(70) / 7 * 30)
-        XCTAssertEqual(baseline.monthlyTotal, 10_000 + Decimal(70) / 7 * 30)
+        // The rent payment isn't counted as spending, but it still marks the ledger's start: Mar 3 … Mar 15.
+        XCTAssertEqual(baseline.line(for: .dining)?.discretionary, dec("161.54"))
+        XCTAssertEqual(baseline.monthlyTotal, 10_000 + dec("161.54"))
         XCTAssertEqual(baseline.cuttableLines.map(\.category), [.dining], "recurring charges are paused, not cut")
     }
 
@@ -399,6 +412,17 @@ final class Phase5SimulationTests: XCTestCase {
         XCTAssertEqual(point.balance, 800)
         XCTAssertEqual(point.upper, 800 + dec("256.32"))
         XCTAssertEqual(point.lower, 800 - dec("256.32"))
+    }
+
+    func testBandNeverDropsBelowWhatSavingNothingWouldLeave() {
+        // A cut of a very swingy category: the raw range would dip below the starting balance.
+        var plan = scenario(cuts: [(.travel, 50)], yield: 0)
+        plan.startingBalance = 1_000
+        let result = simulate(baseline([(.travel, 300)], volatility: [.travel: 520]), plan)
+        let point = result.timeline[3]
+        XCTAssertEqual(point.balance, 1_450)
+        XCTAssertEqual(point.lower, 1_000, "a cut can't save less than nothing")
+        XCTAssertEqual(point.upper, 1_450 + dec("577.15"))
     }
 
     func testBandFollowsTheCutsNotTheWholeBudget() {

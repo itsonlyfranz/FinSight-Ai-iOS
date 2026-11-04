@@ -106,6 +106,12 @@ enum ForwardSimulator {
             months: scenario.horizonMonths,
             annualYieldPercent: scenario.annualYieldPercent
         )
+        let floor = balances(
+            startingBalance: scenario.startingBalance,
+            monthlyDeposit: 0,
+            months: scenario.horizonMonths,
+            annualYieldPercent: scenario.annualYieldPercent
+        )
         let growth = 1 + monthlyRate(annualYieldPercent: scenario.annualYieldPercent).doubleValue
         let volatility = baseline.savingsVolatility(for: scenario.cuts)?.doubleValue
 
@@ -116,7 +122,7 @@ enum ForwardSimulator {
                 date: calendar.date(byAdding: .month, value: month, to: now) ?? now,
                 balance: balance.rounded(scale: 2),
                 contributed: (scenario.startingBalance + monthly * Decimal(month)).rounded(scale: 2),
-                lower: band.map { (balance - $0).rounded(scale: 2) },
+                lower: band.map { max(floor[month], balance - $0).rounded(scale: 2) },
                 upper: band.map { (balance + $0).rounded(scale: 2) }
             )
         }

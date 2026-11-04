@@ -159,16 +159,30 @@ struct ScenarioComparisonView: View {
         }
     }
 
+    /// A distinct legend label per row, so two scenarios with the same name stay separate lines.
+    private func seriesLabels(_ comparison: ScenarioComparison) -> [UUID: String] {
+        var counts: [String: Int] = [:]
+        var labels: [UUID: String] = [:]
+        for row in comparison.rows {
+            let count = (counts[row.entry.name] ?? 0) + 1
+            counts[row.entry.name] = count
+            labels[row.id] = count == 1 ? row.entry.name : "\(row.entry.name) (\(count))"
+        }
+        return labels
+    }
+
     private func chart(_ comparison: ScenarioComparison) -> some View {
-        Chart {
+        let labels = seriesLabels(comparison)
+        return Chart {
             ForEach(comparison.rows) { row in
+                let label = labels[row.id] ?? row.entry.name
                 ForEach(row.entry.result.timeline.filter { $0.month <= 12 }) { point in
                     LineMark(
                         x: .value("Month", point.month),
                         y: .value("Balance", point.balance.doubleValue),
-                        series: .value("Scenario", row.entry.name)
+                        series: .value("Scenario", label)
                     )
-                    .foregroundStyle(by: .value("Scenario", row.entry.name))
+                    .foregroundStyle(by: .value("Scenario", label))
                     .interpolationMethod(.monotone)
                 }
             }

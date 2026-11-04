@@ -1,8 +1,8 @@
 import Charts
 import SwiftUI
 
-/// The projected savings line with 3/6/12-month markers, a reference rule for each goal that is
-/// within reach of the chart, and (optionally) the likely range around the line.
+/// The projected savings line with 3/6/12-month markers, a reference rule for each goal within
+/// reach of the chart at the balance where the goal's remaining amount has been put aside, and (optionally) the likely range around the line.
 struct ProjectionChart: View {
     let result: SimulationResult
     let showsBand: Bool
@@ -18,12 +18,17 @@ struct ProjectionChart: View {
         return max(top, 1)
     }
 
+    private var startingBalance: Decimal { timeline.first?.balance ?? 0 }
+
+    /// The balance at which the projection has put aside the goal's remaining amount.
+    private func reachedLevel(_ goal: GoalCountdown) -> Decimal { startingBalance + goal.remaining }
+
     private var visibleGoals: [GoalCountdown] {
-        result.goals.filter { $0.remaining > 0 && $0.remaining.doubleValue <= peak * Self.goalVisibilityMultiple }
+        result.goals.filter { $0.remaining > 0 && reachedLevel($0).doubleValue <= peak * Self.goalVisibilityMultiple }
     }
 
     private var hiddenGoals: [GoalCountdown] {
-        result.goals.filter { $0.remaining > 0 && $0.remaining.doubleValue > peak * Self.goalVisibilityMultiple }
+        result.goals.filter { $0.remaining > 0 && reachedLevel($0).doubleValue > peak * Self.goalVisibilityMultiple }
     }
 
     private var drawsBand: Bool { showsBand && result.hasUncertaintyBand }
@@ -97,11 +102,11 @@ struct ProjectionChart: View {
             }
 
             ForEach(visibleGoals) { goal in
-                RuleMark(y: .value("Goal", goal.remaining.doubleValue))
+                RuleMark(y: .value("Goal", reachedLevel(goal).doubleValue))
                     .foregroundStyle(Color.orange.opacity(0.85))
                     .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [6, 4]))
                     .annotation(position: .top, alignment: .leading, spacing: 2) {
-                        Text("\(goal.name) · \(compact(goal.remaining))")
+                        Text("\(goal.name) reached · \(compact(reachedLevel(goal)))")
                             .font(.caption2.weight(.semibold))
                             .foregroundStyle(Color.orange)
                     }
@@ -131,7 +136,7 @@ struct ProjectionChart: View {
 
     private var accessibilitySummary: String {
         let marks = result.milestones.map { "\($0.month) months: \(money($0.balance))" }.joined(separator: ", ")
-        let goals = visibleGoals.map { "\($0.name) needs \(money($0.remaining))" }.joined(separator: ", ")
+        let goals = visibleGoals.map { "\($0.name) reached at \(money(reachedLevel($0)))" }.joined(separator: ", ")
         return [marks, goals].filter { !$0.isEmpty }.joined(separator: ". ")
     }
 
