@@ -36,7 +36,7 @@ struct SystemSnapshot: Sendable {
         let insights = InsightVisibility.visible(InsightEngine().insights(for: input), suppressions: try InsightDataLoader.suppressions(in: context), now: now)
         return SystemSnapshot(date: now, currency: settings?.currencyCode ?? CurrencyFormatter.currencyCode,
             spent: ledger.totalSpending(monthsAgo: 0), budget: progress.map(\.limit).sum(),
-            topCategory: ledger.categoryTotals(monthsAgo: 0).first?.category.title,
+            topCategory: ledger.categoryTotals(monthsAgo: 0).first?.category.localizedTitle,
             due: upcoming(recurring: recurring, entries: entries, now: now, calendar: calendar),
             budgets: progress.map { BudgetStatusLine(category: $0.category, limit: $0.limit, spent: $0.spent) }, insights: insights)
     }
@@ -50,7 +50,7 @@ struct SystemSnapshot: Sendable {
         let due = upcoming(recurring: context.recurringExpenses, entries: context.transactions.map(LedgerEntry.init), now: now, calendar: calendar)
         return SystemSnapshot(date: now, currency: context.settings?.currencyCode ?? "USD",
             spent: ledger.totalSpending(monthsAgo: 0), budget: budgets.map(\.limit).sum(),
-            topCategory: ledger.categoryTotals(monthsAgo: 0).first?.category.title,
+            topCategory: ledger.categoryTotals(monthsAgo: 0).first?.category.localizedTitle,
             due: due, budgets: budgets, insights: context.engineInsights)
     }
 

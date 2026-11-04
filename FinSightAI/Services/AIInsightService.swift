@@ -31,8 +31,8 @@ enum AIInsightError: LocalizedError, Equatable {
         switch self {
         case .unavailable(let message): message
         case .modelUnavailable(let reason): reason.message
-        case .emptyResponse: "The AI model returned an empty response."
-        case .ungroundedFigures: "The AI quoted amounts that don't match your data, so its text was hidden."
+        case .emptyResponse: String(localized: "The AI model returned an empty response.")
+        case .ungroundedFigures: String(localized: "The AI quoted amounts that don't match your data, so its text was hidden.")
         }
     }
 

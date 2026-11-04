@@ -94,7 +94,7 @@ struct SimulatorView: View {
                 .foregroundStyle(AppTheme.mutedInk)
             if !baseline.excludedOneOffs.isEmpty {
                 Label(
-                    "Left out as one-off: \(baseline.excludedOneOffs.map { "\($0.merchant.isEmpty ? $0.category.title : $0.merchant) \(CurrencyFormatter.string(from: $0.amount))" }.joined(separator: ", "))",
+                    "Left out as one-off: \(baseline.excludedOneOffs.map { "\($0.merchant.isEmpty ? $0.category.localizedTitle : $0.merchant) \(CurrencyFormatter.string(from: $0.amount))" }.joined(separator: ", "))",
                     systemImage: "minus.circle"
                 )
                 .font(AppTheme.Typography.caption)
@@ -128,7 +128,7 @@ struct SimulatorView: View {
                 let saved = result.categorySavings.first { $0.category == line.category }?.saved ?? 0
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Label(line.category.title, systemImage: line.category.symbolName)
+                        Label(line.category.localizedTitle, systemImage: line.category.symbolName)
                             .font(.subheadline.weight(.semibold))
                         Spacer()
                         Text("\(percent)%")
@@ -138,7 +138,7 @@ struct SimulatorView: View {
                         .font(AppTheme.Typography.caption.monospacedDigit())
                         .foregroundStyle(AppTheme.mutedInk)
                     Slider(value: cutBinding(for: line.category), in: 0...100, step: 5)
-                        .accessibilityLabel("\(line.category.title) cut")
+                        .accessibilityLabel("\(line.category.localizedTitle) cut")
                         .accessibilityValue("\(percent) percent, saves \(CurrencyFormatter.string(from: saved)) a month")
                 }
             }
@@ -353,7 +353,7 @@ struct SimulatorView: View {
         return false
     }
 
-    private func projectionRow(label: String, point: ProjectionPoint) -> some View {
+    private func projectionRow(label: LocalizedStringKey, point: ProjectionPoint) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
                 Text(label)
@@ -439,7 +439,7 @@ private struct GoalCountdownRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
-                Text(goal.name.isEmpty ? "Goal" : goal.name).font(.subheadline.weight(.semibold))
+                Text(goal.name.isEmpty ? String(localized: "Goal") : goal.name).font(.subheadline.weight(.semibold))
                 Spacer()
                 Label(statusTitle, systemImage: statusSymbol)
                     .font(.caption.weight(.semibold))
@@ -481,21 +481,21 @@ private struct GoalCountdownRow: View {
     private var detail: String {
         switch goal.status {
         case .reached:
-            return "Already funded."
+            return String(localized: "Already funded.")
         case .noPace:
-            return "\(CurrencyFormatter.string(from: goal.remaining)) to go. Nothing is saved toward it yet, so it won't be funded."
+            return String(localized: "\(CurrencyFormatter.string(from: goal.remaining)) to go. Nothing is saved toward it yet, so it won't be funded.")
         case .onTrack, .behind:
             let months = goal.planMonths ?? 0
-            var text = "\(months) \(months == 1 ? "month" : "months") to go"
-            if let fundedBy = goal.fundedBy { text += ", funded by \(MonthFormatter.label(for: fundedBy))" }
+            var parts = [String(localized: "\(months) months to go")]
+            if let fundedBy = goal.fundedBy { parts.append(String(localized: "Funded by \(MonthFormatter.label(for: fundedBy)).")) }
             if let sooner = goal.monthsSooner, sooner > 0 {
-                text += " (\(sooner) \(sooner == 1 ? "month" : "months") sooner)"
+                parts.append(String(localized: "\(sooner) months sooner."))
             }
-            text += ". \(CurrencyFormatter.string(from: goal.remaining)) remaining."
+            parts.append(String(localized: "\(CurrencyFormatter.string(from: goal.remaining)) remaining."))
             if goal.status == .behind, let targetDate = goal.targetDate {
-                text += " Misses its \(MonthFormatter.label(for: targetDate)) target."
+                parts.append(String(localized: "Misses its \(MonthFormatter.label(for: targetDate)) target."))
             }
-            return text
+            return parts.joined(separator: " ")
         }
     }
 }

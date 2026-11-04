@@ -45,17 +45,17 @@ struct SpendingWidgetView: View {
                             Text(snapshot.spendText).font(.headline).minimumScaleFactor(0.6)
                             Gauge(value: snapshot.progress) { Text("Budget") }
                                 .gaugeStyle(.linearCapacity)
-                            Text(snapshot.budget > 0 ? "of \(snapshot.budget.formatted(.currency(code: snapshot.currency)))" : "No budget set")
+                            Text(snapshot.budget > 0 ? String(localized: "of \(snapshot.budget.formatted(.currency(code: snapshot.currency)))") : String(localized: "No budget set"))
                                 .font(.caption2).foregroundStyle(.secondary)
                             if family == .systemSmall {
-                                Text(snapshot.topCategory ?? "No spending yet").font(.caption2).lineLimit(1)
-                                Text(snapshot.due.first.map { "Next: \($0.merchant)" } ?? "No bills upcoming").font(.caption2).lineLimit(1)
+                                Text(snapshot.topCategory ?? String(localized: "No spending yet")).font(.caption2).lineLimit(1)
+                                Text(snapshot.due.first.map { String(localized: "Next: \($0.merchant)") } ?? String(localized: "No bills upcoming")).font(.caption2).lineLimit(1)
                             }
                         }
                         if family == .systemMedium {
                             VStack(alignment: .leading, spacing: 8) {
                                 Text("Top category").font(.caption).foregroundStyle(.secondary)
-                                Text(snapshot.topCategory ?? "No spending yet").font(.subheadline)
+                                Text(snapshot.topCategory ?? String(localized: "No spending yet")).font(.subheadline)
                                 Text("Next recurring").font(.caption).foregroundStyle(.secondary)
                                 if let due = snapshot.due.first {
                                     Text(due.merchant).font(.subheadline).lineLimit(1)

@@ -42,7 +42,7 @@ struct CategoryChartDescriptor: AXChartDescriptorRepresentable {
         let maximum = max(breakdown.map(\.amount).max() ?? 0, 1)
         let xAxis = AXCategoricalDataAxisDescriptor(
             title: String(localized: "Category"),
-            categoryOrder: breakdown.map(\.category.title)
+            categoryOrder: breakdown.map(\.category.localizedTitle)
         )
         let yAxis = AXNumericDataAxisDescriptor(
             title: String(localized: "Amount"),
@@ -53,7 +53,7 @@ struct CategoryChartDescriptor: AXChartDescriptorRepresentable {
             name: String(localized: "Spending by category"),
             isContinuous: false,
             dataPoints: breakdown.map {
-                AXDataPoint(x: $0.category.title, y: $0.amount, label: PercentFormatter.string(from: $0.percentage))
+                AXDataPoint(x: $0.category.localizedTitle, y: $0.amount, label: PercentFormatter.string(from: $0.percentage))
             }
         )
         return AXChartDescriptor(
@@ -109,7 +109,7 @@ struct BudgetChartDescriptor: AXChartDescriptorRepresentable {
         let maximum = max(items.map { max($0.spent, $0.limit).doubleValue }.max() ?? 0, 1)
         let xAxis = AXCategoricalDataAxisDescriptor(
             title: String(localized: "Category"),
-            categoryOrder: items.map(\.category.title)
+            categoryOrder: items.map(\.category.localizedTitle)
         )
         let yAxis = AXNumericDataAxisDescriptor(
             title: String(localized: "Amount"),
@@ -126,12 +126,12 @@ struct BudgetChartDescriptor: AXChartDescriptorRepresentable {
                 AXDataSeriesDescriptor(
                     name: String(localized: "Spent"),
                     isContinuous: false,
-                    dataPoints: items.map { AXDataPoint(x: $0.category.title, y: $0.spent.doubleValue) }
+                    dataPoints: items.map { AXDataPoint(x: $0.category.localizedTitle, y: $0.spent.doubleValue) }
                 ),
                 AXDataSeriesDescriptor(
                     name: String(localized: "Budget"),
                     isContinuous: false,
-                    dataPoints: items.map { AXDataPoint(x: $0.category.title, y: $0.limit.doubleValue) }
+                    dataPoints: items.map { AXDataPoint(x: $0.category.localizedTitle, y: $0.limit.doubleValue) }
                 )
             ]
         )

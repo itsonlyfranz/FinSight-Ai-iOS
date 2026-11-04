@@ -40,5 +40,5 @@ enum SharedStore {
 
 enum SharedStoreError: LocalizedError {
     case openApp
-    var errorDescription: String? { "Open FinSight AI to prepare the shared ledger. App Group signing is required for extensions." }
+    var errorDescription: String? { String(localized: "Open FinSight AI to prepare the shared ledger. App Group signing is required for extensions.") }
 }

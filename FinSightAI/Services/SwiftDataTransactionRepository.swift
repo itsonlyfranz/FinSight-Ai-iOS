@@ -66,7 +66,7 @@ enum ValidationError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .invalidAmount: "Enter a valid amount greater than zero."
+        case .invalidAmount: String(localized: "Enter a valid amount greater than zero.")
         }
     }
 

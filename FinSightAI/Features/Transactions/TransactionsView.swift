@@ -173,7 +173,7 @@ private struct CategoryFilterChips: View {
                     Button {
                         filter.toggle(category)
                     } label: {
-                        Label(category.title, systemImage: category.symbolName)
+                        Label(category.localizedTitle, systemImage: category.symbolName)
                             .font(.subheadline.weight(.medium))
                             .padding(.horizontal, 12)
                             .padding(.vertical, 8)
@@ -181,7 +181,7 @@ private struct CategoryFilterChips: View {
                             .background(isSelected ? category.tint : AppTheme.surfaceAccent, in: Capsule())
                     }
                     .buttonStyle(.plain)
-                    .accessibilityLabel("\(category.title) filter")
+                    .accessibilityLabel("\(category.localizedTitle) filter")
                     .accessibilityAddTraits(isSelected ? .isSelected : [])
                 }
             }
@@ -203,9 +203,9 @@ private struct TransactionListRow: View {
                 .frame(minWidth: 28)
 
             VStack(alignment: .leading, spacing: 4) {
-                Text(transaction.merchantName.isEmpty ? transaction.category.title : transaction.merchantName)
+                Text(transaction.merchantName.isEmpty ? transaction.category.localizedTitle : transaction.merchantName)
                     .font(.headline)
-                Text(transaction.note.isEmpty ? (transaction.kind == .income ? "Income" : "Quick expense log") : transaction.note)
+                Text(transaction.note.isEmpty ? (transaction.kind == .income ? String(localized: "Income") : String(localized: "Quick expense log")) : transaction.note)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -233,13 +233,13 @@ private struct TransactionListRow: View {
     }
 
     private var title: String {
-        transaction.merchantName.isEmpty ? transaction.category.title : transaction.merchantName
+        transaction.merchantName.isEmpty ? transaction.category.localizedTitle : transaction.merchantName
     }
 
     private var accessibilityText: String {
-        let kind = transaction.kind == .expense ? "" : "\(transaction.kind.title), "
+        let kind = transaction.kind == .expense ? "" : "\(transaction.kind.localizedTitle), "
         let date = transaction.date.formatted(date: .abbreviated, time: .omitted)
-        return "\(kind)\(title), \(transaction.category.title), \(CurrencyFormatter.string(from: transaction.amount)), \(date)"
+        return "\(kind)\(title), \(transaction.category.localizedTitle), \(CurrencyFormatter.string(from: transaction.amount)), \(date)"
     }
 }
 
@@ -367,7 +367,7 @@ private struct RecurringTransactionRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.merchantName)
                     .font(.headline)
-                Text("\(item.isActive ? item.status.title : "Paused") - expected day \(item.expectedDay)")
+                Text("\(item.isActive ? item.status.localizedTitle : String(localized: "Paused")) - expected day \(item.expectedDay)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -432,7 +432,7 @@ private struct RecurringExpenseEditorView: View {
                 Section("Category") {
                     Picker("Category", selection: Bindable(appContext).activeRecurringDraft.category) {
                         ForEach(SpendingCategory.allCases) { category in
-                            Label(category.title, systemImage: category.symbolName)
+                            Label(category.localizedTitle, systemImage: category.symbolName)
                                 .tag(category)
                         }
                     }
@@ -443,7 +443,7 @@ private struct RecurringExpenseEditorView: View {
                         .lineLimit(2...4)
                 }
             }
-            .navigationTitle(appContext.editingRecurringExpense == nil ? "New Recurring" : "Edit Recurring")
+            .navigationTitle(appContext.editingRecurringExpense == nil ? Text("New Recurring") : Text("Edit Recurring"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {

@@ -241,7 +241,7 @@ struct DashboardView: View {
                 Chart(summary.categoryBreakdown) { item in
                     BarMark(
                         x: .value("Amount", item.amount),
-                        y: .value("Category", item.category.title)
+                        y: .value("Category", item.category.localizedTitle)
                     )
                     .foregroundStyle(item.category.tint.gradient)
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
@@ -387,7 +387,7 @@ private struct TransactionRow: View {
                 .background(transaction.category.tint, in: RoundedRectangle(cornerRadius: AppTheme.CornerRadius.icon, style: .continuous))
 
             VStack(alignment: .leading, spacing: 3) {
-                Text(transaction.merchantName.isEmpty ? transaction.category.title : transaction.merchantName)
+                Text(transaction.merchantName.isEmpty ? transaction.category.localizedTitle : transaction.merchantName)
                     .font(.subheadline.weight(.semibold))
                 Text(transaction.note.isEmpty ? String(localized: "No note") : transaction.note)
                     .font(.caption)

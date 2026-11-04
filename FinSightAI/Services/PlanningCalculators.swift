@@ -94,6 +94,16 @@ enum BudgetStatus: String, Equatable, Sendable {
         }
     }
 
+    /// The name shown in the interface, in the person's language. `title` stays English because
+    /// it feeds insight text, AI prompts and exports.
+    var localizedTitle: String {
+        switch self {
+        case .onTrack: String(localized: "On track")
+        case .nearLimit: String(localized: "Near limit")
+        case .overBudget: String(localized: "Over budget")
+        }
+    }
+
     var systemImage: String {
         switch self {
         case .onTrack: "checkmark.circle.fill"

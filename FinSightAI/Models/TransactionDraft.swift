@@ -29,10 +29,10 @@ struct TransactionDraft: Equatable {
     }
 
     var validationError: String? {
-        guard let amount else { return "Enter a valid amount." }
-        guard amount > 0 else { return "Amount must be greater than zero." }
+        guard let amount else { return String(localized: "Enter a valid amount.") }
+        guard amount > 0 else { return String(localized: "Amount must be greater than zero.") }
         guard !merchantName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            return (kind == .income ? "Source is required." : "Merchant is required.")
+            return (kind == .income ? String(localized: "Source is required.") : String(localized: "Merchant is required."))
         }
         return nil
     }

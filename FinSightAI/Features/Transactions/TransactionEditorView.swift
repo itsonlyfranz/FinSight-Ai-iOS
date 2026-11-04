@@ -18,7 +18,7 @@ struct TransactionEditorView: View {
                 Section {
                     Picker("Type", selection: Bindable(appContext).activeDraft.kind) {
                         ForEach(TransactionKind.allCases) { kind in
-                            Text(kind.title).tag(kind)
+                            Text(kind.localizedTitle).tag(kind)
                         }
                     }
                     .pickerStyle(.segmented)
@@ -43,7 +43,7 @@ struct TransactionEditorView: View {
                     Section {
                         Picker("Category", selection: categoryBinding) {
                             ForEach(SpendingCategory.allCases) { category in
-                                Label(category.title, systemImage: category.symbolName)
+                                Label(category.localizedTitle, systemImage: category.symbolName)
                                     .tag(category)
                             }
                         }
@@ -52,7 +52,7 @@ struct TransactionEditorView: View {
                     } footer: {
                         if let suggestion = appContext.categorySuggestion, !appContext.activeDraft.categoryIsUserChosen || suggestion.category == appContext.activeDraft.category {
                             Label(
-                                suggestion.source == .model ? "Suggested by on-device AI" : "Suggested from the merchant name",
+                                suggestion.source == .model ? String(localized: "Suggested by on-device AI") : String(localized: "Suggested from the merchant name"),
                                 systemImage: "sparkles"
                             )
                         }
@@ -121,7 +121,7 @@ struct TransactionEditorView: View {
         } header: {
             Text("Quick add")
         } footer: {
-            Text(quickAddMessage ?? "Type what you spent in your own words. The amount and date are read exactly as typed; check the details below before saving.")
+            Text(quickAddMessage ?? String(localized: "Type what you spent in your own words. The amount and date are read exactly as typed; check the details below before saving."))
         }
     }
 
@@ -136,7 +136,7 @@ struct TransactionEditorView: View {
             if foundAmount {
                 quickAddText = ""
             } else {
-                quickAddMessage = "Couldn't find an amount. Add one like \"coffee 150\", or fill in the fields below."
+                quickAddMessage = String(localized: "Couldn't find an amount. Add one like \"coffee 150\", or fill in the fields below.")
             }
         }
     }

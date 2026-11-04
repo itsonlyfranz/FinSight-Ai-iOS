@@ -89,13 +89,13 @@ struct InsightSeverityBadge: View {
     let severity: Insight.Severity
 
     var body: some View {
-        Text(severity.title.uppercased())
+        Text(severity.localizedTitle.uppercased())
             .font(.caption2.weight(.bold))
             .padding(.horizontal, 8)
             .padding(.vertical, 3)
             .foregroundStyle(severity.tint)
             .background(severity.tint.opacity(0.15), in: Capsule())
-            .accessibilityLabel("Severity: \(severity.title)")
+            .accessibilityLabel("Severity: \(severity.localizedTitle)")
     }
 }
 

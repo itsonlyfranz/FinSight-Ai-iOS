@@ -38,14 +38,14 @@ struct BudgetsView: View {
                             BudgetProgressRow(progress: progress)
                         } else {
                             HStack {
-                                Label(category.title, systemImage: category.symbolName)
+                                Label(category.localizedTitle, systemImage: category.symbolName)
                                     .foregroundStyle(AppTheme.ink)
                                 Spacer()
                                 Text("No budget")
                                     .foregroundStyle(AppTheme.mutedInk)
                             }
                             .accessibilityElement(children: .combine)
-                            .accessibilityLabel("\(category.title), no budget set")
+                            .accessibilityLabel("\(category.localizedTitle), no budget set")
                         }
                     }
                     .buttonStyle(.plain)
@@ -77,10 +77,10 @@ private struct BudgetEditor: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section("Monthly limit for \(category.title)") {
+                Section("Monthly limit for \(category.localizedTitle)") {
                     TextField("0.00", text: $amountText)
                         .keyboardType(.decimalPad)
-                        .accessibilityLabel("\(category.title) monthly budget")
+                        .accessibilityLabel("\(category.localizedTitle) monthly budget")
                     if let errorMessage {
                         Text(errorMessage).font(.caption).foregroundStyle(.red)
                     }
@@ -98,7 +98,7 @@ private struct BudgetEditor: View {
                     }
                 }
             }
-            .navigationTitle("\(category.title) Budget")
+            .navigationTitle("\(category.localizedTitle) Budget")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {

@@ -37,7 +37,8 @@ extension TransactionDraft {
 }
 
 /// Reads amount, date and kind out of a short sentence, entirely in code. Understands "today",
-/// "yesterday", "N days/weeks ago", weekday names ("on monday", "last friday") and ISO dates.
+/// "yesterday", "N days/weeks ago", weekday names ("on monday", "last friday") and ISO dates, plus
+/// the Filipino "ngayon" (today), "kahapon" (yesterday) and "kamakalawa" (the day before).
 enum QuickAddParser {
     static func parse(
         _ text: String,
@@ -97,13 +98,13 @@ enum QuickAddParser {
                 return (date, removing(range, from: text))
             }
         }
-        if let range = text.range(of: #"\bday before yesterday\b"#, options: [.regularExpression, .caseInsensitive]) {
+        if let range = text.range(of: #"\b(day before yesterday|kamakalawa)\b"#, options: [.regularExpression, .caseInsensitive]) {
             return (day(2), removing(range, from: text))
         }
-        if let range = text.range(of: #"\byesterday\b"#, options: [.regularExpression, .caseInsensitive]) {
+        if let range = text.range(of: #"\b(yesterday|kahapon)\b"#, options: [.regularExpression, .caseInsensitive]) {
             return (day(1), removing(range, from: text))
         }
-        if let range = text.range(of: #"\btoday\b"#, options: [.regularExpression, .caseInsensitive]) {
+        if let range = text.range(of: #"\b(today|ngayong araw|ngayon)\b"#, options: [.regularExpression, .caseInsensitive]) {
             return (today, removing(range, from: text))
         }
         if let range = text.range(of: #"\b(\d{1,3})\s*(day|days|week|weeks)\s+ago\b"#, options: [.regularExpression, .caseInsensitive]) {

@@ -18,7 +18,7 @@ extension BudgetProgress {
         let left = remaining >= 0
             ? "\(CurrencyFormatter.string(from: remaining)) left"
             : "\(CurrencyFormatter.string(from: -remaining)) over"
-        return "\(category.title) budget, spent \(CurrencyFormatter.string(from: spent)) of \(CurrencyFormatter.string(from: limit)), \(used) used, \(left), \(status.title)"
+        return "\(category.localizedTitle) budget, spent \(CurrencyFormatter.string(from: spent)) of \(CurrencyFormatter.string(from: limit)), \(used) used, \(left), \(status.localizedTitle)"
     }
 }
 
@@ -33,7 +33,7 @@ struct BudgetBarChart: View {
         Chart(items) { item in
             BarMark(
                 x: .value("Spent", item.spent.doubleValue),
-                y: .value("Category", item.category.title)
+                y: .value("Category", item.category.localizedTitle)
             )
             .foregroundStyle(item.status.tint.gradient)
             .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
@@ -41,11 +41,11 @@ struct BudgetBarChart: View {
             BarMark(
                 xStart: .value("Budget start", max(0, item.limit.doubleValue - tick)),
                 xEnd: .value("Budget end", item.limit.doubleValue + tick),
-                y: .value("Category", item.category.title),
+                y: .value("Category", item.category.localizedTitle),
                 height: .fixed(26)
             )
             .foregroundStyle(AppTheme.ink)
-            .accessibilityLabel("\(item.category.title) budget")
+            .accessibilityLabel("\(item.category.localizedTitle) budget")
             .accessibilityValue(CurrencyFormatter.string(from: item.limit))
         }
         .chartXAxis {
@@ -72,11 +72,11 @@ struct BudgetProgressRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Label(progress.category.title, systemImage: progress.category.symbolName)
+                Label(progress.category.localizedTitle, systemImage: progress.category.symbolName)
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(AppTheme.ink)
                 Spacer()
-                Label(progress.status.title, systemImage: progress.status.systemImage)
+                Label(progress.status.localizedTitle, systemImage: progress.status.systemImage)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(progress.status.tint)
                     .labelStyle(.titleAndIcon)
@@ -111,7 +111,7 @@ struct SavingsGoalRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Text(goal.name.isEmpty ? "Goal" : goal.name)
+                Text(goal.name.isEmpty ? String(localized: "Goal") : goal.name)
                     .font(.headline)
                 Spacer()
                 Text(PercentFormatter.string(from: goal.progress))

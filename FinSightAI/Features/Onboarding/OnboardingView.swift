@@ -89,7 +89,7 @@ struct OnboardingView: View {
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
                 .disabled(!draft.canAdvance(from: step))
-                .accessibilityHint(draft.canAdvance(from: step) ? Text("") : Text(stepRequirement))
+                .accessibilityHint(stepRequirement.map { Text($0) } ?? Text(verbatim: ""))
             } else {
                 Button {
                     saving = true
@@ -113,11 +113,13 @@ struct OnboardingView: View {
         .background(.bar)
     }
 
-    private var stepRequirement: LocalizedStringKey {
+    /// What still blocks Continue on this step, for VoiceOver; nil once the step is complete.
+    private var stepRequirement: LocalizedStringKey? {
+        guard !draft.canAdvance(from: step) else { return nil }
         switch step {
-        case .income: "Enter a monthly income greater than zero."
-        case .goals: "Give each goal a name and a target greater than zero."
-        default: ""
+        case .income: return "Enter a monthly income greater than zero."
+        case .goals: return "Give each goal a name and a target greater than zero."
+        default: return nil
         }
     }
 

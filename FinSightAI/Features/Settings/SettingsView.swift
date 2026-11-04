@@ -134,9 +134,11 @@ struct SettingsView: View {
                 } header: {
                     Text("Sample data")
                 } footer: {
-                    Text(appContext.hasNoData
-                         ? "Fills the empty ledger with example transactions, income, budgets and a goal."
-                         : "Sample data can only be loaded into an empty ledger, so it never mixes with your own.")
+                    if appContext.hasNoData {
+                        Text("Fills the empty ledger with example transactions, income, budgets and a goal.")
+                    } else {
+                        Text("Sample data can only be loaded into an empty ledger, so it never mixes with your own.")
+                    }
                 }
             }
             .scrollContentBackground(.hidden)

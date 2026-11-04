@@ -96,11 +96,11 @@ struct InsightsView: View {
     private var signalSection: some View {
         if appContext.engineInsights.isEmpty {
             FinSightEmptyState(
-                title: appContext.allEngineInsights.isEmpty ? "No insights yet" : "All caught up",
+                title: appContext.allEngineInsights.isEmpty ? LocalizedStringResource("No insights yet") : LocalizedStringResource("All caught up"),
                 systemImage: appContext.allEngineInsights.isEmpty ? "chart.bar.doc.horizontal" : "checkmark.seal",
                 message: appContext.allEngineInsights.isEmpty
-                    ? "Log a few weeks of expenses, and add income and budgets, to see budget, trend and subscription insights."
-                    : "You've dismissed or snoozed every insight for now."
+                    ? LocalizedStringResource("Log a few weeks of expenses, and add income and budgets, to see budget, trend and subscription insights.")
+                    : LocalizedStringResource("You've dismissed or snoozed every insight for now.")
             )
             .finSightCard()
         } else {
@@ -224,7 +224,7 @@ private struct InsightPanel: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
-            Label(card.kind.title, systemImage: card.kind.systemImage)
+            Label(card.kind.localizedTitle, systemImage: card.kind.systemImage)
                 .font(AppTheme.Typography.headline)
                 .foregroundStyle(AppTheme.ink)
 
@@ -236,7 +236,7 @@ private struct InsightPanel: View {
         }
         .finSightCard(surface: panelTint)
         .accessibilityElement(children: .contain)
-        .accessibilityLabel("\(card.kind.title) insight")
+        .accessibilityLabel("\(card.kind.localizedTitle) insight")
     }
 
     private var panelTint: Color {

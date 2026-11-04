@@ -38,7 +38,7 @@ struct IncomeSourcesView: View {
                         .labelsHidden()
                     }
                     .accessibilityElement(children: .combine)
-                    .accessibilityLabel("\(source.name), \(CurrencyFormatter.string(from: source.monthlyAmount)) per month, \(source.isActive ? "active" : "paused")")
+                    .accessibilityLabel("\(source.name), \(CurrencyFormatter.string(from: source.monthlyAmount)) per month, \(source.isActive ? String(localized: "active") : String(localized: "paused"))")
                     .accessibilityHint("Double tap to edit")
                     .swipeActions {
                         Button("Delete", role: .destructive) {
@@ -111,7 +111,7 @@ private struct IncomeSourceEditor: View {
                     }
                 }
             }
-            .navigationTitle(source == nil ? "New Income" : "Edit Income")
+            .navigationTitle(source == nil ? Text("New Income") : Text("Edit Income"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
