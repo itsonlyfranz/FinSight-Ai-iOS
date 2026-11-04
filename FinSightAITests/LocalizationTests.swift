@@ -89,6 +89,24 @@ final class LocalizationTests: XCTestCase {
         XCTAssertEqual(String(localized: "\(1) categories"), "1 category")
     }
 
+    func testSpendingTrendIsLocalizedForDisplayButStaysEnglishForTheAIPrompt() throws {
+        var utc = Calendar(identifier: .gregorian)
+        utc.timeZone = TimeZone(identifier: "UTC")!
+        let date = { (m: Int, d: Int) in utc.date(from: DateComponents(year: 2026, month: m, day: d))! }
+        let entries = [
+            LedgerEntry(amount: 150, category: .dining, date: date(11, 5)),
+            LedgerEntry(amount: 100, category: .dining, date: date(10, 5))
+        ]
+        let english = "Spending is up 50% compared with the same days last month."
+        XCTAssertEqual(SpendingTrend.description(entries: entries, now: date(11, 15), calendar: utc), english)
+
+        var resource = SpendingTrend.resource(entries: entries, now: date(11, 15), calendar: utc)
+        resource.locale = Locale(identifier: "fil")
+        let filipino = String(localized: resource)
+        XCTAssertNotEqual(filipino, english, "trend sentence is not localized")
+        XCTAssertTrue(filipino.contains("50%"), filipino)
+    }
+
     func testCategoryNamesAreLocalizedForTheInterfaceButStayEnglishForInsights() throws {
         let path = try XCTUnwrap(Bundle.main.path(forResource: "fil", ofType: "lproj"))
         let filipino = try XCTUnwrap(Bundle(path: path))

@@ -40,5 +40,9 @@ struct MonthlySummary: Equatable, Sendable {
     let averageTransactionValue: Double
     let topCategory: SpendingCategory?
     let topCategoryShare: Double
-    let spendingTrendDescription: String
+    /// Localized for display.
+    let spendingTrend: LocalizedStringResource
+
+    /// English trend sentence for the AI prompt and the insight fingerprint.
+    var spendingTrendDescription: String { SpendingTrend.english(spendingTrend) }
 }

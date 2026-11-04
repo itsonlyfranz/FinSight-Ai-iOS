@@ -83,7 +83,7 @@ struct InsightsView: View {
                 .lineLimit(1)
             Text("Across \(appContext.monthlySummary.transactionCount) entries")
                 .font(.title3.weight(.semibold))
-            Text(appContext.monthlySummary.spendingTrendDescription)
+            Text(appContext.monthlySummary.spendingTrend)
                 .font(AppTheme.Typography.caption)
                 .foregroundStyle(AppTheme.mutedInk)
         }

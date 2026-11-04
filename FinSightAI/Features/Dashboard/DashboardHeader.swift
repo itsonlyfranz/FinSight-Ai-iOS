@@ -6,36 +6,54 @@ struct DashboardHeader: View {
     @AppStorage(UserProfile.nameKey) private var name = ""
     @AppStorage(UserProfile.roleKey) private var role = ""
     @ScaledMetric(relativeTo: .headline) private var avatarSize: CGFloat = 44
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
     private var profile: UserProfile { UserProfile(name: name, role: role) }
 
     var body: some View {
-        HStack(alignment: .center, spacing: AppTheme.Spacing.sm) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(verbatim: "FinSight AI")
-                    .font(.title2.bold())
-                    .foregroundStyle(AppTheme.primary)
-                    .accessibilityAddTraits(.isHeader)
-                Group {
-                    if profile.name.isEmpty {
-                        Text("Welcome back")
-                    } else {
-                        Text("Welcome back, \(profile.name)")
-                    }
-                }
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(AppTheme.ink)
-                if !profile.role.isEmpty {
-                    Text(profile.role)
-                        .font(.footnote)
-                        .foregroundStyle(AppTheme.mutedInk)
+        // At accessibility text sizes the greeting gets the full width and the chip and avatar
+        // move to their own row, so neither gets squeezed into one character per line.
+        if dynamicTypeSize.isAccessibilitySize {
+            VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
+                greeting
+                HStack(spacing: AppTheme.Spacing.sm) {
+                    ThemeSwitcherMenu()
+                    avatar
                 }
             }
-            .accessibilityElement(children: .combine)
-            Spacer(minLength: AppTheme.Spacing.xs)
-            ThemeSwitcherMenu()
-            avatar
+            .frame(maxWidth: .infinity, alignment: .leading)
+        } else {
+            HStack(alignment: .center, spacing: AppTheme.Spacing.sm) {
+                greeting
+                Spacer(minLength: AppTheme.Spacing.xs)
+                ThemeSwitcherMenu()
+                avatar
+            }
         }
+    }
+
+    private var greeting: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(verbatim: "FinSight AI")
+                .font(.title2.bold())
+                .foregroundStyle(AppTheme.primary)
+                .accessibilityAddTraits(.isHeader)
+            Group {
+                if profile.name.isEmpty {
+                    Text("Welcome back")
+                } else {
+                    Text("Welcome back, \(profile.name)")
+                }
+            }
+            .font(.subheadline.weight(.semibold))
+            .foregroundStyle(AppTheme.ink)
+            if !profile.role.isEmpty {
+                Text(profile.role)
+                    .font(.footnote)
+                    .foregroundStyle(AppTheme.mutedInk)
+            }
+        }
+        .accessibilityElement(children: .combine)
     }
 
     private var avatar: some View {

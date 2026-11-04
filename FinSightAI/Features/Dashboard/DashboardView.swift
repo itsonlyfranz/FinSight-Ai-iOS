@@ -108,7 +108,7 @@ struct DashboardView: View {
             }
 
             if isCurrentMonth {
-                Text(summary.spendingTrendDescription)
+                Text(summary.spendingTrend)
                     .font(AppTheme.Typography.caption)
                     .foregroundStyle(AppTheme.mutedInk)
             }

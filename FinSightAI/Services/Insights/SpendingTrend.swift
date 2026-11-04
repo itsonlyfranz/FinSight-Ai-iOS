@@ -3,26 +3,39 @@ import Foundation
 /// The one-line spending trend shown on the dashboard and fed to the AI narration.
 ///
 /// It is computed from the ledger (month to date against the same days of last month), not made up.
+/// `resource` is localized for display; `description` is the English text used for the AI prompt.
 enum SpendingTrend {
-    static let emptyMessage = "Start logging a few expenses to unlock spending pattern analysis."
+    static let emptyResource: LocalizedStringResource = "Start logging a few expenses to unlock spending pattern analysis."
+    static var emptyMessage: String { english(emptyResource) }
 
     /// Relative change below which spending counts as unchanged.
     static let stableBand = 0.05
 
     static func description(entries: [LedgerEntry], now: Date, calendar: Calendar) -> String {
+        english(resource(entries: entries, now: now, calendar: calendar))
+    }
+
+    /// Resolves a trend sentence in English whatever the app language is.
+    static func english(_ resource: LocalizedStringResource) -> String {
+        var resource = resource
+        resource.locale = Locale(identifier: "en")
+        return String(localized: resource)
+    }
+
+    static func resource(entries: [LedgerEntry], now: Date, calendar: Calendar) -> LocalizedStringResource {
         let spending = entries.filter(\.countsAsSpending)
-        guard !spending.isEmpty else { return emptyMessage }
+        guard !spending.isEmpty else { return emptyResource }
 
         let today = calendar.startOfDay(for: now)
         guard let monthStart = calendar.dateInterval(of: .month, for: now)?.start,
               let tomorrow = calendar.date(byAdding: .day, value: 1, to: today),
               let previousStart = calendar.dateInterval(of: .month, for: calendar.date(byAdding: .month, value: -1, to: monthStart) ?? monthStart)?.start
-        else { return emptyMessage }
+        else { return emptyResource }
 
         let elapsed = calendar.component(.day, from: now)
         let previousDays = calendar.range(of: .day, in: .month, for: previousStart)?.count ?? 30
         guard let previousEnd = calendar.date(byAdding: .day, value: min(elapsed, previousDays), to: previousStart) else {
-            return emptyMessage
+            return emptyResource
         }
 
         let current = spending.filter { $0.date >= monthStart && $0.date < tomorrow }.map(\.amount).sum()

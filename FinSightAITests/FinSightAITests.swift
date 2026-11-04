@@ -302,7 +302,7 @@ final class FinSightAITests: XCTestCase {
             averageTransactionValue: 666.67,
             topCategory: .groceries,
             topCategoryShare: 0.75,
-            spendingTrendDescription: "Spending is up 10% month over month."
+            spendingTrend: "Spending is up 10% month over month."
         )
         let sameSummary = baseSummary
         let changedSummary = MonthlySummary(
@@ -319,7 +319,7 @@ final class FinSightAITests: XCTestCase {
             averageTransactionValue: 833.33,
             topCategory: .groceries,
             topCategoryShare: 0.75,
-            spendingTrendDescription: baseSummary.spendingTrendDescription
+            spendingTrend: baseSummary.spendingTrend
         )
 
         XCTAssertEqual(

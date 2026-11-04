@@ -2815,6 +2815,16 @@
         }
       }
     },
+    "No spending in the same days last month to compare against yet." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala pang gastos sa parehong mga araw noong nakaraang buwan na maihahambing."
+          }
+        }
+      }
+    },
     "No spending yet" : {
       "localizations" : {
         "fil" : {
@@ -2861,6 +2871,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Walang nabura. Puwede mong subukan ulit, o magsimula sa walang lamang ledger — ililipat ang iyong kasalukuyang data sa isang backup folder sa device na ito, hindi buburahin."
+          }
+        }
+      }
+    },
+    "Nothing spent yet this month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wala ka pang nagagastos ngayong buwan."
           }
         }
       }
@@ -3929,6 +3949,36 @@
         }
       }
     },
+    "Spending is about the same as the same days last month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halos pareho ang gastos sa parehong mga araw noong nakaraang buwan."
+          }
+        }
+      }
+    },
+    "Spending is down %lld%% compared with the same days last month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bumaba ng %lld%% ang gastos kumpara sa parehong mga araw noong nakaraang buwan."
+          }
+        }
+      }
+    },
+    "Spending is up %lld%% compared with the same days last month." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tumaas ng %lld%% ang gastos kumpara sa parehong mga araw noong nakaraang buwan."
+          }
+        }
+      }
+    },
     "Spent" : {
       "localizations" : {
         "fil" : {
@@ -3955,6 +4005,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Magsimula ulit (may backup)"
+          }
+        }
+      }
+    },
+    "Start logging a few expenses to unlock spending pattern analysis." : {
+      "localizations" : {
+        "fil" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magtala ng ilang gastos para makita ang pagsusuri ng iyong paggastos."
           }
         }
       }
