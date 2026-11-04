@@ -29,8 +29,15 @@ final class AppContext {
     var sections: [TransactionMonthSection] = []
     var monthlySummary: MonthlySummary
     var recurringSummary: RecurringSummary = .empty
-    /// Estimated full-month spending used as the simulator baseline.
-    var monthlyRunRate: Double = 0
+    /// A typical full month of spending, per category: the simulator's starting point.
+    var runRateBaseline: RunRateBaseline = .empty
+    /// The what-if the simulator tab is editing. Kept here so it survives tab switches.
+    var workingScenario = SimulationScenario()
+    /// Whether `workingScenario` has been seeded from the user's categories yet.
+    var isScenarioSeeded = false
+    /// What the last seeding produced, to tell an untouched scenario from an edited one.
+    var autoSeededScenario: SimulationScenario?
+    var savedScenarios: [SavedScenarioRecord] = []
     var incomeSources: [IncomeSource] = []
     var budgets: [Budget] = []
     var savingsGoals: [SavingsGoal] = []
@@ -123,10 +130,18 @@ final class AppContext {
             transactions: transactions,
             now: .now
         )
-        monthlyRunRate = MonthlyRunRate.estimate(from: transactions, recurringSummary: recurringSummary, now: .now)
+        runRateBaseline = RunRateBaseline.make(
+            entries: transactions.map(LedgerEntry.init),
+            recurring: RunRateBaseline.recurringCharges(from: recurringSummary),
+            recurringTransactionIDs: recurringSummary.recurringTransactionIDs,
+            now: .now,
+            calendar: settings?.calendar() ?? .current
+        )
         sections = summaryService.monthlySections(from: transactions)
         monthlySummary = summaryService.makeMonthlySummary(from: transactions, recurringSummary: recurringSummary, now: .now)
         try reloadPlanning()
+        try reloadScenarios()
+        seedScenarioIfNeeded()
     }
 
     func saveDraft() throws {
@@ -305,9 +320,8 @@ final class AppContext {
         }
     }
 
-    func loadSimulationExplanation(input: SimulationInput, forceRefresh: Bool = false) async {
-        let projection = simulationService.project(input: input)
-        let fingerprint = AIFingerprint.simulation(input: input, projection: projection)
+    func loadSimulationExplanation(context: SimulationNarrationContext, forceRefresh: Bool = false) async {
+        let fingerprint = context.fingerprint
         let cacheKey = AICacheKey.simulationExplanation(fingerprint: fingerprint)
         let dayKey = DayFormatter.dayKey(for: .now)
 
@@ -353,8 +367,7 @@ final class AppContext {
             }
 
             let explanation = try await aiInsightService.explainSimulation(
-                input: input,
-                projection: projection,
+                context: context,
                 onUpdate: { [weak self] partialMarkdown in
                     guard let self else { return }
                     let visibleMarkdown = partialMarkdown.isEmpty ? (existingCachedMarkdown ?? "") : partialMarkdown
@@ -394,6 +407,9 @@ final class AppContext {
                 cacheKey: cacheKey,
                 dayKey: dayKey,
                 message: error.localizedDescription,
+                unavailableReason: (error as? AIInsightError).flatMap {
+                    if case .modelUnavailable(let reason) = $0 { reason } else { nil }
+                },
                 isAutomatic: !forceRefresh
             )
         }
@@ -590,6 +606,7 @@ final class AppContext {
         cacheKey: String,
         dayKey: String,
         message: String,
+        unavailableReason: AIUnavailableReason? = nil,
         isAutomatic: Bool
     ) {
         if let record = fetchCacheRecord(cacheKey: cacheKey, feature: .simulationExplanation) {
@@ -608,6 +625,8 @@ final class AppContext {
                     statusMessage: message
                 )
             )
+        } else if let unavailableReason {
+            simulatorExplanationState = .modelUnavailable(unavailableReason)
         } else {
             simulatorExplanationState = .unavailable(message)
         }

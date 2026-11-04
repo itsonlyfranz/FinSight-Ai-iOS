@@ -9,8 +9,7 @@ protocol AIInsightService: Sendable {
         onUpdate: (@Sendable ([GeneratedInsightCard]) async -> Void)?
     ) async throws -> GeneratedInsightPayload
     func explainSimulation(
-        input: SimulationInput,
-        projection: SimulationProjection,
+        context: SimulationNarrationContext,
         onUpdate: (@Sendable (String) async -> Void)?
     ) async throws -> GeneratedSimulationExplanation
 }
@@ -33,13 +32,13 @@ enum AIInsightError: LocalizedError, Equatable {
         case .unavailable(let message): message
         case .modelUnavailable(let reason): reason.message
         case .emptyResponse: "The AI model returned an empty response."
-        case .ungroundedFigures: "The AI narration quoted amounts that don't match your data, so it was hidden. The insights above are unaffected."
+        case .ungroundedFigures: "The AI quoted amounts that don't match your data, so its text was hidden."
         }
     }
 
     /// Shown when the model failed or ran too long for a reason the user can't act on.
     static let narrationFailed = AIInsightError.unavailable(
-        "The on-device AI couldn't finish the narration this time. The insights above are unaffected."
+        "The on-device AI couldn't finish this time."
     )
 }
 
@@ -75,8 +74,7 @@ struct UnsupportedAIInsightService: AIInsightService {
     }
 
     func explainSimulation(
-        input: SimulationInput,
-        projection: SimulationProjection,
+        context: SimulationNarrationContext,
         onUpdate: (@Sendable (String) async -> Void)? = nil
     ) async throws -> GeneratedSimulationExplanation {
         throw AIInsightError.unavailable(reason)
@@ -133,6 +131,29 @@ extension InsightNarration {
                 markdown: NarrationCardContent(takeaway: card.takeaway, whyItMatters: card.whyItMatters, nextSteps: card.nextSteps).markdown
             )
         }
+    }
+}
+
+/// The what-if explanation, generated in one structured session. Properties are produced in
+/// declaration order, so the sections fill in top to bottom as they stream.
+@Generable(description: "A short explanation of a savings what-if scenario, grounded in the supplied facts.")
+struct SimulationNarration {
+    @Guide(description: "One or two sentences on what the scenario frees each month and what it grows to. Quote only amounts from the facts.")
+    var summary: String
+    @Guide(description: "One or two sentences on what the user gives up, or how far the likely range could swing. Quote only amounts from the facts.")
+    var tradeoff: String
+    @Guide(description: "One or two concrete next steps. Quote only amounts from the facts.", .count(1...2))
+    var nextSteps: [String]
+}
+
+extension SimulationNarration.PartiallyGenerated {
+    /// The sections that have started streaming, as markdown.
+    var content: SimulationNarrationContent {
+        SimulationNarrationContent(
+            summary: summary ?? "",
+            tradeoff: tradeoff ?? "",
+            nextSteps: nextSteps?.compactMap(\.self) ?? []
+        )
     }
 }
 
@@ -292,24 +313,58 @@ struct AppleFoundationModelsInsightService: AIInsightService {
     }
 
     func explainSimulation(
-        input: SimulationInput,
-        projection: SimulationProjection,
+        context: SimulationNarrationContext,
         onUpdate: (@Sendable (String) async -> Void)? = nil
     ) async throws -> GeneratedSimulationExplanation {
         try ensureAvailable()
 
-        let session = LanguageModelSession(instructions: PromptFactory.simulationInstructions)
-        let prompt = PromptFactory.simulationPrompt(input: input, projection: projection)
-        var streamedMarkdown = ""
+        var correction: String?
+        do {
+            while true {
+                let prompt = PromptFactory.simulationPrompt(context: context) + (correction.map { "\n\n" + $0 } ?? "")
+                let markdown = try await withDeadline(Self.attemptTimeLimit) {
+                    try await streamExplanation(prompt: prompt, facts: context.facts, onUpdate: onUpdate)
+                }
+                let offenders = FigureGrounding.ungroundedAmounts(in: markdown, sources: [context.facts])
+                guard offenders.isEmpty else {
+                    // One retry that names the offending amounts; after that, show the plain
+                    // summary rather than figures the data doesn't support.
+                    guard correction == nil else { throw AIInsightError.ungroundedFigures }
+                    correction = Self.correction(for: offenders)
+                    continue
+                }
+                return GeneratedSimulationExplanation(markdown: markdown, providerIdentifier: providerIdentifier)
+            }
+        } catch let error as AIInsightError {
+            throw error
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            throw AIInsightError.narrationFailed
+        }
+    }
 
-        for try await snapshot in session.streamResponse(to: prompt) {
-            streamedMarkdown = snapshot.content
-            await onUpdate?(streamedMarkdown)
+    private func streamExplanation(
+        prompt: String,
+        facts: String,
+        onUpdate: (@Sendable (String) async -> Void)?
+    ) async throws -> String {
+        let session = LanguageModelSession(instructions: PromptFactory.simulationInstructions)
+        var latest = ""
+        var isForwarding = onUpdate != nil
+
+        for try await snapshot in session.streamResponse(to: prompt, generating: SimulationNarration.self) {
+            latest = snapshot.content.content.markdown
+            guard isForwarding else { continue }
+            // Once a partial quotes an amount the data doesn't support, nothing more is shown from
+            // this attempt; the full answer is still checked, retried or hidden by the caller.
+            isForwarding = FigureGrounding.ungroundedAmounts(inPartial: latest, sources: [facts]).isEmpty
+            if isForwarding { await onUpdate?(latest) }
         }
 
-        let text = streamedMarkdown.trimmingCharacters(in: .whitespacesAndNewlines)
+        let text = latest.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !text.isEmpty else { throw AIInsightError.emptyResponse }
-        return GeneratedSimulationExplanation(markdown: text, providerIdentifier: providerIdentifier)
+        return text
     }
 }
 #endif
@@ -335,37 +390,27 @@ enum PromptFactory {
 
     static var simulationInstructions: String {
         """
-        You explain savings simulations in plain language.
-        Use the supplied numeric projection as the source of truth and do not change the numbers.
-        Keep the response concise, practical, and educational.
-        Return valid markdown with exactly these sections:
+        You explain savings what-if scenarios in plain language.
+        The facts in the prompt are exact and computed by the app. Quote an amount only if it appears \
+        word for word in the facts. Never add, subtract, round, estimate or invent an amount, and do not \
+        change any number.
+        Keep it concise, practical and educational. Do not provide regulated financial advice.
+        The answer is shown as markdown with these sections:
         ## Scenario Summary
 
         ## Tradeoff
 
         ## Recommended Next Step
-        Put a blank line after each heading.
-        Use one short paragraph under Scenario Summary and Tradeoff.
-        Use 1-2 markdown bullet points under Recommended Next Step when the action is concrete.
+        Scenario Summary and Tradeoff are one short paragraph each. Recommended Next Step is 1-2 bullet \
+        points when the action is concrete.
         """
     }
 
-    static func simulationPrompt(input: SimulationInput, projection: SimulationProjection) -> String {
+    static func simulationPrompt(context: SimulationNarrationContext) -> String {
         """
-        Currency: \(CurrencyFormatter.currencyCode)
-        Estimated monthly spending (full-month run-rate): \(CurrencyFormatter.string(from: input.monthlyRunRate))
-        Recurring charges included in that spending: \(CurrencyFormatter.string(from: input.recurringMonthlySpend))
-        Daily savings target: \(CurrencyFormatter.string(from: input.dailySavings))
-        Spending reduction: \(PercentFormatter.string(from: input.reductionPercent / 100))
-        Recurring charges paused: \(CurrencyFormatter.string(from: input.pausedRecurringMonthlySpend))
-        Savings goal: \(CurrencyFormatter.string(from: input.savingsGoal))
-        Monthly savings result: \(CurrencyFormatter.string(from: projection.monthlySavings))
-        3-month projection: \(CurrencyFormatter.string(from: projection.projectedSavingsThreeMonths))
-        6-month projection: \(CurrencyFormatter.string(from: projection.projectedSavingsSixMonths))
-        12-month projection: \(CurrencyFormatter.string(from: projection.projectedSavingsTwelveMonths))
-        Months to goal: \(projection.monthsToGoal.map(String.init) ?? "Not available")
+        \(context.facts)
 
-        Explain the tradeoff and suggest one realistic next step without changing the numbers.
+        Explain the scenario, its tradeoff and one realistic next step, using only these facts.
         """
     }
 }

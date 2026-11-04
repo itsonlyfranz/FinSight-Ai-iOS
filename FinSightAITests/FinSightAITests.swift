@@ -180,24 +180,6 @@ final class FinSightAITests: XCTestCase {
         XCTAssertEqual(draft.note, "Family plan")
     }
 
-    func testSimulationServiceCalculatesGoalTimeline() {
-        let projection = DefaultSimulationService().project(
-            input: SimulationInput(
-                monthlyRunRate: 20_000,
-                recurringMonthlySpend: 500,
-                dailySavings: 100,
-                reductionPercent: 20,
-                savingsGoal: 50_000,
-                pausedRecurringMonthlySpend: 500
-            )
-        )
-
-        // Reduction applies to the 19,500 of non-recurring spend: 3,900 + 3,000 daily + 500 paused.
-        XCTAssertEqual(projection.monthlySavings, 7_400, accuracy: 0.001)
-        XCTAssertEqual(projection.projectedSavingsSixMonths, 44_400, accuracy: 0.001)
-        XCTAssertEqual(projection.monthsToGoal, 7)
-    }
-
     func testCurrencyFormatterFollowsLocale() {
         XCTAssertEqual(CurrencyFormatter.string(from: 1234.5, locale: Locale(identifier: "en_US")), "$1,234.50")
         XCTAssertEqual(CurrencyFormatter.string(from: 1234.5, locale: Locale(identifier: "en_PH")), "₱1,234.50")
@@ -350,19 +332,15 @@ final class FinSightAITests: XCTestCase {
         )
     }
 
-    func testSimulationFingerprintIsStableForSameInputs() {
-        let input = SimulationInput(
-            monthlyRunRate: 20_000,
-            dailySavings: 100,
-            reductionPercent: 20,
-            savingsGoal: 50_000
-        )
-        let projection = DefaultSimulationService().project(input: input)
+    func testSimulationFingerprintIsStableForSameInputsAndChangesWithThem() {
+        func context(daily: Decimal) -> SimulationNarrationContext {
+            let scenario = SimulationScenario(dailySavings: daily)
+            let result = ForwardSimulator.simulate(baseline: .empty, scenario: scenario, now: Date(timeIntervalSince1970: 0), calendar: Calendar(identifier: .gregorian))
+            return SimulationFacts.context(scenario: scenario, baseline: .empty, result: result)
+        }
 
-        XCTAssertEqual(
-            AIFingerprint.simulation(input: input, projection: projection),
-            AIFingerprint.simulation(input: input, projection: projection)
-        )
+        XCTAssertEqual(context(daily: 100).fingerprint, context(daily: 100).fingerprint)
+        XCTAssertNotEqual(context(daily: 100).fingerprint, context(daily: 110).fingerprint)
     }
 
     func testAutomaticRefreshPolicyUsesFingerprintAndDailyCap() {

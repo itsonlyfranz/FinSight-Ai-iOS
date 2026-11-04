@@ -127,7 +127,7 @@ extension AppContext {
     var goalSurplusShare: Decimal {
         GoalCalculator.surplusShare(
             monthlyIncome: monthlyRecurringIncome,
-            monthlySpending: Decimal(monthlyRunRate),
+            monthlySpending: runRateBaseline.monthlyTotal,
             unfinishedGoals: savingsGoals.filter { !$0.isReached }.count
         )
     }

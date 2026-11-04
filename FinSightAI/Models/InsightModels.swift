@@ -64,6 +64,8 @@ enum LoadableTextState: Equatable {
     case idle
     case loading
     case available(CachedContent<String>)
+    /// The on-device model can't run, and why. The plain-text summary is still shown.
+    case modelUnavailable(AIUnavailableReason)
     case unavailable(String)
     case failure(String)
 }
@@ -126,22 +128,6 @@ enum AIFingerprint {
         ].joined(separator: ";")
     }
 
-    static func simulation(input: SimulationInput, projection: SimulationProjection) -> String {
-        [
-            "runRate=\(normalizedDecimal(input.monthlyRunRate))",
-            "recurring=\(normalizedDecimal(input.recurringMonthlySpend))",
-            "daily=\(normalizedDecimal(input.dailySavings))",
-            "reduction=\(normalizedDecimal(input.reductionPercent))",
-            "goal=\(normalizedDecimal(input.savingsGoal))",
-            "pausedRecurring=\(normalizedDecimal(input.pausedRecurringMonthlySpend))",
-            "monthly=\(normalizedDecimal(projection.monthlySavings))",
-            "three=\(normalizedDecimal(projection.projectedSavingsThreeMonths))",
-            "six=\(normalizedDecimal(projection.projectedSavingsSixMonths))",
-            "twelve=\(normalizedDecimal(projection.projectedSavingsTwelveMonths))",
-            "monthsToGoal=\(projection.monthsToGoal.map(String.init) ?? "none")"
-        ].joined(separator: ";")
-    }
-
     private static func normalizedDecimal(_ value: Double) -> String {
         String(format: "%.4f", value)
     }
@@ -153,7 +139,7 @@ enum AICacheKey {
     }
 
     /// Each scenario gets its own cache entry, so one scenario never overwrites (or is shown as)
-    /// another. `fingerprint` is the scenario's `AIFingerprint.simulation` string.
+    /// another. `fingerprint` is the scenario's `SimulationNarrationContext.fingerprint`.
     static func simulationExplanation(fingerprint: String) -> String {
         let digest = SHA256.hash(data: Data(fingerprint.utf8))
         let hex = digest.prefix(12).map { String(format: "%02x", $0) }.joined()

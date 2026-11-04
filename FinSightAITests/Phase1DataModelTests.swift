@@ -125,8 +125,10 @@ final class Phase1DataModelTests: XCTestCase {
         XCTAssertEqual(summary.totalSpent, 100)
         XCTAssertEqual(summary.transactionCount, 1)
 
-        let runRate = MonthlyRunRate.estimate(from: transactions, now: now, calendar: calendar)
-        XCTAssertEqual(runRate, 100.0 / 13.0 * 30.0, accuracy: 0.001)
+        let runRate = RunRateBaseline.make(entries: transactions.map(LedgerEntry.init), now: now, calendar: calendar).monthlyTotal.doubleValue
+        // Income and transfers add nothing to spending; the Mar 1 income only marks where the
+        // ledger starts, so Mar 1–15 is 15 observed days.
+        XCTAssertEqual(runRate, 100.0 / 15.0 * 30.0, accuracy: 0.001)
     }
 
     func testKindPersistsAndUnknownRawValueFallsBackToExpense() throws {
@@ -234,7 +236,7 @@ final class Phase1DataModelTests: XCTestCase {
 
     func testSchemaHasNoUniqueConstraints() {
         let schema = AppStoreSchema.schema
-        XCTAssertEqual(schema.entities.count, 9)
+        XCTAssertEqual(schema.entities.count, 10)
         for entity in schema.entities {
             XCTAssertTrue(entity.uniquenessConstraints.isEmpty, "\(entity.name) must not declare .unique (CloudKit)")
             XCTAssertTrue(entity.properties.allSatisfy { !$0.isUnique }, "\(entity.name)")
