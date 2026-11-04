@@ -215,7 +215,7 @@ The current app is the foundation for a broader startup roadmap. Likely evolutio
 3. Choose an iPhone simulator such as `iPhone 17`
 4. Press `Cmd+R`
 
-The app starts with an empty ledger. Tap **Load sample data** on the Dashboard to explore with example transactions; sample data is never added automatically.
+A fresh install opens onboarding, and the ledger starts empty. To explore with example transactions, turn on **Load sample data** during onboarding or tap it on the Dashboard. Sample data is never added automatically.
 
 ### Build From Terminal
 
