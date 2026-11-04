@@ -11,3 +11,4 @@ typealias SavingsGoal = FinSightSchemaV2.SavingsGoal
 typealias GoalContribution = FinSightSchemaV2.GoalContribution
 typealias AppSettings = FinSightSchemaV2.AppSettings
 typealias InsightStateRecord = FinSightSchemaV3.InsightStateRecord
+typealias SavedScenarioRecord = FinSightSchemaV4.SavedScenarioRecord

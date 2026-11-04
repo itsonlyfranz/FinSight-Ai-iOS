@@ -842,8 +842,7 @@ private final class ScriptedAIService: AIInsightService, @unchecked Sendable {
     }
 
     func explainSimulation(
-        input: SimulationInput,
-        projection: SimulationProjection,
+        context: SimulationNarrationContext,
         onUpdate: (@Sendable (String) async -> Void)?
     ) async throws -> GeneratedSimulationExplanation {
         GeneratedSimulationExplanation(markdown: "explained", providerIdentifier: providerIdentifier)

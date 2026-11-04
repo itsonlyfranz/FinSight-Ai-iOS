@@ -206,32 +206,29 @@ final class Phase0RegressionTests: XCTestCase {
 
     func testD6_EachScenarioGetsItsOwnCachedExplanation() async throws {
         let harness = try makeHarness()
-        let scenarioA = SimulationInput(monthlyRunRate: 10_000, dailySavings: 100, reductionPercent: 10, savingsGoal: 20_000)
-        let scenarioB = SimulationInput(monthlyRunRate: 10_000, dailySavings: 200, reductionPercent: 10, savingsGoal: 20_000)
+        let scenarioA = narration(dailySavings: 100)
+        let scenarioB = narration(dailySavings: 200)
 
-        await harness.context.loadSimulationExplanation(input: scenarioA)
-        await harness.context.loadSimulationExplanation(input: scenarioB)
+        await harness.context.loadSimulationExplanation(context: scenarioA)
+        await harness.context.loadSimulationExplanation(context: scenarioB)
         let records = try harness.modelContext.fetch(FetchDescriptor<AIResponseCacheRecord>())
         XCTAssertEqual(Set(records.map(\.cacheKey)).count, 2)
 
         // Back to A: shows A's own text from cache without another model call.
-        await harness.context.loadSimulationExplanation(input: scenarioA)
+        await harness.context.loadSimulationExplanation(context: scenarioA)
         XCTAssertEqual(harness.ai.simulationCalls, 2)
         guard case .available(let content) = harness.context.simulatorExplanationState else {
             return XCTFail("Expected cached explanation")
         }
-        let projectionA = DefaultSimulationService().project(input: scenarioA)
-        XCTAssertEqual(content.value, "Explanation for \(projectionA.monthlySavings)")
+        XCTAssertEqual(content.value, "Explanation for \(scenarioA.facts)")
     }
 
     func testD6_NewScenarioDoesNotShowAnotherScenariosText() async throws {
         let harness = try makeHarness()
-        let scenarioA = SimulationInput(monthlyRunRate: 10_000, dailySavings: 100, reductionPercent: 10, savingsGoal: 20_000)
-        await harness.context.loadSimulationExplanation(input: scenarioA)
+        await harness.context.loadSimulationExplanation(context: narration(dailySavings: 100))
 
         harness.ai.failSimulation = true
-        let scenarioB = SimulationInput(monthlyRunRate: 10_000, dailySavings: 300, reductionPercent: 10, savingsGoal: 20_000)
-        await harness.context.loadSimulationExplanation(input: scenarioB)
+        await harness.context.loadSimulationExplanation(context: narration(dailySavings: 300))
 
         guard case .unavailable = harness.context.simulatorExplanationState else {
             return XCTFail("A failed new scenario must not display scenario A's explanation")
@@ -241,12 +238,28 @@ final class Phase0RegressionTests: XCTestCase {
     func testD6_SimulationCacheKeepsOnlyTheMostRecentScenarios() async throws {
         let harness = try makeHarness()
         for step in 0..<(AppContext.simulationCacheLimit + 4) {
-            let input = SimulationInput(monthlyRunRate: 10_000, dailySavings: Double(step * 10), reductionPercent: 5, savingsGoal: 20_000)
-            await harness.context.loadSimulationExplanation(input: input)
+            await harness.context.loadSimulationExplanation(context: narration(dailySavings: Decimal(step * 10)))
         }
 
         let records = try harness.modelContext.fetch(FetchDescriptor<AIResponseCacheRecord>())
         XCTAssertEqual(records.count, AppContext.simulationCacheLimit)
+    }
+
+    /// The facts the model would be given for a scenario that only sets a daily saving.
+    private func narration(dailySavings: Decimal) -> SimulationNarrationContext {
+        let scenario = SimulationScenario(dailySavings: dailySavings)
+        let result = ForwardSimulator.simulate(baseline: .empty, scenario: scenario, now: date(2024, 3, 1), calendar: calendar)
+        return SimulationFacts.context(scenario: scenario, baseline: .empty, result: result)
+    }
+
+    private func runRate(_ transactions: [TransactionRecord], recurringSummary: RecurringSummary = .empty, now: Date) -> Double {
+        RunRateBaseline.make(
+            entries: transactions.map(LedgerEntry.init),
+            recurring: RunRateBaseline.recurringCharges(from: recurringSummary),
+            recurringTransactionIDs: recurringSummary.recurringTransactionIDs,
+            now: now,
+            calendar: calendar
+        ).monthlyTotal.doubleValue
     }
 
     // MARK: - D7 savings is not spending
@@ -289,7 +302,7 @@ final class Phase0RegressionTests: XCTestCase {
         let now = date(2024, 3, 3)
         // Only 3 days of history: the observed window is floored at 7 days, then scaled to 30.
         let early = [TransactionRecord(amount: 700, merchantName: "A", category: .dining, date: date(2024, 3, 2))]
-        XCTAssertEqual(MonthlyRunRate.estimate(from: early, now: now, calendar: calendar), 700.0 / 7 * 30, accuracy: 0.001)
+        XCTAssertEqual(runRate(early, now: now), 700.0 / 7 * 30, accuracy: 0.001)
 
         // A full 30 days of history is taken as-is, and savings never count.
         let full = [
@@ -298,8 +311,8 @@ final class Phase0RegressionTests: XCTestCase {
             TransactionRecord(amount: 9_999, merchantName: "Bank", category: .savings, date: date(2024, 3, 3)),
             TransactionRecord(amount: 5_000, merchantName: "Old", category: .travel, date: date(2023, 12, 1))
         ]
-        XCTAssertEqual(MonthlyRunRate.estimate(from: full, now: now, calendar: calendar), 3_000, accuracy: 0.001)
-        XCTAssertEqual(MonthlyRunRate.estimate(from: [], now: now, calendar: calendar), 0)
+        XCTAssertEqual(runRate(full, now: now), 3_000, accuracy: 0.001)
+        XCTAssertEqual(runRate([], now: now), 0)
     }
 
     func testD8_RunRateAddsRecurringChargesOnceInsteadOfScalingThem() {
@@ -313,85 +326,71 @@ final class Phase0RegressionTests: XCTestCase {
             now: now
         )
 
-        let logged = MonthlyRunRate.estimate(from: [rentPayment, coffee], recurringSummary: recurring, now: now, calendar: calendar)
+        let logged = runRate([rentPayment, coffee], recurringSummary: recurring, now: now)
         XCTAssertEqual(logged, 70.0 / 7 * 30 + 10_000, accuracy: 0.001)
 
-        let notYetLogged = MonthlyRunRate.estimate(from: [coffee], recurringSummary: recurring, now: now, calendar: calendar)
+        let notYetLogged = runRate([coffee], recurringSummary: recurring, now: now)
         XCTAssertEqual(notYetLogged, 70.0 / 7 * 30 + 10_000, accuracy: 0.001)
 
-        let projection = DefaultSimulationService().project(
-            input: SimulationInput(
-                monthlyRunRate: logged,
-                recurringMonthlySpend: recurring.totalMonthlySpend,
-                dailySavings: 0,
-                reductionPercent: 10,
-                savingsGoal: 0
-            )
+        // The rent is counted once and is not everyday spending, so a 10% dining cut frees 10% of the 300 coffee run-rate.
+        let baseline = RunRateBaseline.make(
+            entries: [rentPayment, coffee].map(LedgerEntry.init),
+            recurring: RunRateBaseline.recurringCharges(from: recurring),
+            recurringTransactionIDs: recurring.recurringTransactionIDs,
+            now: now,
+            calendar: calendar
         )
-        XCTAssertEqual(projection.monthlySavings, 30, accuracy: 0.001)
+        var scenario = SimulationScenario()
+        scenario.setCut(10, for: .dining)
+        let result = ForwardSimulator.simulate(baseline: baseline, scenario: scenario, now: now, calendar: calendar)
+        XCTAssertEqual(result.monthlySavings.doubleValue, 30, accuracy: 0.001)
     }
 
     func testD8_PausedRecurringChargesAreNotDoubleCounted() {
-        let projection = DefaultSimulationService().project(
-            input: SimulationInput(
-                monthlyRunRate: 10_000,
-                recurringMonthlySpend: 2_000,
-                dailySavings: 0,
-                reductionPercent: 10,
-                savingsGoal: 0,
-                pausedRecurringMonthlySpend: 2_000
-            )
+        let rent = RecurringCharge(id: UUID(), name: "Rent", category: .bills, monthlyAmount: 2_000)
+        let baseline = RunRateBaseline(
+            lines: [
+                RunRateBaseline.Line(category: .dining, discretionary: 8_000, recurring: 0),
+                RunRateBaseline.Line(category: .bills, discretionary: 0, recurring: 2_000)
+            ],
+            excludedOneOffs: [],
+            recurringCharges: [rent],
+            categoryVolatility: [:]
         )
+        var scenario = SimulationScenario()
+        scenario.setCut(10, for: .dining)
+        scenario.setCut(10, for: .bills)
+        scenario.setRecurring(rent.id, included: false)
 
-        // 10% of the 8,000 non-recurring spend + the 2,000 paused once = 2,800 (not 3,000).
-        XCTAssertEqual(projection.monthlySavings, 2_800, accuracy: 0.001)
+        let result = ForwardSimulator.simulate(baseline: baseline, scenario: scenario, now: date(2024, 3, 1), calendar: calendar)
+
+        // 10% of the 8,000 everyday spending + the 2,000 paused once = 2,800 (not 3,000, and the
+        // bills cut finds no everyday spending to cut).
+        XCTAssertEqual(result.monthlySavings, 2_800)
     }
 
-    func testD8_PausedAmountNeverExceedsRecurringTotal() {
-        let projection = DefaultSimulationService().project(
-            input: SimulationInput(
-                monthlyRunRate: 1_000,
-                recurringMonthlySpend: 100,
-                dailySavings: 0,
-                reductionPercent: 0,
-                savingsGoal: 0,
-                pausedRecurringMonthlySpend: 5_000
-            )
-        )
+    func testD8_OnlyExistingChargesCanBePaused() {
+        let rent = RecurringCharge(id: UUID(), name: "Rent", category: .bills, monthlyAmount: 100)
+        let baseline = RunRateBaseline(lines: [], excludedOneOffs: [], recurringCharges: [rent], categoryVolatility: [:])
+        var scenario = SimulationScenario()
+        scenario.setRecurring(UUID(), included: false)
+        XCTAssertEqual(ForwardSimulator.simulate(baseline: baseline, scenario: scenario, now: date(2024, 3, 1), calendar: calendar).monthlySavings, 0)
 
-        XCTAssertEqual(projection.monthlySavings, 100, accuracy: 0.001)
+        scenario.setRecurring(rent.id, included: false)
+        XCTAssertEqual(ForwardSimulator.simulate(baseline: baseline, scenario: scenario, now: date(2024, 3, 1), calendar: calendar).monthlySavings, 100)
     }
 
     func testD8_ToggleOnMeansChargeKeepsRunning() {
-        let netflix = makeRecurring("Netflix", amount: 700)
-        let gym = makeRecurring("Gym", amount: 300)
-        var selection = RecurringPauseSelection()
+        let netflix = UUID()
+        var scenario = SimulationScenario()
 
-        XCTAssertTrue(selection.isIncluded(netflix.id))
-        XCTAssertEqual(selection.pausedMonthlySpend(in: [netflix, gym]), 0)
+        XCTAssertFalse(scenario.pausedRecurringIDs.contains(netflix))
 
-        selection.setIncluded(false, for: netflix.id)
-        XCTAssertFalse(selection.isIncluded(netflix.id))
-        XCTAssertTrue(selection.isPaused(netflix.id))
-        XCTAssertEqual(selection.pausedMonthlySpend(in: [netflix, gym]), 700, accuracy: 0.001)
+        scenario.setRecurring(netflix, included: false)
+        XCTAssertTrue(scenario.pausedRecurringIDs.contains(netflix))
 
-        selection.setIncluded(true, for: netflix.id)
-        XCTAssertEqual(selection.pausedMonthlySpend(in: [netflix, gym]), 0)
-    }
-
-    private func makeRecurring(_ name: String, amount: Double) -> RecurringTransaction {
-        RecurringTransaction(
-            id: UUID(),
-            merchantName: name,
-            normalizedMerchantName: name.lowercased(),
-            category: .bills,
-            monthlyAmount: amount,
-            expectedDay: 1,
-            expectedDate: .now,
-            status: .upcoming,
-            isActive: true,
-            note: ""
-        )
+        scenario.setRecurring(netflix, included: true)
+        XCTAssertTrue(scenario.pausedRecurringIDs.isEmpty)
     }
 
     // MARK: - D9 locale-safe amounts, repository validation, no hard-wired currency
@@ -510,14 +509,13 @@ private final class CountingAIService: AIInsightService, @unchecked Sendable {
     }
 
     func explainSimulation(
-        input: SimulationInput,
-        projection: SimulationProjection,
+        context: SimulationNarrationContext,
         onUpdate: (@Sendable (String) async -> Void)?
     ) async throws -> GeneratedSimulationExplanation {
         lock.withLock { _simulationCalls += 1 }
         if failSimulation { throw AIInsightError.unavailable("Model offline") }
         return GeneratedSimulationExplanation(
-            markdown: "Explanation for \(projection.monthlySavings)",
+            markdown: "Explanation for \(context.facts)",
             providerIdentifier: providerIdentifier
         )
     }

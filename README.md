@@ -72,13 +72,15 @@ A deterministic, on-device `InsightEngine` analyses the last 12 months and produ
 
 Insights show as cards with severity badges and impact numbers, and can be dismissed or snoozed (persisted). The Foundation Models budgeting, risk and growth cards remain as optional narration below them.
 
-### Simulator
+### Simulator (Phase 5)
 
-- daily savings input
-- spending reduction slider
-- savings goal slider
-- deterministic monthly and long-range projections
-- AI explanation state
+- a baseline of a typical full month, per category: recent spending scaled to 30 days, with recurring charges added once and with transfers, income, savings and one-off purchases left out
+- a cut slider for each of your own categories (applied to everyday spending), a daily savings amount, and switches to pause recurring charges
+- savings that compound monthly as `(balance + deposit) × (1 + APY / 12)`, with a configurable yield, an optional starting balance and a 12 to 60 month timeline
+- a Swift Charts projection with 3, 6 and 12 month markers, a reference line for each unfinished savings goal, and an optional likely range drawn from how much your everyday spending has varied month to month
+- a goals countdown: how many months each goal takes at its current pace and with the scenario, and whether that meets its target date
+- named scenarios you can save, load and compare side by side
+- a plan summary written by code, plus an AI explanation from one structured session that is grounded in the same figures
 
 ## Why It Matters
 
@@ -108,7 +110,7 @@ Core components:
 - `RecurringExpenseRepository`: user-managed recurring expense storage
 - `SummaryService`: monthly aggregation and dashboard summary building
 - `RecurringSummaryService`: recurring expense totals and transaction classification
-- `SimulationService`: deterministic savings calculations
+- `SimulationService` / `ForwardSimulator`: pure `Decimal` what-if maths (run-rate baseline, compounding, goal countdowns, uncertainty band, scenario comparison)
 - `AIInsightService`: AI abstraction for insights and simulator explanations
 - `CapabilityService`: checks whether Apple Intelligence support is available
 
@@ -163,6 +165,7 @@ Important note:
 - the budgeting, risk and growth narration cards come from one session with `@Generable` structured output, streamed as they are written
 - the prompt is grounded in the engine's typed insights and three months of history, trimmed to fit the model's context window
 - the model can call tools (`categoryTotals`, `transactions(matching:)`, `budgetStatus`) so the figures it quotes are computed by code; narration that quotes amounts not found in the facts or tool results is retried once and then hidden
+- the simulator's explanation uses the same structured session and availability fallback; every amount it quotes is checked against the scenario's facts, and the plan summary written by code is always shown beside it
 - the model is prewarmed on launch, and narration is cached by a data fingerprint so unchanged data doesn't call the model again
 
 The AI layer sits behind the `AIInsightService` protocol so other providers can be added later.
@@ -235,7 +238,7 @@ Automated coverage currently includes:
 
 - transaction validation
 - monthly summary aggregation
-- simulator projection math
+- forward-simulator maths: the Android simulator's seven tests as behavioural specs, `(b + d)(1 + r/12)` compounding, goal countdowns, the run-rate baseline's one-off and transfer exclusions, the uncertainty band's bounds, and saved-scenario comparison
 - locale-aware currency formatting and amount parsing
 - app-context save flow
 - exact Decimal money storage and transaction kinds (expense, income, transfer)
@@ -247,6 +250,7 @@ Automated coverage currently includes:
 - RFC 4180 CSV export, including formula-injection neutralisation of free-text cells
 - the deterministic insight engine: budget breaches and overruns, month-over-month changes, anomalies, recurring-charge and price-creep detection, savings rate, emergency-fund runway and no-spend streaks
 - persisted insight dismiss/snooze and the V2 to V3 schema migration
+- saved what-if scenarios and the V3 to V4 schema migration
 - AI availability reasons and fallbacks, prompt grounding and token budgeting, figure grounding, the ledger tools, merchant-name cleaning, auto-categorization and quick-add parsing
 - on-device model smoke tests (`OnDeviceModelSmokeTests`) that run the real Foundation Models paths and skip, with the reason, where Apple Intelligence is unavailable
 

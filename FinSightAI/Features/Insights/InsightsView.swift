@@ -157,8 +157,9 @@ struct InsightsView: View {
 }
 
 /// Why AI narration can't run, what to do about it, and a reminder that the insights above don't need it.
-private struct AIUnavailablePanel: View {
+struct AIUnavailablePanel: View {
     let reason: AIUnavailableReason
+    var footnote = "The insights above are calculated on your device and don't need AI."
     let onCheckAgain: () -> Void
 
     var body: some View {
@@ -173,7 +174,7 @@ private struct AIUnavailablePanel: View {
                     .font(AppTheme.Typography.caption)
                     .foregroundStyle(AppTheme.mutedInk)
             }
-            Text("The insights above are calculated on your device and don't need AI.")
+            Text(footnote)
                 .font(AppTheme.Typography.caption)
                 .foregroundStyle(AppTheme.mutedInk)
             if reason.isRecoverable {
