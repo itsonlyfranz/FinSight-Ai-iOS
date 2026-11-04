@@ -180,11 +180,12 @@ struct ScenarioComparisonView: View {
                 AxisValueLabel { if let month = value.as(Int.self) { Text("\(month)m") } }
             }
         }
-        .frame(height: 220)
+        .frame(minHeight: 220)
         .finSightCard()
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Projected savings by scenario")
-        .accessibilityValue(comparison.rows.map { "\($0.label): \(CurrencyFormatter.string(from: $0.entry.result.twelveMonths)) after 12 months" }.joined(separator: ". "))
+        .accessibilityValue(comparison.rows.map { String(localized: "\($0.label): \(CurrencyFormatter.string(from: $0.entry.result.twelveMonths)) after 12 months") }.joined(separator: ". "))
+        .accessibilityChartDescriptor(ScenarioComparisonChartDescriptor(comparison: comparison))
     }
 
     private func table(_ comparison: ScenarioComparison) -> some View {

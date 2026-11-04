@@ -170,6 +170,7 @@ struct DashboardView: View {
     }
 
     @ScaledMetric(relativeTo: .body) private var chartHeight: CGFloat = 180
+    @ScaledMetric(relativeTo: .subheadline) private var recurringIconSize: CGFloat = 32
 
     private var recurringSpendCard: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
@@ -198,7 +199,8 @@ struct DashboardView: View {
                     HStack(spacing: AppTheme.Spacing.sm) {
                         Image(systemName: largest.category.symbolName)
                             .foregroundStyle(.white)
-                            .frame(width: 32, height: 32)
+                            .accessibilityHidden(true)
+                            .frame(width: recurringIconSize, height: recurringIconSize)
                             .background(largest.category.tint, in: RoundedRectangle(cornerRadius: AppTheme.CornerRadius.icon, style: .continuous))
                         VStack(alignment: .leading, spacing: 2) {
                             Text(largest.merchantName)
@@ -374,12 +376,14 @@ struct DashboardView: View {
 
 private struct TransactionRow: View {
     let transaction: TransactionSnapshot
+    @ScaledMetric(relativeTo: .subheadline) private var iconSize: CGFloat = 38
 
     var body: some View {
         HStack(spacing: AppTheme.Spacing.sm) {
             Image(systemName: transaction.category.symbolName)
                 .foregroundStyle(.white)
-                .frame(width: 38, height: 38)
+                .accessibilityHidden(true)
+                .frame(width: iconSize, height: iconSize)
                 .background(transaction.category.tint, in: RoundedRectangle(cornerRadius: AppTheme.CornerRadius.icon, style: .continuous))
 
             VStack(alignment: .leading, spacing: 3) {

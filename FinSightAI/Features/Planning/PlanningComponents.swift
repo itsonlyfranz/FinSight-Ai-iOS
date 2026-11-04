@@ -61,6 +61,7 @@ struct BudgetBarChart: View {
         .frame(height: CGFloat(items.count) * 46 + 36)
         .accessibilityLabel("Spending against budget by category")
         .accessibilityValue(items.map(\.accessibilitySummary).joined(separator: "; "))
+        .accessibilityChartDescriptor(BudgetChartDescriptor(items: items))
     }
 }
 

@@ -8,6 +8,7 @@ struct RootTabView: View {
     @State private var showingExpense = false
     @State private var errorMessage: String?
     @State private var selectedTab = Tab.dashboard
+    @State private var savedCount = 0
     @AppStorage(ThemePalette.storageKey) private var paletteRawValue = ThemePalette.deckEmerald.rawValue
 
     private enum Tab: Hashable { case dashboard, transactions, insights, simulator, settings }
@@ -54,6 +55,7 @@ struct RootTabView: View {
         .id(paletteRawValue)
         .tint(AppTheme.primary)
         .sensoryFeedback(.selection, trigger: selectedTab)
+        .sensoryFeedback(.success, trigger: savedCount)
         .fullScreenCover(isPresented: Binding(get: { appContext.needsOnboarding }, set: { _ in })) {
             OnboardingView(initialStep: Self.launchOnboardingStep)
                 .environment(appContext)
@@ -69,7 +71,7 @@ struct RootTabView: View {
         }
         .sheet(isPresented: $showingExpense) {
             TransactionEditorView(onSave: {
-                do { try appContext.saveDraft(); showingExpense = false }
+                do { try appContext.saveDraft(); showingExpense = false; savedCount += 1 }
                 catch { errorMessage = error.localizedDescription }
             }).environment(appContext)
         }

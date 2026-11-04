@@ -35,7 +35,7 @@ struct SimulatorView: View {
                 .padding(AppTheme.Spacing.lg)
             }
             .background(AppTheme.backgroundGradient.ignoresSafeArea())
-            .navigationTitle("What If")
+            .navigationTitle("Forward Simulator")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Reset", systemImage: "arrow.counterclockwise") { appContext.resetWorkingScenario() }
@@ -61,7 +61,7 @@ struct SimulatorView: View {
 
     private func heroCard(scenario: SimulationScenario, result: SimulationResult) -> some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
-            Text("Scenario Builder")
+            Text("Monthly freed cashflow")
                 .font(.headline)
                 .foregroundStyle(AppTheme.onElevated.opacity(0.85))
             Text(CurrencyFormatter.string(from: result.monthlySavings))
@@ -73,7 +73,7 @@ struct SimulatorView: View {
                 .accessibilityLabel("Projected monthly savings")
                 .accessibilityValue(CurrencyFormatter.string(from: result.monthlySavings))
                 .contentTransition(.numericText())
-                .animation(.spring(duration: 0.3), value: result.monthlySavings)
+                .motionSafeAnimation(.spring(duration: 0.3), value: result.monthlySavings)
             Text("freed each month. After 12 months at \(SimulationFacts.percent(scenario.annualYieldPercent)) a year that grows to \(CurrencyFormatter.string(from: result.twelveMonths)).")
                 .foregroundStyle(AppTheme.onElevated.opacity(0.88))
         }
@@ -116,7 +116,7 @@ struct SimulatorView: View {
     private func categoryCutsCard(result: SimulationResult) -> some View {
         let lines = appContext.runRateBaseline.cuttableLines
         return VStack(alignment: .leading, spacing: 18) {
-            Label("Cut by category", systemImage: "scissors")
+            Label("Lifestyle Inflation Levers", systemImage: "scissors")
                 .font(.headline)
             if lines.isEmpty {
                 Text("All of your spending is recurring. Pause charges below to see what they would save.")
@@ -153,7 +153,7 @@ struct SimulatorView: View {
                 Text(CurrencyFormatter.string(from: scenario.dailySavings))
                     .font(.title3.weight(.semibold)).monospacedDigit()
                     .contentTransition(.numericText())
-                    .animation(.spring(duration: 0.3), value: scenario.dailySavings)
+                    .motionSafeAnimation(.spring(duration: 0.3), value: scenario.dailySavings)
                 Slider(value: dailySavingsBinding, in: 0...500, step: 10)
                     .accessibilityLabel("Daily savings")
             }
@@ -264,7 +264,7 @@ struct SimulatorView: View {
 
     private func goalsCard(result: SimulationResult) -> some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
-            Label("Goals countdown", systemImage: "flag.checkered")
+            Label("Financial Goals Countdown", systemImage: "flag.checkered")
                 .font(.headline)
             if result.goals.isEmpty {
                 Text("Create a savings goal to see how much sooner this plan gets you there.")
@@ -299,7 +299,7 @@ struct SimulatorView: View {
     private func explanationCard(context: SimulationNarrationContext) -> some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
             HStack {
-                Label("AI Explanation", systemImage: "sparkles")
+                Label("AI Milestone Context", systemImage: "sparkles")
                     .font(.headline)
                 Spacer()
                 FinSightStreamingRefreshControl(
@@ -316,7 +316,7 @@ struct SimulatorView: View {
             case .idle, .loading:
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.sm) {
                     FinSightTypingIndicator()
-                    Text("Preparing scenario explanation...")
+                    Text("Preparing scenario explanation…")
                         .foregroundStyle(AppTheme.mutedInk)
                 }
             case .available(let content):
@@ -368,7 +368,7 @@ struct SimulatorView: View {
                 .fontWeight(.semibold)
                 .monospacedDigit()
                 .contentTransition(.numericText())
-                .animation(.spring(duration: 0.3), value: point.balance)
+                .motionSafeAnimation(.spring(duration: 0.3), value: point.balance)
         }
         .accessibilityElement(children: .combine)
     }

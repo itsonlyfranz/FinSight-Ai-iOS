@@ -12,7 +12,7 @@ struct InsightSignalCard: View {
                 Image(systemName: insight.kind.systemImage)
                     .font(.title3)
                     .foregroundStyle(insight.severity.tint)
-                    .frame(width: 28)
+                    .frame(minWidth: 28)
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 4) {
                     InsightSeverityBadge(severity: insight.severity)

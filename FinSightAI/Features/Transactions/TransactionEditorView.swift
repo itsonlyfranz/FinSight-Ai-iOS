@@ -60,11 +60,11 @@ struct TransactionEditorView: View {
                 }
 
                 Section("Details") {
-                    TextField(appContext.activeDraft.kind == .income ? "Source" : "Merchant", text: Bindable(appContext).activeDraft.merchantName)
+                    TextField(appContext.activeDraft.kind == .income ? String(localized: "Source") : String(localized: "Title / Merchant"), text: Bindable(appContext).activeDraft.merchantName)
                         .textInputAutocapitalization(.words)
                         .onSubmit { appContext.normalizeActiveMerchant() }
                     DatePicker("Date", selection: Bindable(appContext).activeDraft.date, displayedComponents: .date)
-                    TextField("Note", text: Bindable(appContext).activeDraft.note, axis: .vertical)
+                    TextField("Notes (optional)", text: Bindable(appContext).activeDraft.note, axis: .vertical)
                         .lineLimit(2...4)
                 }
             }
@@ -74,7 +74,7 @@ struct TransactionEditorView: View {
                 guard !Task.isCancelled else { return }
                 await appContext.suggestCategoryForActiveDraft()
             }
-            .navigationTitle(appContext.editingTransaction == nil ? "New Transaction" : "Edit Transaction")
+            .navigationTitle(appContext.editingTransaction == nil ? Text("Add Transaction") : Text("Edit Transaction"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {

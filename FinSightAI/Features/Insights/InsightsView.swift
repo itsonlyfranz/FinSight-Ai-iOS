@@ -3,12 +3,30 @@ import SwiftUI
 struct InsightsView: View {
     @Environment(AppContext.self) private var appContext
     @Environment(\.scenePhase) private var scenePhase
+    @State private var errorMessage: String?
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.md) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("AI Financial Intelligence")
+                            .font(.title2.bold())
+                            .foregroundStyle(AppTheme.ink)
+                            .accessibilityAddTraits(.isHeader)
+                        Text("Real-time behavioral nudges & wealth accelerators")
+                            .font(.subheadline)
+                            .foregroundStyle(AppTheme.mutedInk)
+                    }
+
                     summaryHeader
+
+                    if !appContext.engineInsights.isEmpty {
+                        Text("Active AI Insights")
+                            .font(AppTheme.Typography.headline)
+                            .foregroundStyle(AppTheme.ink)
+                            .accessibilityAddTraits(.isHeader)
+                    }
 
                     signalSection
 
@@ -23,11 +41,20 @@ struct InsightsView: View {
                 if appContext.hiddenInsightCount > 0 {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Show \(appContext.hiddenInsightCount) hidden", systemImage: "eye") {
-                            try? appContext.restoreHiddenInsights()
+                            run { try appContext.restoreHiddenInsights() }
                         }
                     }
                 }
             }
+        }
+        .sensoryFeedback(.error, trigger: errorMessage) { _, new in new != nil }
+        .alert("Something went wrong", isPresented: Binding(
+            get: { errorMessage != nil },
+            set: { if !$0 { errorMessage = nil } }
+        )) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(errorMessage ?? "")
         }
         .task(id: scenePhase) {
             guard scenePhase == .active else { return }
@@ -38,6 +65,10 @@ struct InsightsView: View {
             guard !Task.isCancelled else { return }
             await appContext.loadInsights()
         }
+    }
+
+    private func run(_ action: () throws -> Void) {
+        do { try action() } catch { errorMessage = error.localizedDescription }
     }
 
     private var summaryHeader: some View {
@@ -76,8 +107,8 @@ struct InsightsView: View {
             ForEach(appContext.engineInsights) { insight in
                 InsightSignalCard(
                     insight: insight,
-                    onSnooze: { try? appContext.snoozeInsight(insight) },
-                    onDismiss: { try? appContext.dismissInsight(insight) }
+                    onSnooze: { run { try appContext.snoozeInsight(insight) } },
+                    onDismiss: { run { try appContext.dismissInsight(insight) } }
                 )
             }
         }

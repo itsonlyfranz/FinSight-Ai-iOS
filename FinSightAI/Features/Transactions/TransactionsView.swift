@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TransactionsView: View {
     @Environment(AppContext.self) private var appContext
+    @State private var savedCount = 0
     @State private var showingEditor = false
     @State private var showingRecurringEditor = false
     @State private var errorMessage: String?
@@ -37,7 +38,7 @@ struct TransactionsView: View {
                             Image(systemName: "repeat.circle.fill")
                                 .font(.headline)
                                 .foregroundStyle(AppTheme.primary)
-                                .frame(width: 28)
+                                .frame(minWidth: 28)
 
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Recurring Charges")
@@ -101,7 +102,8 @@ struct TransactionsView: View {
                         appContext.prepareNewTransaction()
                         showingEditor = true
                     } label: {
-                        Image(systemName: "plus.circle.fill")
+                        Label("Add Expense", systemImage: "plus.circle.fill")
+                            .labelStyle(.iconOnly)
                             .font(.title3)
                     }
                 }
@@ -112,6 +114,7 @@ struct TransactionsView: View {
                         do {
                             try appContext.saveDraft()
                             showingEditor = false
+                            savedCount += 1
                         } catch {
                             errorMessage = error.localizedDescription
                         }
@@ -125,6 +128,7 @@ struct TransactionsView: View {
                         do {
                             try appContext.saveRecurringDraft()
                             showingRecurringEditor = false
+                            savedCount += 1
                         } catch {
                             errorMessage = error.localizedDescription
                         }
@@ -132,6 +136,7 @@ struct TransactionsView: View {
                 )
                 .environment(appContext)
             }
+            .sensoryFeedback(.success, trigger: savedCount)
             .alert("Unable to save", isPresented: Binding(
                 get: { errorMessage != nil },
                 set: { if !$0 { errorMessage = nil } }
@@ -195,7 +200,7 @@ private struct TransactionListRow: View {
             Image(systemName: transaction.category.symbolName)
                 .font(.headline)
                 .foregroundStyle(transaction.category.tint)
-                .frame(width: 28)
+                .frame(minWidth: 28)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(transaction.merchantName.isEmpty ? transaction.category.title : transaction.merchantName)
@@ -357,7 +362,7 @@ private struct RecurringTransactionRow: View {
             Image(systemName: item.status.systemImage)
                 .font(.headline)
                 .foregroundStyle(statusTint)
-                .frame(width: 28)
+                .frame(minWidth: 28)
 
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.merchantName)

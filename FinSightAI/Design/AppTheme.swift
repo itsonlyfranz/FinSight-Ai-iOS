@@ -169,3 +169,20 @@ struct FinSightStatusLine: View {
         .foregroundStyle(AppTheme.mutedInk)
     }
 }
+
+/// An animation that is skipped when Reduce Motion is on.
+private struct MotionSafeAnimation<Value: Equatable>: ViewModifier {
+    let animation: Animation
+    let value: Value
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    func body(content: Content) -> some View {
+        content.animation(reduceMotion ? nil : animation, value: value)
+    }
+}
+
+extension View {
+    func motionSafeAnimation<Value: Equatable>(_ animation: Animation, value: Value) -> some View {
+        modifier(MotionSafeAnimation(animation: animation, value: value))
+    }
+}
