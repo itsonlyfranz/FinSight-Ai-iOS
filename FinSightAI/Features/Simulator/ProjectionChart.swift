@@ -2,7 +2,8 @@ import Charts
 import SwiftUI
 
 /// The projected savings line with 3/6/12-month markers, a reference rule for each goal within
-/// reach of the chart at the balance where the goal's remaining amount has been put aside, and (optionally) the likely range around the line.
+/// reach of the chart at the balance where the goal's remaining amount has been put aside, and
+/// (optionally) the likely range around the line.
 struct ProjectionChart: View {
     let result: SimulationResult
     let showsBand: Bool

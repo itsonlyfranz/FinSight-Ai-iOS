@@ -74,10 +74,10 @@ Insights show as cards with severity badges and impact numbers, and can be dismi
 
 ### Simulator (Phase 5)
 
-- a baseline of a typical full month, per category: recent spending scaled to 30 days, with recurring charges added once and with transfers, income, savings and one-off purchases left out
+- a baseline of a typical full month, per category: the last 30 days of spending (scaled up only when your history is shorter than that), with recurring charges added once and with transfers, income, savings and one-off purchases left out
 - a cut slider for each of your own categories (applied to everyday spending), a daily savings amount, and switches to pause recurring charges
 - savings that compound monthly as `(balance + deposit) × (1 + APY / 12)`, with a configurable yield, an optional starting balance and a 12 to 60 month timeline
-- a Swift Charts projection with 3, 6 and 12 month markers, a reference line for each unfinished savings goal, and an optional likely range drawn from how much your everyday spending has varied month to month
+- a Swift Charts projection with 3, 6 and 12 month markers, a "goal reached" line for each unfinished savings goal at the balance that covers what it still needs, and an optional likely range drawn from how much your everyday spending has varied month to month
 - a goals countdown: how many months each goal takes at its current pace and with the scenario, and whether that meets its target date
 - named scenarios you can save, load and compare side by side
 - a plan summary written by code, plus an AI explanation from one structured session that is grounded in the same figures
